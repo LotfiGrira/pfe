@@ -25,3 +25,10 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+Route::get('/about', function () {
+    app()->setLocale("ar");
+    return Inertia::render('About', [
+        "text" => __("about.mawarith")
+    ]);
+});
