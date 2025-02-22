@@ -14,12 +14,6 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get("/test", function() {
-    return Inertia::render("Test", [
-        "name" => "Lotfi"
-    ]);
-});
-
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
