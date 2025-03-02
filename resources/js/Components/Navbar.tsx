@@ -8,7 +8,7 @@ const Navbar = ({menu}: any) => {
     return (
       <header className={`flex w-full items-center bg-white dark:bg-dark`}>
         <div className="container">
-          <div className="relative -mx-4 flex items-center justify-between">
+          <div className=" flex items-center justify-between ">
             <div className="w-60 max-w-full px-4">
               <a href="/#" className="block w-full py-5">
                 Mawarith
@@ -44,15 +44,16 @@ const Navbar = ({menu}: any) => {
                   href="/register"
                   className="px-7 py-3 text-base font-medium text-dark hover:text-primary dark:text-white"
                 >
-                  Sign in
+                  Sign up
                 </a>
   
                 <a
                   href="/login"
-                  className="rounded-md bg-primary px-7 py-3 text-base font-medium text-white hover:bg-primary/90"
+                  className="px-7 py-3 text-base font-medium text-dark hover:text-primary dark:text-white"
                 >
-                  Sign Up
+                  Sign in
                 </a>
+  
               </div>
             </div>
           </div>
