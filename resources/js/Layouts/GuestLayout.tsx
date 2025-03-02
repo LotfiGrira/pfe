@@ -6,6 +6,12 @@ export default function Guest({ children }: PropsWithChildren) {
         link: "/", text: "الرئيسة"
     }, {
         link:"/about", text: "حول"
+        }, {
+        link:"/about", text: "حساب المواربث"
+        }, {
+        link:"/about", text: "اختبارات"
+        }, {
+        link:"/about", text: "مراجع"
     }];
 
     return (
