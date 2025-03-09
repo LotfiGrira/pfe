@@ -9,9 +9,9 @@ return new class extends Migration {
     {
         Schema::create('propositions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('exercice_id')->constrained()->onDelete('cascade'); // Lien avec exercices
-            $table->text('propos'); // Texte de la proposition
-            $table->boolean('is_true')->default(false); // Indique si la proposition est vraie
+            $table->foreignId('exercice_id')->constrained()->onDelete('cascade'); // Relation avec exercices
+            $table->text('propos');
+            $table->boolean('is_true')->default(false);
             $table->timestamps();
         });
     }

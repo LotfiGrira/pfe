@@ -9,10 +9,8 @@ return new class extends Migration {
     {
         Schema::create('exercices', function (Blueprint $table) {
             $table->id();
-            $table->string('titre');  // Titre de l'exercice
-            $table->text('propos')->nullable(); // Description (nullable)
-            $table->boolean('is_true')->default(false); // Boolean (par défaut false)
-            $table->timestamps(); // created_at & updated_at
+            $table->string('titre');
+            $table->timestamps();
         });
     }
 
