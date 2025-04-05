@@ -9,5 +9,10 @@ class Exercice extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['titre', 'propos', 'is_true']; 
+    protected $fillable = ['titre'];
+
+    public function propositions()
+    {
+        return $this->hasMany(Proposition::class, 'exercice_id');
+    }
 }
