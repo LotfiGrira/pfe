@@ -6,13 +6,13 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
     public function up(): void
-    {
-        Schema::create('exercices', function (Blueprint $table) {
-            $table->id();
-            $table->string('titre');
-            $table->timestamps();
-        });
-    }
+   {
+     Schema::create('exercices', function (Blueprint $table) {
+        $table->id();
+        $table->string('titre');
+        $table->timestamps();
+     });
+    } 
 
     public function down(): void
     {
