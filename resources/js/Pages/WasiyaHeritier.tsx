@@ -1,0 +1,70 @@
+import { useState } from "react";
+import { Link } from "@inertiajs/react";
+import GuestLayout from "@/Layouts/GuestLayout";
+
+const options = ["لا", ...Array.from({ length: 20 }, (_, i) => (i + 1).toString())];
+
+const categories = [
+  {
+    title: "(ب)أولاد الابن المتوفى",
+    fields: ["ابنه (ابن ابن)", "بنته (بنت ابن)", "بنات ابنه أشقاء أيضاً (ابن ابن ابن)", "بنات ابنه أشقاء أيضاً (بنت ابن ابن)"]
+  },
+  {
+    title: "(ب)أولاد البنت المتوفية",
+    fields: ["ابنها (ابن بنت)", "بنتها (بنت بنت)"]
+  },
+  {
+    title: "أولاد الابن  المتوفى (أ)",
+    fields: ["ابنه (ابن ابن)", "بنته (بنت ابن)", "بنات ابنه أشقاء أيضاً (ابن ابن ابن)", "بنات ابنه أشقاء أيضاً (بنت ابن ابن)"]
+  },
+  {
+    title: "(أ)أولاد البنت  المتوفية ",
+    fields: ["ابنها (ابن بنت)", "بنتها (بنت بنت)"]
+  }
+];
+
+export default function SelectionForm() {
+  const [selections, setSelections] = useState<Record<string, string>>({});
+
+  const handleChange = (field: string, value: string) => {
+    setSelections((prev) => ({ ...prev, [field]: value }));
+  };
+
+  return (
+    <GuestLayout>
+    <div className="flex flex-col items-center bg-yellow-100 min-h-screen p-6 text-right">
+      <h3 className="text-lg font-bold mb-6">اختر أولاد الابن المتوفى أو البنت المتوفية:</h3>
+      <div className="flex flex-wrap justify-center gap-6">
+        {categories.map((category, index) => (
+          <div key={index} className="bg-red-700 text-white p-4 rounded-lg w-64">
+            <h4 className="font-bold mb-2">{category.title}</h4>
+            {category.fields.map((field, idx) => (
+              <div key={idx} className="mb-2">
+                <label className="block">{field}:</label>
+                <select
+                  className="w-full p-1 text-black"
+                  value={selections[field] || "لا"}
+                  onChange={(e) => handleChange(field, e.target.value)}
+                >
+                  {options.map((option) => (
+                    <option key={option} value={option}>{option}</option>
+                  ))}
+                </select>
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+      <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4">
+                        
+                        <Link
+                            href="/tagsim-heritier"
+                            className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg shadow-md transition-colors duration-200 text-center">
+                            تقسيم الميراث
+                        </Link>
+                    </div>
+    </div>
+    </GuestLayout>
+  );
+  
+}
