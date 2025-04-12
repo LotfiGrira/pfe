@@ -50,16 +50,16 @@ require __DIR__.'/auth.php';
 Route::post('/resultats', [ExerciceController::class, 'getResultats']);
 
 Route::get('/calculator', function () {
-    return Inertia::render('NewCalcule'); // Vérifiez si ça pointe vers "NewCalcule"
+    return Inertia::render('Miraths/NewCalcule'); // Vérifiez si ça pointe vers "NewCalcule"
 });
 Route::get('/liste-heritier', function () {
-    return Inertia::render('ListeHeritier'); // Vérifiez si ça pointe vers "NewCalcule"
+    return Inertia::render('Miraths/ListeHeritier'); // Vérifiez si ça pointe vers "NewCalcule"
 });
 Route::get('/cas-heritier', function () {
-    return Inertia::render('CasHeritier'); 
+    return Inertia::render('Miraths/CasHeritier'); 
 });
 Route::get('/Monasa5atHeritier', function () {
-    return Inertia::render('Monasa5atHeritier');
+    return Inertia::render('Miraths/Monasa5atHeritier');
 })->name('monasa5at.heritier');
 
 Route::get('/HamelHeritier', function () {
