@@ -28,7 +28,7 @@ const EditExercice: React.FC<EditExerciceProps> = ({ exercice }) => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        put(`/exercice/${exercice.id}`);
+        put(`/exercices/${exercice.id}`);
     };
 
     return (

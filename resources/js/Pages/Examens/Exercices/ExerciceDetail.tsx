@@ -24,7 +24,7 @@ const ExerciceDetail: React.FC<ExerciceDetailProps> = ({ exercice = { id: 0, tit
             try {
                 const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
     
-                const response = await fetch(`/exercice/${exercice.id}`, {
+                const response = await fetch(`/exercices/${exercice.id}`, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',
@@ -34,7 +34,7 @@ const ExerciceDetail: React.FC<ExerciceDetailProps> = ({ exercice = { id: 0, tit
     
                 if (response.ok) {
                     alert('Exercice supprimé avec succès !'); // ✅ Affiche une alerte après suppression
-                    window.location.href = '/exercice'; // ✅ Redirige après l'alerte
+                    window.location.href = '/exercices'; // ✅ Redirige après l'alerte
                 } else {
                     const errorText = await response.text();
                     console.error("Erreur serveur:", errorText);
@@ -68,7 +68,7 @@ const ExerciceDetail: React.FC<ExerciceDetailProps> = ({ exercice = { id: 0, tit
 
                 <div className="mt-8 flex justify-center space-x-4">
                     <a
-                        href={`/exercice/${exercice.id}/edit`}
+                        href={`/exercices/${exercice.id}/edit`}
                         className="bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 transition duration-200"
                     >
                         Modifier l'exercice
