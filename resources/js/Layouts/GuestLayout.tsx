@@ -2,15 +2,12 @@ import { PropsWithChildren } from 'react';
 import Navbar from "@/Components/Navbar";
 
 export default function Guest({ children }: PropsWithChildren) {
-    
     const menu = [
         { text: "الرئيسة", link: "/" },
         { text: "حساب المواريث", link: "/calculator" },
-        { text: "اختبارات", link: "/exercice/create" },
+        { text: "اختبارات", link: "/exercices/create" },
         { text: "مراجع", link: "/references" },
-        
     ];
-
 
     return (
         <div dir="rtl" className="flex min-h-screen flex-col items-center bg-gray-100 pt-6 sm:justify-center sm:pt-0">
