@@ -15,7 +15,7 @@ class ExerciceController extends Controller
     public function index()
     {
         $exercices = Exercice::with('propositions')->get(); // Récupérer tous les exercices
-        return Inertia::render('ExerciceList', ['exercices' => $exercices]);
+        return Inertia::render('Examens/Exercices/ExerciceList', ['exercices' => $exercices]);
     }
   
     // Afficher un exercice spécifique
@@ -25,13 +25,13 @@ class ExerciceController extends Controller
                 if (!$exercice) {
             abort(404, 'Exercice non trouvé');
         }
-        return Inertia::render('ExerciceDetail', ['exercice' => $exercice]);
+        return Inertia::render('Examens/Exercices/ExerciceDetail', ['exercice' => $exercice]);
     }
 
     // Créer un nouvel exercice
     public function create()
     {
-        return Inertia::render('CreateExercice');
+        return Inertia::render('Examens/Exercices/CreateExercice');
     }
 
     // Enregistrer un nouvel exercice dans la base de données
@@ -73,7 +73,7 @@ public function edit($id)
     }
 
     // Passer l'exercice à la vue
-    return Inertia::render('EditExercice', ['exercice' => $exercice]);
+    return Inertia::render('Examens/Exercices/EditExercice', ['exercice' => $exercice]);
 }
 
     // Mettre à jour un exercice existant
