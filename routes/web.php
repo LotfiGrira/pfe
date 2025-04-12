@@ -14,16 +14,17 @@ Route::get('/', function () {
     return redirect()->route("about");
 });
 
-// Page de création d'un exercice
-Route::get('/exercice/create', function () {
-    return Inertia::render('CreateExercice');
-})->name('exercice.create');
+
 
 // Routes pour les exercices
+// Page de création d'un exercice
+Route::get('/exercices/create',  [ExerciceController::class, 'create']);
 Route::post('/exercices', [ExerciceController::class, 'store'])->name('exercice.store');
 Route::get('/exercices', [ExerciceController::class, 'index'])->name('exercice.index');
 Route::get('/exercices/{id}', [ExerciceController::class, 'show'])->name('exercice.show');
-
+Route::get('/exercices/{id}/edit', [ExerciceController::class, 'edit'])->name('exercice.edit');
+Route::put('/exercices/{id}', [ExerciceController::class, 'update'])->name('exercice.update');
+Route::delete('/exercices/{id}', [ExerciceController::class, 'destroy'])->name('exercice.destroy');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
@@ -41,15 +42,11 @@ Route::get('/about', [AboutController::class, "index"])->name("about");
 
 require __DIR__.'/auth.php';
 
-Route::get('/exercice/{id}', [ExerciceController::class, 'show'])->name('exercice.show');
-Route::get('/exercice/create', [ExerciceController::class, 'create'])->name('exercice.create');
-Route::get('/exercice/{id}/edit', [ExerciceController::class, 'edit'])->name('exercice.edit');
-Route::put('/exercice/{id}', [ExerciceController::class, 'update'])->name('exercice.update');
-Route::delete('/exercice/{id}', [ExerciceController::class, 'destroy'])->name('exercice.destroy');
 
 
 
-Route::get('/exercices/create', [ExerciceController::class, 'create']);
+
+// Route::get('/exercices/create', [ExerciceController::class, 'create']);
 Route::post('/resultats', [ExerciceController::class, 'getResultats']);
 
 Route::get('/calculator', function () {
@@ -86,5 +83,5 @@ Route::get('/tagsim-heritier', function () {
 Route::get('/liste-monasa5at', function () {
     return Inertia::render('ListeMonasa5at'); 
 });
-Route::get('/', [NewCalculeController::class, 'index'])->name('new-calcule');
+
 Route::get('/listeheritier', [ListeHeritierController::class, 'index'])->name('listeheritier');
