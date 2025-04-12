@@ -5,7 +5,7 @@ use App\Http\Controllers\AboutController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use App\Http\Controllers\ExerciceController;
+use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\ListeHeritierController;
 
 
@@ -16,15 +16,15 @@ Route::get('/', function () {
 
 
 
-// Routes pour les exercices
+// Routes pour les Questions
 // Page de création d'un exercice
-Route::get('/exercices/create',  [ExerciceController::class, 'create']);
-Route::post('/exercices', [ExerciceController::class, 'store'])->name('exercice.store');
-Route::get('/exercices', [ExerciceController::class, 'index'])->name('exercice.index');
-Route::get('/exercices/{id}', [ExerciceController::class, 'show'])->name('exercice.show');
-Route::get('/exercices/{id}/edit', [ExerciceController::class, 'edit'])->name('exercice.edit');
-Route::put('/exercices/{id}', [ExerciceController::class, 'update'])->name('exercice.update');
-Route::delete('/exercices/{id}', [ExerciceController::class, 'destroy'])->name('exercice.destroy');
+Route::get('/questions/create',  [QuestionController::class, 'create']);
+Route::post('/questions', [QuestionController::class, 'store'])->name('question.store');
+Route::get('/questions', [QuestionController::class, 'index'])->name('question.index');
+Route::get('/questions/{id}', [QuestionController::class, 'show'])->name('question.show');
+Route::get('/questions/{id}/edit', [QuestionController::class, 'edit'])->name('question.edit');
+Route::put('/questions/{id}', [QuestionController::class, 'update'])->name('question.update');
+Route::delete('/questions/{id}', [QuestionController::class, 'destroy'])->name('question.destroy');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
@@ -46,8 +46,7 @@ require __DIR__.'/auth.php';
 
 
 
-// Route::get('/exercices/create', [ExerciceController::class, 'create']);
-Route::post('/resultats', [ExerciceController::class, 'getResultats']);
+Route::post('/resultats', [QuestionsController::class, 'getResultats']);
 
 Route::get('/calculator', function () {
     return Inertia::render('Miraths/NewCalcule'); // Vérifiez si ça pointe vers "NewCalcule"

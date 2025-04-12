@@ -1,20 +1,20 @@
 import React, { useState } from 'react';
 import { useForm } from '@inertiajs/react';
 
-interface Exercice {
+interface Question {
     id: number;
     titre: string;
     propositions: { propos: string; is_true: boolean }[];
 }
 
-interface EditExerciceProps {
-    exercice: Exercice;
+interface EditQuestionProps {
+    Question: Question;
 }
 
-const EditExercice: React.FC<EditExerciceProps> = ({ exercice }) => {
+const EditQuestion: React.FC<EditQuestionProps> = ({ question }) => {
     const { data, setData, put, processing, errors } = useForm({
-        titre: exercice.titre,
-        propositions: [...exercice.propositions],
+        titre: question.titre,
+        propositions: [...question.propositions],
     });
 
     const handleAddProposition = () => {
@@ -28,14 +28,14 @@ const EditExercice: React.FC<EditExerciceProps> = ({ exercice }) => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        put(`/exercices/${exercice.id}`);
+        put(`/questions/${question.id}`);
     };
 
     return (
         <div className="min-h-screen bg-gray-100 p-6">
             <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-6">
                 <h1 className="text-3xl font-bold text-center text-gray-800 mb-6">
-                    Éditer l'exercice
+                    Éditer le question
                 </h1>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
@@ -147,4 +147,4 @@ const EditExercice: React.FC<EditExerciceProps> = ({ exercice }) => {
     );
 };
 
-export default EditExercice;
+export default EditQuestion;

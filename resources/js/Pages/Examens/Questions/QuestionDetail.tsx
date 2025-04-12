@@ -5,26 +5,26 @@ interface Proposition {
     is_true: boolean;
 }
 
-interface Exercice {
+interface Question {
     id: number;
     titre: string;
     propositions: Proposition[];
 }
 
-interface ExerciceDetailProps {
-    exercice?: Exercice;
+interface QuestionDetailProps {
+    question?: Question;
     onDelete?: (id: number) => void; // Permet de supprimer sans recharger la page
 }
 
-const ExerciceDetail: React.FC<ExerciceDetailProps> = ({ exercice = { id: 0, titre: '', propositions: [] }, onDelete }) => {
+const QuestionDetail: React.FC<QuestionDetailProps> = ({ question = { id: 0, titre: '', propositions: [] }, onDelete }) => {
     const [isDeleting, setIsDeleting] = useState(false);
 
     const handleDelete = async () => {
-        if (window.confirm('Êtes-vous sûr de vouloir supprimer cet exercice ?')) {
+        if (window.confirm('Êtes-vous sûr de vouloir supprimer cet question ?')) {
             try {
                 const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
     
-                const response = await fetch(`/exercices/${exercice.id}`, {
+                const response = await fetch(`/questions/${question.id}`, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',
@@ -33,8 +33,8 @@ const ExerciceDetail: React.FC<ExerciceDetailProps> = ({ exercice = { id: 0, tit
                 });
     
                 if (response.ok) {
-                    alert('Exercice supprimé avec succès !'); // ✅ Affiche une alerte après suppression
-                    window.location.href = '/exercices'; // ✅ Redirige après l'alerte
+                    alert('Question supprimé avec succès !'); // ✅ Affiche une alerte après suppression
+                    window.location.href = '/questions'; // ✅ Redirige après l'alerte
                 } else {
                     const errorText = await response.text();
                     console.error("Erreur serveur:", errorText);
@@ -42,7 +42,7 @@ const ExerciceDetail: React.FC<ExerciceDetailProps> = ({ exercice = { id: 0, tit
                 }
             } catch (error) {
                 console.error('Erreur:', error);
-                alert('Impossible de supprimer cet exercice.');
+                alert('Impossible de supprimer cet question.');
             }
         }
     };
@@ -52,11 +52,11 @@ const ExerciceDetail: React.FC<ExerciceDetailProps> = ({ exercice = { id: 0, tit
     return (
         <div className="min-h-screen bg-gray-100 p-6">
             <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-6">
-                <h1 className="text-3xl font-bold text-center text-gray-800 mb-6">{exercice.titre}</h1>
+                <h1 className="text-3xl font-bold text-center text-gray-800 mb-6">{question.titre}</h1>
 
                 <h3 className="text-xl font-semibold text-gray-700 mb-4">Propositions :</h3>
                 <ul className="space-y-4">
-                    {exercice.propositions.map((proposition, index) => (
+                    {question.propositions.map((proposition, index) => (
                         <li key={index} className="bg-gray-50 p-4 rounded-lg">
                             <p className="text-gray-700">{proposition.propos}</p>
                             <p className={`mt-2 text-sm font-medium ${proposition.is_true ? 'text-green-600' : 'text-red-600'}`}>
@@ -68,10 +68,10 @@ const ExerciceDetail: React.FC<ExerciceDetailProps> = ({ exercice = { id: 0, tit
 
                 <div className="mt-8 flex justify-center space-x-4">
                     <a
-                        href={`/exercices/${exercice.id}/edit`}
+                        href={`/questions/${question.id}/edit`}
                         className="bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 transition duration-200"
                     >
-                        Modifier l'exercice
+                        Modifier le question
                     </a>
                     <button
                         onClick={handleDelete}
@@ -88,4 +88,4 @@ const ExerciceDetail: React.FC<ExerciceDetailProps> = ({ exercice = { id: 0, tit
     );
 };
 
-export default ExerciceDetail;
+export default QuestionDetail;

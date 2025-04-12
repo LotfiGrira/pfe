@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Exercice extends Model
+class Question extends Model
 {
     use HasFactory;
 
@@ -13,6 +13,6 @@ class Exercice extends Model
 
     public function propositions()
     {
-        return $this->hasMany(Proposition::class, 'exercice_id');
+        return $this->hasMany(Proposition::class, 'question_id');
     }
 }

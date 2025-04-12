@@ -6,33 +6,33 @@ interface Proposition {
     is_true: boolean;
 }
 
-interface Exercice {
+interface Question {
     id: number;
     titre: string;
     propositions: Proposition[];
 }
 
-interface ExerciceListProps {
-    exercices: Exercice[];
+interface QuestionListProps {
+    questions: Question[];
 }
 
-const ExerciceList: React.FC<ExerciceListProps> = ({ exercices = [] }) => {
+const QuestionList: React.FC<QuestionListProps> = ({ questions = [] }) => {
     const [selectedPropositions, setSelectedPropositions] = useState<{ [key: number]: number | null }>({});
     const [resultsVisible, setResultsVisible] = useState(false);
     const [score, setScore] = useState<number | null>(null);
 
-    const handleRadioChange = (exerciceId: number, propositionId: number) => {
+    const handleRadioChange = (questionId: number, propositionId: number) => {
         setSelectedPropositions((prev) => ({
             ...prev,
-            [exerciceId]: propositionId,
+            [questionId]: propositionId,
         }));
     };
 
     const handleResultClick = () => {
         let correctAnswers = 0;
-        exercices.forEach((exercice) => {
-            const selectedId = selectedPropositions[exercice.id];
-            const correctProposition = exercice.propositions.find((prop) => prop.is_true);
+        questions.forEach((question) => {
+            const selectedId = selectedPropositions[question.id];
+            const correctProposition = question.propositions.find((prop) => prop.is_true);
             if (correctProposition && selectedId === correctProposition.id) {
                 correctAnswers++;
             }
@@ -54,11 +54,11 @@ const ExerciceList: React.FC<ExerciceListProps> = ({ exercices = [] }) => {
         return "❌ Besoin de révisions !";
     };
 
-    if (exercices.length === 0) {
+    if (questions.length === 0) {
         return (
             <div className="min-h-screen bg-gray-100 p-6">
                 <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-6">
-                    <p className="text-center text-gray-600 font-mono">Aucun exercice disponible.</p>
+                    <p className="text-center text-gray-600 font-mono">Aucun question disponible.</p>
                 </div>
             </div>
         );
@@ -69,32 +69,32 @@ const ExerciceList: React.FC<ExerciceListProps> = ({ exercices = [] }) => {
             <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-6">
                 <h1 className="text-3xl font-bold text-center text-gray-800 font-mono mb-6">📜 Examen</h1>
                 <ul className="space-y-4">
-                    {exercices.map((exercice) => (
-                        <li key={exercice.id} className="p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition duration-200">
+                    {questions.map((question) => (
+                        <li key={question.id} className="p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition duration-200">
                             <div>
                                 <h2 className="text-xl font-semibold text-gray-700 font-mono">
-                                    Exercice {exercice.id}: {exercice.titre}
+                                Question {question.id}: {question.titre}
                                 </h2>
                                 <div className="mt-2">
-                                    {exercice.propositions.map((proposition) => {
-                                        const isSelected = selectedPropositions[exercice.id] === proposition.id;
+                                    {question.propositions.map((proposition) => {
+                                        const isSelected = selectedPropositions[question.id] === proposition.id;
                                         const isCorrect = proposition.is_true;
-                                        const correctProposition = exercice.propositions.find((prop) => prop.is_true);
+                                        const correctProposition = question.propositions.find((prop) => prop.is_true);
 
                                         return (
                                             <div key={proposition.id} className="flex items-center">
                                                 <input
                                                     type="radio"
-                                                    id={`exercice-${exercice.id}-proposition-${proposition.id}`}
-                                                    name={`exercice-${exercice.id}`}
+                                                    id={`question-${question.id}-proposition-${proposition.id}`}
+                                                    name={`question-${question.id}`}
                                                     value={proposition.id}
                                                     checked={isSelected}
-                                                    onChange={() => handleRadioChange(exercice.id, proposition.id)}
+                                                    onChange={() => handleRadioChange(question.id, proposition.id)}
                                                     className="mr-2"
                                                     disabled={resultsVisible}
                                                 />
                                                 <label
-                                                    htmlFor={`exercice-${exercice.id}-proposition-${proposition.id}`}
+                                                    htmlFor={`question-${question.id}-proposition-${proposition.id}`}
                                                     className={`font-mono ${
                                                         resultsVisible
                                                             ? isSelected
@@ -129,9 +129,9 @@ const ExerciceList: React.FC<ExerciceListProps> = ({ exercices = [] }) => {
                         <>
                             <div className="mt-6 p-4 bg-gray-900 text-green-400 font-mono rounded-lg shadow-md">
                                 <h2 className="text-xl font-bold">
-                                    Score : {score} / {exercices.length}
+                                    Score : {score} / {questions.length}
                                 </h2>
-                                <p className="mt-2 text-lg">{getRemark(score || 0, exercices.length)}</p>
+                                <p className="mt-2 text-lg">{getRemark(score || 0, questions.length)}</p>
                             </div>
                             <button
                                 onClick={handlePrint}
@@ -147,4 +147,4 @@ const ExerciceList: React.FC<ExerciceListProps> = ({ exercices = [] }) => {
     );
 };
 
-export default ExerciceList;
+export default QuestionList;

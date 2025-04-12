@@ -9,7 +9,7 @@ return new class extends Migration {
     {
         Schema::create('propositions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('exercice_id')->constrained()->onDelete('cascade'); // Suppression en cascade
+            $table->foreignId('question_id')->constrained()->onDelete('cascade'); // Suppression en cascade
             $table->text('propos');
             $table->boolean('is_true')->default(false);
             $table->timestamps();

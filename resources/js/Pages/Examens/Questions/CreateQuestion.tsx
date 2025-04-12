@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useForm } from "@inertiajs/react";
 import GuestLayout from "@/Layouts/GuestLayout";
 
-export default function CreateExercice() {
+export default function CreateQuestion() {
     const { data, setData, post, processing, errors } = useForm({
         titre: "",
         propositions: [
@@ -13,8 +13,8 @@ export default function CreateExercice() {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        post("/exercices", {
-            onSuccess: () => window.location.href = "/exercices",
+        post("/questions", {
+            onSuccess: () => window.location.href = "/questions",
         });
     };
 
@@ -35,9 +35,9 @@ export default function CreateExercice() {
         }
     };
     const handleDelete = async () => {
-        if (window.confirm('Êtes-vous sûr de vouloir supprimer cet exercice ?')) {
+        if (window.confirm('Êtes-vous sûr de vouloir supprimer cet question ?')) {
             try {
-                const response = await fetch(`/exercice/${exercice.id}`, {
+                const response = await fetch(`/question/${question.id}`, {
                     method: 'DELETE',
                     headers: {
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
@@ -47,7 +47,7 @@ export default function CreateExercice() {
                 console.log('Réponse de la suppression :', response); // Affiche la réponse dans la console du navigateur
     
                 if (response.ok) {
-                    window.location.href = '/exercice'; // Rediriger après suppression
+                    window.location.href = '/question'; // Rediriger après suppression
                 } else {
                     alert('Une erreur est survenue lors de la suppression.');
                 }
@@ -59,7 +59,7 @@ export default function CreateExercice() {
     return (
         <GuestLayout>
             <div className="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-md">
-                <h2 className="text-2xl font-bold mb-4">Créer un Exercice</h2>
+                <h2 className="text-2xl font-bold mb-4">Créer un Question</h2>
                 <form onSubmit={handleSubmit} className="space-y-4">
                     {/* Champ Titre */}
                     <div>
@@ -125,7 +125,7 @@ export default function CreateExercice() {
                         disabled={processing}
                         className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 disabled:bg-gray-400 mt-4"
                     >
-                        {processing ? "Création..." : "Créer Exercice"}
+                        {processing ? "Création..." : "Créer Question"}
                     </button>
                 </form>
             </div>

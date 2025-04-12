@@ -9,11 +9,11 @@ class Proposition extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['propos', 'is_true', 'exercice_id'];
+    protected $fillable = ['propos', 'is_true', 'question_id'];
 
-    public function exercice()
+    public function question()
     {
-        return $this->belongsTo(Exercice::class, 'exercice_id');
+        return $this->belongsTo(Question::class, 'question_id');
     }
     
 }
