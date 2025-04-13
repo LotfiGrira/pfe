@@ -14,7 +14,7 @@ export default function CreateQuestion() {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         post("/questions", {
-            onSuccess: () => window.location.href = "/questions",
+            onSuccess: () => window.location.href = "/questions/affichage",
         });
     };
 
