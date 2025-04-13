@@ -21,10 +21,12 @@ Route::get('/', function () {
 Route::get('/questions/create',  [QuestionController::class, 'create']);
 Route::post('/questions', [QuestionController::class, 'store'])->name('question.store');
 Route::get('/questions', [QuestionController::class, 'index'])->name('question.index');
+Route::get('/questions/affichage', [QuestionController::class, 'affichage'])->name('question.affichage');
 Route::get('/questions/{id}', [QuestionController::class, 'show'])->name('question.show');
 Route::get('/questions/{id}/edit', [QuestionController::class, 'edit'])->name('question.edit');
 Route::put('/questions/{id}', [QuestionController::class, 'update'])->name('question.update');
 Route::delete('/questions/{id}', [QuestionController::class, 'destroy'])->name('question.destroy');
+
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
