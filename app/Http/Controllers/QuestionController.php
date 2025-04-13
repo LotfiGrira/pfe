@@ -59,7 +59,7 @@ class QuestionController extends Controller
         ]);
     }
 
-    return redirect()->route('question.index')->with('success', 'Question créé avec succès');
+    return redirect()->route('question.affichage')->with('success', 'Question créé avec succès');
 }
 
     // Afficher le formulaire d'édition d'un Questions
@@ -112,7 +112,8 @@ public function update(Request $request, $id)
     }
 
     // Rediriger vers la liste des question avec un message de succès
-    return redirect()->route('question.index')->with('success', 'Question mis à jour avec succès');
+    return redirect()->route('question.affichage')->with('success', 'Question mis à jour avec succès');
+
 }
 
     // Supprimer un question
@@ -167,5 +168,13 @@ public function getResultats(Request $request)
     ]);
 }
 
+public function affichage()
+{
+    $questions = Question::select('id', 'titre')->get();
+
+    return Inertia::render('Examens/Questions/AffichageQuestion', [
+        'questions' => $questions,
+    ]);
+}
 }
 
