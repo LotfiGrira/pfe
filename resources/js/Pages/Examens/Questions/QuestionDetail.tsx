@@ -34,7 +34,7 @@ const QuestionDetail: React.FC<QuestionDetailProps> = ({ question = { id: 0, tit
     
                 if (response.ok) {
                     alert('Question supprimé avec succès !'); // ✅ Affiche une alerte après suppression
-                    window.location.href = '/questions'; // ✅ Redirige après l'alerte
+                    window.location.href = '/questions/affichage'; // ✅ Redirige après l'alerte
                 } else {
                     const errorText = await response.text();
                     console.error("Erreur serveur:", errorText);
