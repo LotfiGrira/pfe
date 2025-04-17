@@ -23,7 +23,7 @@ const AffichageQuestion: React.FC<Props> = ({ questions = [], examenId }) => {
         if (confirm('Voulez-vous vraiment supprimer cette question ?')) {
           router.delete(route('examens.questions.destroy', {
             examen: examenId,
-            question: questionId
+            id: questionId // ✅ Ici on met bien "id", pas "question"
           }));
         }
       };
@@ -59,7 +59,7 @@ const AffichageQuestion: React.FC<Props> = ({ questions = [], examenId }) => {
                 <div className="flex justify-between items-start mb-2">
                   <h2 className="text-lg font-semibold">{question.titre}</h2>
                   <div className="space-x-2">
-                  <button
+      <button
   onClick={() => handleEdit(question.id)}
   className="px-3 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600 text-sm"
 >
