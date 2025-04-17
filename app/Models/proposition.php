@@ -9,11 +9,11 @@ class Proposition extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['propos', 'is_true', 'question_id'];
-
+    protected $fillable = ['question_id', 'propos', 'is_true'];
     public function question()
     {
         return $this->belongsTo(Question::class, 'question_id');
     }
     
 }
+
