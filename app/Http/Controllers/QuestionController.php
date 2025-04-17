@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-namespace App\Http\Controllers;
 
 use App\Models\Question;
+use App\Models\Proposition;
+use App\Models\Examen;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -13,73 +14,84 @@ class QuestionController extends Controller
     // Afficher tous les questions
     
   
-    public function index()
-{
-    $questions = Question::with('propositions')->get();
-    return Inertia::render('Examens/Questions/QuestionList', ['questions' => $questions]);
-}
-
-    // Afficher un questions spécifique
-    public function show($id)
+    public function index(Examen $examen)
     {
-        $question = Question::with('propositions')->find($id);
-                if (!$question) {
-            abort(404, 'Question non trouvé');
-        }
-        return Inertia::render('Examens/Questions/QuestionDetail', ['question' => $question]);
-    }
-
-    // Créer un nouvel question
-    public function create()
-    {
-        return Inertia::render('Examens/Questions/CreateQuestion');
-    }
-
-    // Enregistrer un nouvel Questions dans la base de données
-    public function store(Request $request)
-{
-    // Validation des données
-    $request->validate([
-        'titre' => 'required|string|max:255',
-        'propositions' => 'required|array|min:1',
-        'propositions.*.text' => 'required|string|max:255', // Assurez-vous que le champ est bien 'text'
-        'propositions.*.is_true' => 'required|boolean',
-    ]);
-
-    // Création de l'Questions
-    $question = Question::create([
-        'titre' => $request->titre,
-    ]);
-
-    // Enregistrement des propositions
-    foreach ($request->propositions as $proposition) {
-        $question->propositions()->create([
-            'propos' => $proposition['text'], // Assurez-vous que le champ est bien 'text'
-            'is_true' => $proposition['is_true'],
+        return Inertia::render('Examens/Questions/AffichageQuestion', [
+            'questions' => $examen->questions()->with('propositions')->get(),
+            'examenId' => $examen->id,
         ]);
     }
+    
 
-    return redirect()->route('question.affichage')->with('success', 'Question créé avec succès');
+    // Afficher un questions spécifique
+    public function show(Examen $examen)
+{
+    $questions = $examen->questions()->with('propositions')->get();
+
+    return Inertia::render('Examens/Questions/AffichageQuestion', [
+        'examenId' => $examen->id,
+        'questions' => $questions,
+    ]);
 }
+
+    // Créer un nouvel question
+    public function create($examenId)
+    {
+        // Récupérer l'examen
+        $examen = Examen::findOrFail($examenId);
+    
+        // Passer l'examenId à la vue
+        return Inertia::render('Examens/Questions/CreateQuestion', [
+            'examenId' => $examen->id
+        ]);
+    }
+    
+
+
+
+    
+    // Enregistrer un nouvel Questions dans la base de données
+    public function store(Request $request, $examenId)
+    {
+        $request->validate([
+            'titre' => 'required|string|max:255',
+            'propositions' => 'required|array|min:2',
+            'propositions.*.propos' => 'required|string',
+            'propositions.*.is_true' => 'required|boolean',
+        ]);
+    
+        // Créer la question
+        $question = Question::create([
+            'titre' => $request->titre,
+            'examen_id' => $examenId,
+        ]);
+    
+        // Créer les propositions associées
+        foreach ($request->propositions as $prop) {
+            Proposition::create([
+                'question_id' => $question->id,
+                'propos' => $prop['propos'],
+                'is_true' => $prop['is_true'],
+            ]);
+        }
+        return redirect()->route('question.affichage', $examenId)
+                        ->with('success', 'Question créée avec succès !');
+    }
+    
 
     // Afficher le formulaire d'édition d'un Questions
     
-public function edit($id)
-{
-    // Récupérer l'Questions avec ses propositions
-    $question = question::with('propositions')->find($id);
-
-    if (!$question) {
-        abort(404, 'Question non trouvé');
+    public function edit(Examen $examen, Question $question)
+    {
+        return Inertia::render('Examens/Questions/Edit', [
+            'examenId' => $examen->id,
+            'question' => $question->load('propositions'),
+        ]);
     }
 
-    // Passer l'question à la vue
-    return Inertia::render('Examens/Questions/EditQuestion', ['question' => $question]);
-}
-
     // Mettre à jour un question existant
-public function update(Request $request, $id)
-{
+    public function update(UpdateQuestionRequest $request, Examen $examen, Question $question)
+    {
     // Validation des données
     $request->validate([
         'titre' => 'required|string|max:255',
@@ -112,24 +124,19 @@ public function update(Request $request, $id)
     }
 
     // Rediriger vers la liste des question avec un message de succès
-    return redirect()->route('question.affichage')->with('success', 'Question mis à jour avec succès');
+    return redirect()->route('examen/question.affichage')->with('success', 'Question mis à jour avec succès');
 
 }
 
     // Supprimer un question
    
-    public function destroy($id)
-    {
-        $question = Question::find($id);
-    
-        if (!$question) {
-            return response()->json(['message' => 'Question introuvable'], 404);
-        }
-    
-        $question->delete();
-    
-        return response()->json(['message' => 'Question supprimé avec succès'], 200);
-    }
+    public function destroy($examenId, $questionId)
+{
+    $question = Question::findOrFail($questionId);
+    $question->delete();
+
+    return redirect()->back()->with('success', 'Question supprimée avec succès.');
+}
 
 public function getResultats(Request $request)
 {
