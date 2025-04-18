@@ -30,7 +30,7 @@ Route::get('/examens/{examen}/questions/affichage', [QuestionController::class, 
     ->name('question.affichage');
     Route::get('/examens/{examen}/questions/{id}', [QuestionController::class, 'show'])->name('question.show');
 Route::get('/examens/{examen}/questions/{id}/edit', [QuestionController::class, 'edit'])->name('question.edit');
-Route::put('/examens/{examen}/questions/{id}', [QuestionController::class, 'update'])->name('question.update');
+Route::put('/examens/{examen}/questions/{id}', [QuestionController::class, 'update'])->name('questions.update');
 Route::delete('/examens/{examen}/questions/{id}', [QuestionController::class, 'destroy'])->name('examens.questions.destroy');
 
 
