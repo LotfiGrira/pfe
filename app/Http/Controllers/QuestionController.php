@@ -74,8 +74,10 @@ class QuestionController extends Controller
                 'is_true' => $prop['is_true'],
             ]);
         }
-        return redirect()->route('question.affichage', $examenId)
-                        ->with('success', 'Question créée avec succès !');
+    
+        // ✅ Redirection vers la page de l'examen (affichage de l'examen avec ses questions, par exemple)
+        return redirect()->route('examens.show', $examenId)
+                         ->with('success', 'Question créée avec succès !');
     }
     
 

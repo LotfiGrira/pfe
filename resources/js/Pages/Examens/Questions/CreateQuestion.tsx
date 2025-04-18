@@ -34,8 +34,8 @@ export default function CreateQuestion({ examenId }: Props) {
     e.preventDefault();
     post(route('examens.questions.store', examenId), {
       onSuccess: () => {
-        // Redirection vers la page d'affichage
-        router.visit(route('question.affichage', examenId));
+        // Redirection vers la page Show
+        router.visit(route('examens.show', examenId));
       },
     });
   };
