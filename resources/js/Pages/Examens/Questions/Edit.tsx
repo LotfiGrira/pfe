@@ -1,5 +1,5 @@
 import React from 'react';
-import { useForm } from '@inertiajs/react';
+import { useForm, router } from '@inertiajs/react';
 
 interface Proposition {
   id: number;
@@ -36,7 +36,7 @@ const Edit: React.FC<Props> = ({ examenId, question }) => {
 
   const handleAddProposition = () => {
     const newProp: Proposition = {
-      id: Date.now(), // ID temporaire (id backend non nécessaire ici)
+      id: Date.now(), // ID temporaire, juste pour React
       propos: '',
       is_true: false,
     };
@@ -51,10 +51,16 @@ const Edit: React.FC<Props> = ({ examenId, question }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
     put(route('questions.update', {
       examen: examenId,
-      question: question.id
-    }));
+      id: question.id, // ✅ corriger ici : `id` est requis par la route
+    }), {
+      onSuccess: () => {
+        // ✅ redirection automatique vers l'affichage de l'examen
+        router.visit(route('examens.show', examenId));
+      }
+    });
   };
 
   return (
