@@ -83,52 +83,49 @@ class QuestionController extends Controller
 
     // Afficher le formulaire d'édition d'un Questions
     
-    public function edit(Examen $examen, Question $question)
+    public function edit(Examen $examen, $questionId)
     {
+        $question = $examen->questions()->with('propositions')->findOrFail($questionId);
+    
         return Inertia::render('Examens/Questions/Edit', [
             'examenId' => $examen->id,
-            'question' => $question->load('propositions'),
+            'question' => $question,
         ]);
     }
 
     // Mettre à jour un question existant
-    public function update(UpdateQuestionRequest $request, Examen $examen, Question $question)
+    public function update(Request $request, Examen $examen, $questionId)
     {
-    // Validation des données
-    $request->validate([
-        'titre' => 'required|string|max:255',
-        'propositions' => 'required|array|min:1',
-        'propositions.*.propos' => 'required|string|max:255',
-        'propositions.*.is_true' => 'required|boolean',
-    ]);
-
-    // Récupérer l'question
-    $question = Question::find($id);
-
-    if (!$question) {
-        abort(404, 'Question non trouvé');
-    }
-
-    // Mettre à jour l'question
-    $question->update([
-        'titre' => $request->titre,
-    ]);
-
-    // Supprimer les anciennes propositions
-    $question->propositions()->delete();
-
-    // Enregistrer les nouvelles propositions
-    foreach ($request->propositions as $proposition) {
-        $question->propositions()->create([
-            'propos' => $proposition['propos'],
-            'is_true' => $proposition['is_true'],
+        $request->validate([
+            'titre' => 'required|string|max:255',
+            'propositions' => 'required|array|min:1',
+            'propositions.*.propos' => 'required|string|max:255',
+            'propositions.*.is_true' => 'required|boolean',
         ]);
+    
+        // Trouver la question liée à l'examen
+        $question = $examen->questions()->findOrFail($questionId);
+    
+        // Mettre à jour le titre
+        $question->update([
+            'titre' => $request->titre,
+        ]);
+    
+        // Supprimer les anciennes propositions
+        $question->propositions()->delete();
+    
+        // Ajouter les nouvelles
+        foreach ($request->propositions as $prop) {
+            $question->propositions()->create([
+                'propos' => $prop['propos'],
+                'is_true' => $prop['is_true'],
+            ]);
+        }
+    
+        // ✅ Redirection vers la page de l'examen
+        return redirect()->route('examens.show', $examen->id)
+                         ->with('success', 'Question mise à jour avec succès.');
     }
-
-    // Rediriger vers la liste des question avec un message de succès
-    return redirect()->route('examen/question.affichage')->with('success', 'Question mis à jour avec succès');
-
-}
 
     // Supprimer un question
    
