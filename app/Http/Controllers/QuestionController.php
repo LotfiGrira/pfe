@@ -22,6 +22,8 @@ class QuestionController extends Controller
         ]);
     }
     
+ 
+
 
     // Afficher un questions spécifique
     public function show(Examen $examen)
@@ -173,13 +175,12 @@ public function getResultats(Request $request)
         'finalScore' => $finalScore,
     ]);
 }
-
 public function affichage()
 {
-    $questions = Question::select('id', 'titre')->get();
+    $questions = Question::with('propositions')->get();
 
-    return Inertia::render('Examens/Questions/AffichageQuestion', [
-        'questions' => $questions,
+    return Inertia::render('Examens/Questions/QuestionList', [
+        'questions' => $questions
     ]);
 }
 }

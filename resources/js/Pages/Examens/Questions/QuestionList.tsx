@@ -27,7 +27,6 @@ const QuestionList: React.FC<QuestionListProps> = ({ questions = [] }) => {
             [questionId]: propositionId,
         }));
     };
-
     const handleResultClick = () => {
         let correctAnswers = 0;
         questions.forEach((question) => {

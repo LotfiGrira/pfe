@@ -22,13 +22,10 @@ Route::get('/', function () {
 Route::get('/examens/{examen}/questions/create', [QuestionController::class, 'create'])->name('questions.create');
 Route::post('/examens/{examen}/questions', [QuestionController::class, 'store'])->name('question.store');
 Route::get('/examens/{examen}/questions', [QuestionController::class, 'index'])->name('question.index');
-Route::post('/examens/{examen}/questions', [QuestionController::class, 'store'])
-    ->name('examens.questions.store');
-    Route::get('/examens/{examen}', [QuestionController::class, 'index'])->name('examens.questions.index');
-
-Route::get('/examens/{examen}/questions/affichage', [QuestionController::class, 'affichage'])
-    ->name('question.affichage');
-    Route::get('/examens/{examen}/questions/{id}', [QuestionController::class, 'show'])->name('question.show');
+Route::post('/examens/{examen}/questions', [QuestionController::class, 'store'])->name('examens.questions.store');
+Route::get('/examens/{examen}', [QuestionController::class, 'index'])->name('examens.questions.index');
+Route::get('/examens/{examen}/questions/affichage', [QuestionController::class, 'affichage'])->name('question.affichage');
+Route::get('/examens/{examen}/questions/{id}', [QuestionController::class, 'show'])->name('question.show');
 Route::get('/examens/{examen}/questions/{id}/edit', [QuestionController::class, 'edit'])->name('question.edit');
 Route::put('/examens/{examen}/questions/{id}', [QuestionController::class, 'update'])->name('questions.update');
 Route::delete('/examens/{examen}/questions/{id}', [QuestionController::class, 'destroy'])->name('examens.questions.destroy');
