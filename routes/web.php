@@ -33,7 +33,7 @@ Route::delete('/examens/{examen}/questions/{id}', [QuestionController::class, 'd
 
 // Routes pour les Examens
 
-Route::get('examens/create', [ExamenController::class, 'create'])->name('examen.create');
+Route::get('/examens/create', [ExamenController::class, 'create'])->name('examens.create');
 Route::post('/examens', [ExamenController::class, 'store'])->name('examen.store');
 Route::get('/examens', [ExamenController::class, 'index'])->name('examens.index');
 Route::get('/examens/{id}', [ExamenController::class, 'show'])->name('examens.show');
@@ -52,6 +52,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    
 });
 
 // Route pour la page "À propos"
