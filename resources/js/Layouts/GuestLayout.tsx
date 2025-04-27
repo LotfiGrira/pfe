@@ -5,7 +5,7 @@ export default function Guest({ children }: PropsWithChildren) {
     const menu = [
         { text: "الرئيسة", link: "/" },
         { text: "حساب المواريث", link: "/calculator" },
-        { text: "اختبارات", link: "/examens/create" },
+        { text: "اختبارات", link: "/examens" },
         { text: "مراجع", link: "/references" },
     ];
 
