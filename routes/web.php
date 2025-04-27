@@ -11,6 +11,7 @@ use App\Http\Controllers\ExamenController;
 
 
 
+
 Route::get('/', function () {
     return redirect()->route("about");
 });
@@ -30,17 +31,15 @@ Route::get('/examens/{examen}/questions/{id}/edit', [QuestionController::class, 
 Route::put('/examens/{examen}/questions/{id}', [QuestionController::class, 'update'])->name('questions.update');
 Route::delete('/examens/{examen}/questions/{id}', [QuestionController::class, 'destroy'])->name('examens.questions.destroy');
 
-
 // Routes pour les Examens
 
-Route::get('/examens/create', [ExamenController::class, 'create'])->name('examens.create');
-Route::post('/examens', [ExamenController::class, 'store'])->name('examen.store');
+Route::get('/examen/create', [ExamenController::class, 'create'])->name('examens.create'); 
+Route::post('/examens', [ExamenController::class, 'store'])->name('examens.store');
 Route::get('/examens', [ExamenController::class, 'index'])->name('examens.index');
 Route::get('/examens/{id}', [ExamenController::class, 'show'])->name('examens.show');
 Route::get('/examens/{id}/edit', [ExamenController::class, 'edit'])->name('examens.edit');
 Route::put('/examens/{id}', [ExamenController::class, 'update'])->name('examens.update');
 Route::delete('/examens/{id}', [ExamenController::class, 'destroy'])->name('examens.destroy');
-
 
 
 Route::get('/dashboard', function () {
