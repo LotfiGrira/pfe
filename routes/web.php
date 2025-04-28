@@ -16,7 +16,9 @@ Route::get('/', function () {
     return redirect()->route("about");
 });
 
-
+Route::middleware('role:admin')->get('/examen/create', function () {
+    return view('examens.create');
+});
 
 // Routes pour les Questions
 
