@@ -10,8 +10,9 @@ use Inertia\Response;
 class ExamenController extends Controller
 {
 
-public function create(): Response
+public function create()
 {
+    dd('gg');
     return Inertia::render('Examens/Examen/CreateExamen');
 }
 
@@ -27,11 +28,19 @@ public function store(Request $request)
 
     return redirect()->route('examens.index')->with('success', 'Examen créé avec succès.');
 }
+
+
 public function index()
 {
     $examens = Examen::all();
-    return Inertia::render('Examens/Examen/Index', ['examens' => $examens]);
+    $isAdmin = auth()->user()->hasRole('admin');
+
+    return Inertia::render('Examens/Examen/Index', [
+        'examens' => $examens,
+        'isAdmin' => $isAdmin,
+    ]);
 }
+
 public function edit($id)
 {
     $examen = Examen::findOrFail($id);
@@ -60,7 +69,10 @@ public function destroy($id)
 
     return redirect()->route('examens.index')->with('success', 'Examen supprimé avec succès.');
 }
-
+public function __construct()
+{
+    $this->middleware('role:admin'); // Vérifie que l'utilisateur a le rôle "admin"
+}
 
 
 }
