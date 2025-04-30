@@ -12,7 +12,7 @@ class ExamenController extends Controller
 
 public function create()
 {
-    dd('gg');
+    
     return Inertia::render('Examens/Examen/CreateExamen');
 }
 
@@ -71,8 +71,15 @@ public function destroy($id)
 }
 public function __construct()
 {
-    $this->middleware('role:admin'); // Vérifie que l'utilisateur a le rôle "admin"
+    // $this->middleware('role:admin'); // Vérifie que l'utilisateur a le rôle "admin"
 }
+public function show($id)
+{
+    $examen = Examen::findOrFail($id);
 
+    return Inertia::render('Examens/Questions/AffichageQuestion', [
+        'examen' => $examen,
+    ]);
+}
 
 }
