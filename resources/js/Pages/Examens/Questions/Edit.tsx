@@ -36,7 +36,7 @@ const Edit: React.FC<Props> = ({ examenId, question }) => {
 
   const handleAddProposition = () => {
     const newProp: Proposition = {
-      id: Date.now(), // ID temporaire, juste pour React
+      id: Date.now(), // ID temporaire pour React
       propos: '',
       is_true: false,
     };
@@ -54,11 +54,11 @@ const Edit: React.FC<Props> = ({ examenId, question }) => {
 
     put(route('questions.update', {
       examen: examenId,
-      id: question.id, // ✅ corriger ici : `id` est requis par la route
+      id: question.id,
     }), {
       onSuccess: () => {
-        // ✅ redirection automatique vers l'affichage de l'examen
-        router.visit(route('examens.show', examenId));
+        // ✅ Redirige vers la liste des questions de cet examen
+        router.visit(route('examens.questions.index', { examen: examenId }));
       }
     });
   };
@@ -129,10 +129,10 @@ const Edit: React.FC<Props> = ({ examenId, question }) => {
             </button>
 
             <a
-              href={route('examens.show', examenId)}
+              href={route('examens.questions.index', { examen: examenId })}
               className="text-blue-600 hover:underline text-sm"
             >
-              ← Retour à l'examen
+              ← Retour aux questions
             </a>
           </div>
         </form>
