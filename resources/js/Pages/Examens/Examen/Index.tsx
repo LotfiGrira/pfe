@@ -37,12 +37,16 @@ const ExamenIndex: React.FC<Props> = ({ examens, isAdmin }) => { // 👈 récup�
           <ul className="divide-y">
             {examens.map((examen) => (
               <li key={examen.id} className="py-3 flex justify-between items-center">
-                <Link
-                  href={`/examens/${examen.id}`}
-                  className="text-blue-600 hover:underline font-medium"
-                >
-                  {examen.titre}
-                </Link>
+             <Link
+  href={route('question.affichage', { examen: examen.id })}
+  className="text-blue-600 hover:underline font-medium"
+>
+  {examen.titre}
+</Link>
+
+
+
+                
                 <div className="space-x-2">
                   <Link
                     href={`/examens/${examen.id}/edit`}
