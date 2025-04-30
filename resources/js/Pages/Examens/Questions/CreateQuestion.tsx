@@ -34,9 +34,8 @@ export default function CreateQuestion({ examenId }: Props) {
     e.preventDefault();
     post(route('examens.questions.store', examenId), {
       onSuccess: () => {
-        // Redirection vers la page Show
-        router.visit(route('examens.show', examenId));
-      },
+        router.visit(route('question.affichage', { examen: examenId }));
+      }
     });
   };
 
@@ -99,6 +98,7 @@ export default function CreateQuestion({ examenId }: Props) {
           >
             {processing ? 'Création...' : 'Créer Question'}
           </button>
+          
           <button
             type="button"
             onClick={ajouterProposition}
