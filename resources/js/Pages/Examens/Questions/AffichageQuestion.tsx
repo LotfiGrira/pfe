@@ -15,7 +15,7 @@ interface Question {
 
 interface Props {
   questions: Question[];
-  examenId: number; // 👈 Important pour la route de création
+  examenId: number; // 👈 doit venir du composant parent
 }
 
 const AffichageQuestion: React.FC<Props> = ({ questions = [], examenId }) => {
@@ -29,7 +29,7 @@ const AffichageQuestion: React.FC<Props> = ({ questions = [], examenId }) => {
       };
 
       const handleEdit = (questionId: number) => {
-        router.visit(route('question.edit', {
+        router.visit(route('questions.edit', {
           examen: examenId,
           id: questionId, // ⚠️ Bien mettre "id" ici, car ta route utilise {id}
         }));
@@ -42,12 +42,13 @@ const AffichageQuestion: React.FC<Props> = ({ questions = [], examenId }) => {
         {/* Bouton Ajouter une question */}
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">📋 Liste des Questions</h1>
+         
           <Link
-            href={route('questions.create', { examen: examenId })}
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm"
-          >
-            ➕ Ajouter une question
-          </Link>
+  href={route('questions.create', { examen: examenId })}
+  className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm"
+>
+  ➕ Ajouter une question
+</Link>
         </div>
 
         {questions.length === 0 ? (
