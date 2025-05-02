@@ -174,5 +174,16 @@ public function affichage($examenId)
         'examenId' => (int) $examenId,
     ]);
 }
+public function liste($examenId)
+    {
+        $questions = Question::with('propositions')
+            ->where('examen_id', $examenId)
+            ->get();
+
+        return Inertia::render('Examens/Questions/QuestionList', [
+            'questions' => $questions,
+            'examenId' => (int) $examenId,
+        ]);
+    }
 }
 
