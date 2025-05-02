@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Examen;
-use Illuminate\Http\Request;
+use App\Models\Examen; // ✅ ICI
 use Inertia\Inertia;
+use Illuminate\Http\Request;
 use Inertia\Response;
 
 class ExamenController extends Controller
+
 {
 
 public function create()
@@ -80,6 +81,18 @@ public function show($id)
     return Inertia::render('Examens/Questions/AffichageQuestion', [
         'examen' => $examen,
     ]);
+}
+
+
+public function affichage()
+{
+$examens = Examen::all();
+
+    return Inertia::render('Examens/Examen/AffichageExamen', [
+        'examens' => Examen::all(),
+        
+    ]);
+
 }
 
 }
