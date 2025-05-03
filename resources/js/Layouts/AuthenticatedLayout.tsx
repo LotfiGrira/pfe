@@ -9,7 +9,7 @@ export default function Authenticated({
     header,
     children,
 }: PropsWithChildren<{ header?: ReactNode }>) {
-    const user = usePage().props.auth.user;
+    const user = usePage().props?.auth?.user;
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
 
@@ -34,7 +34,7 @@ export default function Authenticated({
                         {/* Avatar + Dropdown */}
                         <div className="hidden sm:flex sm:items-center gap-3">
                             <img
-                                src={user?.photo || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=random`}
+                                src={user?.photo || `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.name)}&background=random`}
                                 alt="Avatar"
                                 className="w-9 h-9 rounded-full border object-cover"
                             />
@@ -45,7 +45,7 @@ export default function Authenticated({
                                             type="button"
                                             className="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-800"
                                         >
-                                            {user.name}
+                                            {user?.name}
                                             <svg
                                                 className="ms-2 h-4 w-4"
                                                 xmlns="http://www.w3.org/2000/svg"
@@ -118,10 +118,10 @@ export default function Authenticated({
                     <div className="border-t border-gray-200 pb-1 pt-4">
                         <div className="px-4">
                             <div className="text-base font-medium text-gray-800">
-                                {user.name}
+                                {user?.name}
                             </div>
                             <div className="text-sm font-medium text-gray-500">
-                                {user.email}
+                                {user?.email}
                             </div>
                         </div>
                         <div className="mt-3 space-y-1">
