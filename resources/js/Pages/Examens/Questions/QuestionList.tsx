@@ -16,7 +16,7 @@ interface QuestionListProps {
     questions: Question[];
 }
 
-const QuestionList: React.FC<QuestionListProps> = ({ questions = [] }) => {
+const QuestionList: React.FC<QuestionListProps> = ({ questions = [], examenTitre }) => {
     const [selectedPropositions, setSelectedPropositions] = useState<{ [key: number]: number | null }>({});
     const [resultsVisible, setResultsVisible] = useState(false);
     const [score, setScore] = useState<number | null>(null);
@@ -57,7 +57,10 @@ const QuestionList: React.FC<QuestionListProps> = ({ questions = [] }) => {
         return (
             <div className="min-h-screen bg-gray-100 p-6">
                 <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-6">
-                    <p className="text-center text-gray-600 font-mono">Aucun question disponible.</p>
+                    <h1 className="text-3xl font-bold text-center text-gray-800 font-mono mb-6">
+                        📜 Examen : {examenTitre}
+                    </h1>
+                    <p className="text-center text-gray-600 font-mono">Aucune question disponible.</p>
                 </div>
             </div>
         );
@@ -66,19 +69,20 @@ const QuestionList: React.FC<QuestionListProps> = ({ questions = [] }) => {
     return (
         <div className="min-h-screen bg-gray-100 p-6">
             <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-6">
-                <h1 className="text-3xl font-bold text-center text-gray-800 font-mono mb-6">📜 Examen</h1>
+                <h1 className="text-3xl font-bold text-center text-gray-800 font-mono mb-6">
+                    📜 Examen : {examenTitre}
+                </h1>
                 <ul className="space-y-4">
                     {questions.map((question) => (
                         <li key={question.id} className="p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition duration-200">
                             <div>
                                 <h2 className="text-xl font-semibold text-gray-700 font-mono">
-                                Question {question.id}: {question.titre}
+                                    Question {question.id}: {question.titre}
                                 </h2>
                                 <div className="mt-2">
                                     {question.propositions.map((proposition) => {
                                         const isSelected = selectedPropositions[question.id] === proposition.id;
                                         const isCorrect = proposition.is_true;
-                                        const correctProposition = question.propositions.find((prop) => prop.is_true);
 
                                         return (
                                             <div key={proposition.id} className="flex items-center">
