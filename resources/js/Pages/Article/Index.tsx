@@ -8,10 +8,10 @@ interface Article {
 
 interface Props {
   articles: Article[];
-  isAdmin: boolean; // 👈 ajouter isAdmin ici
+  isAdmin: boolean;
 }
 
-const ArticleIndex: React.FC<Props> = ({ articles, isAdmin }) => { // 👈 récupérer isAdmin ici
+const ArticleIndex: React.FC<Props> = ({ articles, isAdmin }) => {
   const handleDelete = (id: number) => {
     if (confirm('Voulez-vous vraiment supprimer cet article ?')) {
       router.delete(`/articles/${id}`);
@@ -21,9 +21,8 @@ const ArticleIndex: React.FC<Props> = ({ articles, isAdmin }) => { // 👈 récu
   return (
     <div className="p-6">
       <div className="max-w-3xl mx-auto bg-white shadow rounded-lg p-4">
-        <h1 className="text-2xl font-bold mb-4">📋 Liste des article</h1>
+        <h1 className="text-2xl font-bold mb-4">📋 Liste des articles</h1>
 
-        {/* Affiche le bouton seulement si l'utilisateur est admin */}
         {isAdmin && (
           <Link
             href={route('articles.create')}
@@ -36,27 +35,32 @@ const ArticleIndex: React.FC<Props> = ({ articles, isAdmin }) => { // 👈 récu
         <div>
           <ul className="divide-y">
             {articles.map((article) => (
-              <li key={article.id} className="py-3 flex justify-between items-center">      
+              <li key={article.id} className="py-3 flex justify-between items-center">
+                {/* Lien vers la page de détail */}
+                <Link
+                  href={route('articles.detail', { article: article.id })}
+                  className="text-blue-600 hover:underline font-medium"
+                >
+                  {article.titre}
+                </Link>
 
-               <div
-              >
-                {article.titre}
-              </div>
-
-                <div className="space-x-2">
-                  <Link
-                    href={`/articles/${article.id}/edit`}
-                    className="text-yellow-500 hover:underline"
-                  >
-                    Modifier
-                  </Link>
-                  <button
-                    onClick={() => handleDelete(article.id)}
-                    className="text-red-500 hover:underline"
-                  >
-                    Supprimer
-                  </button>
-                </div>
+                {/* Actions pour l'admin */}
+                {isAdmin && (
+                  <div className="space-x-2">
+                    <Link
+                      href={`/articles/${article.id}/edit`}
+                      className="text-yellow-500 hover:underline"
+                    >
+                      Modifier
+                    </Link>
+                    <button
+                      onClick={() => handleDelete(article.id)}
+                      className="text-red-500 hover:underline"
+                    >
+                      Supprimer
+                    </button>
+                  </div>
+                )}
               </li>
             ))}
           </ul>
