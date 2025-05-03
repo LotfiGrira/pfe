@@ -41,6 +41,16 @@ public function index()
         'isAdmin' => $isAdmin,
     ]);
 }
+public function listeexamen()
+{
+    $examens = Examen::all();
+    $isAdmin = auth()->user()->hasRole('admin');
+
+    return Inertia::render('Examens/Examen/ListeExamen', [
+        'examens' => $examens,
+        'isAdmin' => $isAdmin,
+    ]);
+}
 
 public function edit($id)
 {
