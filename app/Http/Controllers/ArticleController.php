@@ -80,8 +80,23 @@ class ArticleController extends Controller
         ]);
     }
 
-    public function __construct()
-    {
-        // $this->middleware('role:admin'); // 👈 Active si nécessaire
-    }
+
+public function liste()
+{
+    $articles = Article::all();
+
+    return Inertia::render('Article/ListeArticle', [
+        'articles' => $articles,
+        'isAdmin' => auth()->user()?->hasRole('admin'),
+    ]);
+}
+
+public function show($article_id)
+{
+    $article = Article::findOrFail($article_id);
+
+    return Inertia::render('Article/ShowArticle', [
+        'article' => $article,
+    ]);
+}
 }
