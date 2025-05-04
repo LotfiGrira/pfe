@@ -18,37 +18,50 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::group(['middleware' => ['role:admin']], function () {
+
+        Route::get('/examens', [ExamenController::class, 'index'])->name('examens.index');
         Route::get('/examen/create', [ExamenController::class, 'create'])->name('examens.create');
         Route::post('/examens', [ExamenController::class, 'store'])->name('examens.store');
-        Route::get('/examens', [ExamenController::class, 'index'])->name('examens.index');
         Route::get('/examens/{id}/edit', [ExamenController::class, 'edit'])->name('examens.edit');
-        Route::get('/examens/{id}', [ExamenController::class, 'show'])->name('examens.show');
         Route::put('/examens/{id}', [ExamenController::class, 'update'])->name('examens.update');
         Route::delete('/examens/{id}', [ExamenController::class, 'destroy'])->name('examens.destroy');
-        Route::get('/examens/{examen}/questions/create', [QuestionController::class, 'create'])->name('questions.create');
-    });
 
+        Route::post('/examens/{examen}/questions', [QuestionController::class, 'store'])->name('examens.questions.store');
+        Route::get('/examens/{examen}/questions/create', [QuestionController::class, 'create'])->name('questions.create');
+        Route::get('/examens/{examen}/questions', [QuestionController::class, 'index'])->name('examens.questions.index');
+        Route::get('/examens/{examen}/questions/{id}/edit', [QuestionController::class, 'edit'])->name('questions.edit');
+        Route::put('/examens/{examen}/questions/{id}', [QuestionController::class, 'update'])->name('questions.update');
+        Route::delete('/examens/{examen}/questions/{id}', [QuestionController::class, 'destroy'])->name('examens.questions.destroy');
+       
+        Route::get('/article/create', [ArticleController::class, 'create'])->name('articles.create');
+        Route::post('/articles', [ArticleController::class, 'store'])->name('articles.store');
+        Route::get('/articles', [ArticleController::class, 'index'])->name('articles.index');
+        Route::get('/articles/{id}/edit', [ArticleController::class, 'edit'])->name('articles.edit');
+        Route::put('/articles/{id}', [ArticleController::class, 'update'])->name('articles.update');
+        Route::delete('/articles/{id}', [ArticleController::class, 'destroy'])->name('articles.destroy');
+    });
+   
+     Route::group(['middleware' => ['role:user']], function () {
+        Route::get('/examens/liste', [ExamenController::class, 'listeexamen'])->name('examens.listeexamen');
+        Route::get('/examens/affichage', [ExamenController::class, 'affichage'])->name('examens.affichage');
+        Route::get('/examens/{id}', [ExamenController::class, 'show'])->name('examens.show');
+
+
+        Route::get('/examens/{examen}/questions/{id}', [QuestionController::class, 'show'])->name('question.show');
+
+        Route::get('/articles/liste', [ArticleController::class, 'liste'])->name('articles.liste');
+        Route::get('/articles/{id}', [ArticleController::class, 'show'])->name('articles.show');
+        Route::get('/articles/affichage', [ArticleController::class, 'affichage'])->name('articles.affichage');
+        Route::get('/articles/{article}', [ArticleController::class, 'show'])->name('articles.detail');
+
+    });
     Route::get('/examens/liste', [ExamenController::class, 'listeexamen'])->name('examens.listeexamen');
-    Route::get('/examens/affichage', [ExamenController::class, 'affichage'])->name('examens.affichage');
-    //Route::post('/examens/{examen}/questions', [QuestionController::class, 'store'])->name('questions.store');
-    Route::post('/examens/{examen}/questions', [QuestionController::class, 'store'])->name('examens.questions.store');
-    Route::get('/examens/{examen}/questions', [QuestionController::class, 'index'])->name('examens.questions.index');
-    Route::get('/examens/{examen}/questions/affichage', [QuestionController::class, 'affichage'])->name('question.affichage');
-    Route::get('/examens/{examen}/questions/{id}', [QuestionController::class, 'show'])->name('question.show');
-    Route::get('/examens/{examen}/questions/{id}/edit', [QuestionController::class, 'edit'])->name('questions.edit');
-    Route::put('/examens/{examen}/questions/{id}', [QuestionController::class, 'update'])->name('questions.update');
-    Route::delete('/examens/{examen}/questions/{id}', [QuestionController::class, 'destroy'])->name('examens.questions.destroy');
     Route::get('/examens/{examen}/liste', [QuestionController::class, 'liste'])->name('examens.questions.liste');
-    Route::get('/article/create', [ArticleController::class, 'create'])->name('articles.create');
-    Route::post('/articles', [ArticleController::class, 'store'])->name('articles.store');
-    Route::get('/articles', [ArticleController::class, 'index'])->name('articles.index');
-    Route::get('/articles/{id}', [ArticleController::class, 'show'])->name('articles.show');
-    Route::get('/articles/{id}/edit', [ArticleController::class, 'edit'])->name('articles.edit');
-    Route::put('/articles/{id}', [ArticleController::class, 'update'])->name('articles.update');
-    Route::delete('/articles/{id}', [ArticleController::class, 'destroy'])->name('articles.destroy');
-    Route::get('/articles/affichage', [ArticleController::class, 'affichage'])->name('articles.affichage');
+    Route::get('/examens/{examen}/questions/affichage', [QuestionController::class, 'affichage'])->name('question.affichage');
     Route::get('/articles/liste', [ArticleController::class, 'liste'])->name('articles.liste');
     Route::get('/articles/{article}', [ArticleController::class, 'show'])->name('articles.detail');
+    Route::get('/articles/{id}', [ArticleController::class, 'show'])->name('articles.show');
+    
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
