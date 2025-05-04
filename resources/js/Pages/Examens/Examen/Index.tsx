@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, router } from '@inertiajs/react';
+import Breadcrumbs from '@/Components/Breadcrumbs';
 
 interface Examen {
   id: number;
@@ -21,6 +22,12 @@ const ExamenIndex: React.FC<Props> = ({ examens, isAdmin }) => { // 👈 récup�
   return (
     <div className="p-6">
       <div className="max-w-3xl mx-auto bg-white shadow rounded-lg p-4">
+      <Breadcrumbs
+  items={[
+    { label: 'Accueil', href: '/dashboard' },
+    { label: 'Examens' }
+  ]}
+/>
         <h1 className="text-2xl font-bold mb-4">📋 Liste des Examens</h1>
 
         {/* Affiche le bouton seulement si l'utilisateur est admin */}

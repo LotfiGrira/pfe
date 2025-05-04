@@ -1,5 +1,6 @@
 import React from 'react';
 import { useForm, router } from '@inertiajs/react';
+import Breadcrumbs from '@/Components/Breadcrumbs';
 
 interface Proposition {
   id: number;
@@ -66,6 +67,15 @@ const Edit: React.FC<Props> = ({ examenId, question }) => {
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <div className="max-w-3xl mx-auto bg-white shadow-md rounded-lg p-6">
+      <Breadcrumbs
+            items={[
+              { label: 'Accueil', href: '/dashboard' },
+              { label: 'Examens', href: '/examens' },
+              { label: 'Questions', href: '/examens/{examen}/questions/affichage' },
+              { label: 'Modification Questions' },
+            ]}
+          />
+          
         <h1 className="text-2xl font-bold mb-4">✏️ Modifier la Question</h1>
 
         <form onSubmit={handleSubmit} className="space-y-6">

@@ -1,5 +1,6 @@
 import React from 'react';
 import { useForm, router } from '@inertiajs/react';
+import Breadcrumbs from '@/Components/Breadcrumbs';
 
 interface Props {
   examenId: number;
@@ -41,6 +42,14 @@ export default function CreateQuestion({ examenId }: Props) {
 
   return (
     <div className="max-w-xl mx-auto mt-10 bg-white p-6 rounded shadow">
+      <Breadcrumbs
+            items={[
+              { label: 'Accueil', href: '/dashboard' },
+              { label: 'Examens', href: '/examens' },
+              { label: 'Questions', href: '/examens/{examen}/questions/affichage' },
+              { label: 'Creation Questions' },
+            ]}
+          />
       <h1 className="text-2xl font-bold mb-4 text-center">Créer un Exercice</h1>
 
       <form onSubmit={handleSubmit} className="space-y-4">

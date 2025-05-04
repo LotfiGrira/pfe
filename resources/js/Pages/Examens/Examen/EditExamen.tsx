@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useForm } from '@inertiajs/react';
 import { Link } from '@inertiajs/react';
+import Breadcrumbs from '@/Components/Breadcrumbs';
 
 interface Props {
   examen: {
@@ -21,6 +22,14 @@ export default function Edit({ examen }: Props) {
 
   return (
     <div className="max-w-xl mx-auto mt-10 bg-white p-6 rounded shadow">
+      <Breadcrumbs
+  items={[
+    { label: 'Accueil', href: '/dashboard' },
+    { label: 'Examens', href: '/examens' },
+    { label: 'Modifier' }
+  ]}
+/>
+
       <h1 className="text-2xl font-bold mb-4 text-center">✏️ Modifier l'examen</h1>
       <Link
   href={`/examens/${examen.id}/questions/create`}

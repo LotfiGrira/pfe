@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { router, useForm } from '@inertiajs/react';
+import Breadcrumbs from '@/Components/Breadcrumbs';
 
 export default function CreateArticle() {
   const { data, setData, post, processing, errors } = useForm({
@@ -15,6 +16,13 @@ export default function CreateArticle() {
 
   return (
     <div className="max-w-3xl mx-auto p-6 bg-white rounded shadow">
+      <Breadcrumbs
+  items={[
+    { label: 'Accueil', href: '/dashboard' },
+    { label: 'Articles', href: '/articles' },
+    { label: 'Créer' }
+  ]}
+/>
       <h1 className="text-2xl font-bold mb-6">Créer un article</h1>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>

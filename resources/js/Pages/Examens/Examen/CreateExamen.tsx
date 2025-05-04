@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { router } from '@inertiajs/react';
+import Breadcrumbs from '@/Components/Breadcrumbs';
 
 const CreateExamen = () => {
   const [titre, setTitre] = useState('');
@@ -16,6 +17,14 @@ const CreateExamen = () => {
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <div className="max-w-md mx-auto bg-white shadow-md rounded-lg p-6">
+      <Breadcrumbs
+  items={[
+    { label: 'Accueil', href: '/dashboard' },
+    { label: 'Examens', href: '/examens' },
+    { label: 'Créer' }
+  ]}
+/>
+
         <h2 className="text-2xl font-bold mb-4 text-center">➕ Créer un nouvel examen</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>

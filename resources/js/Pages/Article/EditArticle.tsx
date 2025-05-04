@@ -1,5 +1,6 @@
 import React from 'react';
 import { useForm } from '@inertiajs/react';
+import Breadcrumbs from '@/Components/Breadcrumbs';
 
 interface Props {
   article: {
@@ -27,6 +28,13 @@ export default function Edit({ article }: Props) {
 
   return (
     <div className="max-w-xl mx-auto mt-10 bg-white p-6 rounded shadow">
+      <Breadcrumbs
+  items={[
+    { label: 'Accueil', href: '/dashboard' },
+    { label: 'Articles', href: '/articles' },
+    { label: 'Modifier' }
+  ]}
+/>
       <h1 className="text-2xl font-bold mb-4 text-center">✏️ Modifier l'article</h1>
 
       <form onSubmit={handleSubmit} className="space-y-4">

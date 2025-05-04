@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, router } from '@inertiajs/react';
+import Breadcrumbs from '@/Components/Breadcrumbs';
 
 interface Proposition {
   id: number;
@@ -41,6 +42,13 @@ const AffichageQuestion: React.FC<Props> = ({ questions = [], examenId }) => {
         
         {/* Bouton Ajouter une question */}
         <div className="flex justify-between items-center mb-6">
+        <Breadcrumbs
+            items={[
+              { label: 'Accueil', href: '/dashboard' },
+              { label: 'Examens', href: '/examens' },
+            ]}
+          />
+          
           <h1 className="text-2xl font-bold">📋 Liste des Questions</h1>
          
           <Link

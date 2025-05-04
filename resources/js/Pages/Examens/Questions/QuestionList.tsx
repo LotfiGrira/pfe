@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import GuestLayout from "@/Layouts/GuestLayout";
 
 interface Proposition {
     id: number;
@@ -55,6 +56,7 @@ const QuestionList: React.FC<QuestionListProps> = ({ questions = [], examenTitre
 
     if (questions.length === 0) {
         return (
+            
             <div className="min-h-screen bg-gray-100 p-6">
                 <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-6">
                     <h1 className="text-3xl font-bold text-center text-gray-800 font-mono mb-6">
@@ -67,6 +69,7 @@ const QuestionList: React.FC<QuestionListProps> = ({ questions = [], examenTitre
     }
 
     return (
+        <GuestLayout>
         <div className="min-h-screen bg-gray-100 p-6">
             <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-6">
                 <h1 className="text-3xl font-bold text-center text-gray-800 font-mono mb-6">
@@ -147,6 +150,7 @@ const QuestionList: React.FC<QuestionListProps> = ({ questions = [], examenTitre
                 </div>
             </div>
         </div>
+        </GuestLayout>
     );
 };
 

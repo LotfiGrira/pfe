@@ -1,5 +1,7 @@
 import React from 'react';
 import { Link, router } from '@inertiajs/react';
+import GuestLayout from "@/Layouts/GuestLayout";
+
 
 interface Article {
   id: number;
@@ -19,6 +21,7 @@ const ArticleIndex: React.FC<Props> = ({ articles, isAdmin }) => { // 👈 récu
   };
 
   return (
+    <GuestLayout>
     <div className="p-6">
       <div className="max-w-3xl mx-auto bg-white shadow rounded-lg p-4">
         <h1 className="text-2xl font-bold mb-4">📋 Liste des article</h1>
@@ -45,6 +48,7 @@ const ArticleIndex: React.FC<Props> = ({ articles, isAdmin }) => { // 👈 récu
         </div>
       </div>
     </div>
+    </GuestLayout>
   );
 };
 
