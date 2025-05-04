@@ -5,13 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Article;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Auth;
 
 class ArticleController extends Controller
 {
     public function index()
     {
         $articles = Article::all();
-        $isAdmin = auth()->user()->hasRole('admin');
+        $isAdmin = Auth::user()?->hasRole('admin') ?? false;
 
         return Inertia::render('Article/Index', [
             'articles' => $articles,
@@ -48,10 +49,11 @@ class ArticleController extends Controller
 
     public function update(Request $request, $id)
     {
-         $request->validate([
+        $request->validate([
             'titre' => 'required|string|max:255',
             'contenu' => 'required|string',
         ]);
+
         $article = Article::findOrFail($id);
         $article->update([
             'titre' => $request->titre,
@@ -60,8 +62,6 @@ class ArticleController extends Controller
 
         return redirect()->route('articles.index')->with('success', 'Article mis à jour.');
     }
-
-
 
     public function destroy($id)
     {
@@ -80,23 +80,23 @@ class ArticleController extends Controller
         ]);
     }
 
+    public function liste()
+    {
+        $articles = Article::all();
+        $isAdmin = Auth::user()?->hasRole('admin') ?? false;
 
-public function liste()
-{
-    $articles = Article::all();
+        return Inertia::render('Article/ListeArticle', [
+            'articles' => $articles,
+            
+        ]);
+    }
 
-    return Inertia::render('Article/ListeArticle', [
-        'articles' => $articles,
-        'isAdmin' => auth()->user()?->hasRole('admin'),
-    ]);
-}
+    public function show($id)
+    {
+        $article = Article::findOrFail($id);
 
-public function show($article_id)
-{
-    $article = Article::findOrFail($article_id);
-
-    return Inertia::render('Article/ShowArticle', [
-        'article' => $article,
-    ]);
-}
+        return Inertia::render('Article/ShowArticle', [
+            'article' => $article,
+        ]);
+    }
 }
