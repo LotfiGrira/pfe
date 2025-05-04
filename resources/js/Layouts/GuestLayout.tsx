@@ -8,7 +8,7 @@ export default function Guest({ children }: PropsWithChildren) {
     const menu = [
         { text: "الرئيسة", link: "/" },
         { text: "حساب المواريث", link: "/calculator" },
-        { text: "مراجع", link: "/references" },
+        { text: "مراجع", link: "/articles/liste" },
     ];
 
     if (user !== null) {
