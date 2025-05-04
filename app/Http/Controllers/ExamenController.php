@@ -44,11 +44,9 @@ public function index()
 public function listeexamen()
 {
     $examens = Examen::all();
-    $isAdmin = auth()->user()->hasRole('admin');
 
     return Inertia::render('Examens/Examen/ListeExamen', [
         'examens' => $examens,
-        'isAdmin' => $isAdmin,
     ]);
 }
 
