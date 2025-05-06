@@ -1,109 +1,139 @@
 import { useState, useEffect } from "react";
 import GuestLayout from "@/Layouts/GuestLayout";
 import { Link } from "@inertiajs/react";
+import type { MirathInput } from "./MirathInput";
 
 export default function ListeHeritier() {
-    const [gender, setGender] = useState<"ذكر" | "أنثى">(() => {
-        return localStorage.getItem("deceasedGender") === "أنثى" ? "أنثى" : "ذكر";
-    });
-
-    const [heirs, setHeirs] = useState<Record<string, string | number>>(() => {
-        // Ne pas charger depuis localStorage au départ
-        return {};
-    });
-
-    const booleanHeirs = [
-        "هل يوجد أب؟", "هل يوجد أم؟",
-        "جد (أب الأب)؟", "جدة (أم الأب)؟",
-        "جد (أب أب الأب)؟", "جدة (أم أم الأب)؟",
-        "جدة (أم الأم)؟", "جدة (أم أم الأم)؟"
+    const heirFields: { label: string; key: keyof MirathInput; type: "boolean" | "number" }[] = [
+        { label: "هل يوجد زوج؟", key: "zawj", type: "boolean" },
+        { label: "هل يوجد زوجة؟", key: "zawja", type: "boolean" },
+        { label: "هل يوجد أب؟", key: "alab", type: "boolean" },
+        { label: "هل يوجد أم؟", key: "alom", type: "boolean" },
+        { label: "جد (أب الأب)؟", key: "aljad", type: "boolean" },
+        { label: "جدة (أم الأب)؟", key: "aljadah_li_ab", type: "boolean" },
+        { label: "جدة (أم الأم)؟", key: "aljadah_li_om", type: "boolean" },
+        { label: "الابن", key: "alabna", type: "number" },
+        { label: "البنت", key: "albanat", type: "number" },
+        { label: "ابن الابن", key: "abna_alabna", type: "number" },
+        { label: "بنت الابن", key: "banat_alabna", type: "number" },
+        { label: "الأخ الشقيق", key: "alikhwa_alashika", type: "number" },
+        { label: "الأخ لأب", key: "alikhwa_li_ab", type: "number" },
+        { label: "الأخ لأم", key: "alikhwa_li_om", type: "number" },
+        { label: "الأخت الشقيقة", key: "alakhawat_ashakikat", type: "number" },
+        { label: "الأخت لأب", key: "alakhawat_li_ab", type: "number" },
+        { label: "الأخت لأم", key: "alakhawat_li_om", type: "number" },
+        { label: "ابن الأخ الشقيق", key: "abna_alikhwa_alashika", type: "number" },
+        { label: "ابن الأخ لأب", key: "abna_alikhwa_li_ab", type: "number" },
+        { label: "العم الشقيق", key: "ala3mam_alashika", type: "number" },
+        { label: "العم لأب", key: "ala3mam_li_ab", type: "number" },
+        { label: "ابن العم الشقيق", key: "abna_ala3mam_alashika", type: "number" },
+        { label: "ابن العم لأب", key: "abna_ala3mam_li_ab", type: "number" }
     ];
 
-    const numericHeirs = [
-        "الابن", "البنت", "الأخ الشقيق",
-        "الأخت الشقيقة", "الأخ لأب", "الأخت لأب",
-        "الأخ لأم", "الأخت لأم", "ابن الأخ الشقيق",
-        "ابن لأخ لأب", "ابن ابن الأخ الشقيق",
-        "ابن ابن لأخ لأب", "عم الشقيق", "عم لأب",
-        "ابن عم شقيق", "ابن عم لأب",
-        " عم الأب", " عم الجد",
-        "ابن ابن عم شقيق", " ابن ابن العم  لأب"
-    ];
+    const [mirathInput, setMirathInput] = useState<MirathInput>(() => {
+        const stored = localStorage.getItem("mirathInput");
+        const parsed = (stored ? JSON.parse(stored) : {}) as Partial<MirathInput>;
+    
+        console.log("mirathInput before ");
+        console.log(parsed);
+        return {
+            ...parsed,
+            ...Object.fromEntries(
+            heirFields.map(({ key, type }) => [
+                key,
+                parsed[key as keyof MirathInput] ?? (type === "boolean" ? false : 0)
+            ])
+        ) as unknown as MirathInput};        
+        
+    });
+    console.log("mirathInput");
+    console.log(mirathInput);
+    
 
-    useEffect(() => {
-        const spouseLabel = gender === "ذكر" ? "هل يوجد زوجة؟" : "هل يوجد زوج؟";
-        const baseHeirs = [spouseLabel, ...booleanHeirs, ...numericHeirs];
 
-        setHeirs(prevHeirs => {
-            const newHeirs: Record<string, string | number> = {};
-            baseHeirs.forEach(heir => {
-                newHeirs[heir] = booleanHeirs.includes(heir) || heir === spouseLabel ? "لا" : "لا";
-            });
-            return newHeirs;
-        });
-    }, [gender]);
-
-    const handleHeirChange = (heir: string, value: string | number) => {
-        setHeirs(prev => {
-            const newHeirs = { ...prev, [heir]: value };
-            
-            // Sauvegarder seulement les héritiers sélectionnés (différents de "لا")
-            const selected = Object.fromEntries(
-                Object.entries(newHeirs).filter(([_, val]) => val !== "لا")
-            );
-            localStorage.setItem("selectedHeirs", JSON.stringify(selected));
-            
-            return newHeirs;
-        });
+    const handleNext = () => {
+        localStorage.setItem("mirathInput", JSON.stringify(mirathInput));
+        alert("تم حفظ قائمة الورثة بنجاح في التخزين المحلي.");
     };
 
     return (
         <GuestLayout>
             <div className="p-1 bg-yellow-100 shadow-md rounded-lg max-w-4xl mx-auto min-h-[500px]">
-         
                 <h1 className="text-2xl font-bold text-center mb-4">قائمة الورثة</h1>
 
                 <div className="text-center mb-6">
                     <span className="bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-lg font-semibold">
-                        نوع المورث: {gender}
+                        نوع المورث: {mirathInput["gender"] || "غير محدد"}
                     </span>
                 </div>
 
                 <div className="bg-gray-200 p-4 rounded-lg shadow-md grid grid-cols-2 gap-4">
-                    {Object.entries(heirs).map(([heirKey, heirValue], index) => (
-                        <div key={index} className="flex justify-between items-center bg-yellow-500 p-3 rounded-md">
-                            <label className="text-white font-bold text-lg">{heirKey}</label>
-                            {booleanHeirs.includes(heirKey) || heirKey.includes("زوج") ? (
-                                <select
-                                    value={heirValue as string}
-                                    onChange={(e) => handleHeirChange(heirKey, e.target.value)}
-                                    className="border-2 px-3 py-1 rounded-lg bg-white text-gray-800"
-                                >
-                                    <option value="لا">لا</option>
-                                    <option value="نعم">نعم</option>
-                                </select>
-                            ) : (
-                                <select
-                                    value={heirValue as string}
-                                    onChange={(e) => handleHeirChange(heirKey, e.target.value)}
-                                    className="border-2 px-3 py-1 rounded-lg bg-white text-gray-800"
-                                >
-                                    <option value="لا">لا</option>
-                                    {[...Array(50).keys()].map(i => (
-                                        <option key={i + 1} value={i + 1}>{i + 1}</option>
-                                    ))}
-                                </select>
-                            )}
-                        </div>
-                    ))}
+                    {heirFields
+                        .filter(({ key }) => {
+                            if (mirathInput["gender"] === "ذكر" && key === "zawj") return false;
+                            if (mirathInput["gender"] === "أنثى" && key === "zawja") return false;
+                            return true;
+                        })
+                        .map(({ label, key, type }, index) => (
+                            <div key={index} className="flex justify-between items-center bg-yellow-500 p-3 rounded-md">
+                                <label className="text-white font-bold text-lg">{label}</label>
+                                {type === "boolean" ? (
+                                    <select
+                                        value={mirathInput[key] ? "نعم" : "لا"}
+                                        onChange={(e) =>
+                                            setMirathInput(prev => ({
+                                                ...prev,
+                                                [key]: e.target.value === "نعم"
+                                            }))
+                                        }
+                                        className="border-2 px-3 py-1 rounded-lg bg-white text-gray-800"
+                                    >
+                                        <option value="لا">لا</option>
+                                        <option value="نعم">نعم</option>
+                                    </select>
+                                ) : (
+                                    <select
+                                        value={
+                                            typeof mirathInput[key] === "number" && mirathInput[key] !== 0
+                                                ? mirathInput[key]?.toString()
+                                                : "لا"
+                                        }
+                                        onChange={(e) =>
+                                            setMirathInput(prev => ({
+                                                ...prev,
+                                                [key]: e.target.value === "لا" ? 0 : parseInt(e.target.value)
+                                            }))
+                                        }
+                                        className="border-2 px-3 py-1 rounded-lg bg-white text-gray-800"
+                                    >
+                                        <option value="لا">لا</option>
+                                        {[...Array(50).keys()].map(i => (
+                                            <option key={i + 1} value={i + 1}>
+                                                {i + 1}
+                                            </option>
+                                        ))}
+                                    </select>
+                                )}
+                            </div>
+                        ))}
                 </div>
 
                 <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4">
                     <Link
                         href="/cas-heritier"
-                        className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg shadow-md transition-colors duration-200 text-center">
+                        className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg shadow-md transition-colors duration-200 text-center"
+                    >
                         الحالات الخاصة
                     </Link>
+
+                    <button
+
+                        onClick={handleNext}
+                        className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg shadow-md transition-colors duration-200"
+                    >
+                        التالي
+                    </button>
+                    
                 </div>
             </div>
         </GuestLayout>
