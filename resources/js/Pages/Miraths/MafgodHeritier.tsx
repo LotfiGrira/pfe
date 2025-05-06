@@ -1,154 +1,163 @@
 import { useEffect, useState } from "react";
 import GuestLayout from "@/Layouts/GuestLayout";
-import { Link, router } from "@inertiajs/react";
-
-const heirFields = [
-    { name: "ابن", key: "ibn" },
-    { name: "بنت", key: "bint" },
-    { name: "أب", key: "ab" },
-    { name: "أم", key: "omm" },
-    { name: "زوج", key: "zawj" },
-    { name: "زوجة", key: "zawja" },
-    { name: "أخ", key: "akh" },
-    { name: "أخت", key: "oukht" },
-    { name: "جد", key: "jadd" },
-    { name: "جدة", key: "jadda" },
-    // Ajoute d'autres champs si besoin
-];
+import type { MirathInput } from "./MirathInput";
+import { router } from "@inertiajs/react";
 
 export default function MafgodHeritier() {
-    const [mirathInputData, setMirathInputData] = useState<Record<string, string | number | boolean>>({});
-    const [selectedHeirsNames, setSelectedHeirsNames] = useState<string[]>([]);
-    const [missingCounts, setMissingCounts] = useState<Record<string, number>>({});
+    const [mirathInput, setMirathInput] = useState<MirathInput | null>(null);
+    const [formValues, setFormValues] = useState<Partial<MirathInput>>({});
+
+    const heirLabels: Partial<Record<keyof MirathInput, string>> = {
+        zawj: "الزوج",
+        zawja: "الزوجة",
+        alab: "الأب",
+        alom: "الأم",
+        aljad: "الجد (أب الأب)",
+        aljadah_li_ab: "الجدة (أم الأب)",
+        aljadah_li_om: "الجدة (أم الأم)",
+        alabna: "الابن",
+        albanat: "البنت",
+        abna_alabna: "ابن الابن",
+        banat_alabna: "بنت الابن",
+        alikhwa_alashika: "الأخ الشقيق",
+        alikhwa_li_ab: "الأخ لأب",
+        alikhwa_li_om: "الأخ لأم",
+        alakhawat_ashakikat: "الأخت الشقيقة",
+        alakhawat_li_ab: "الأخت لأب",
+        alakhawat_li_om: "الأخت لأم",
+        abna_alikhwa_alashika: "ابن الأخ الشقيق",
+        abna_alikhwa_li_ab: "ابن الأخ لأب",
+        ala3mam_alashika: "العم الشقيق",
+        ala3mam_li_ab: "العم لأب",
+        abna_ala3mam_alashika: "ابن العم الشقيق",
+        abna_ala3mam_li_ab: "ابن العم لأب",
+    };
 
     useEffect(() => {
-        const mirathRaw = localStorage.getItem("mirathInput");
-        if (mirathRaw) {
-            const data = JSON.parse(mirathRaw);
-            setMirathInputData(data);
+        const stored = localStorage.getItem("mirathInput");
+        if (stored) {
+            setMirathInput(JSON.parse(stored));
         }
     }, []);
 
-    const handleHeirSelection = (heirKey: string) => {
-        setSelectedHeirsNames((prevSelected) => {
-            if (prevSelected.includes(heirKey)) {
-                const updated = prevSelected.filter((name) => name !== heirKey);
-                const { [heirKey]: _, ...rest } = missingCounts;
-                setMissingCounts(rest);
-                return updated;
-            }
-            return [...prevSelected, heirKey];
-        });
-    };
+    if (!mirathInput) {
+        return (
+            <GuestLayout>
+                <div className="text-center p-6 text-red-600 font-bold">
+                    لا توجد بيانات ورثة محفوظة.
+                </div>
+            </GuestLayout>
+        );
+    }
 
-    const handleMissingCountChange = (heirKey: string, value: string, max: number) => {
-        const parsed = parseInt(value);
-        if (!isNaN(parsed) && parsed >= 1 && parsed <= max) {
-            setMissingCounts((prev) => ({
-                ...prev,
-                [heirKey]: parsed,
-            }));
-        }
+    const filteredFields = Object.entries(mirathInput).filter(([key, value]) => {
+        if (
+            [
+                "gender", "tarika", "doyon", "wasiya", "hasPregnancy", "hasgatel",
+                "haskafer", "hasmafgod", "haswasiya", "heirDiedBeforeInheritance",
+                "noSpecialCases", "azawjat", "aljad_ma3a_alikhwa"
+            ].includes(key)
+        ) return false;
+
+        return (typeof value === "boolean" && value) || (typeof value === "number" && value !== 0);
+    }) as [keyof MirathInput, number | boolean][];
+
+    const handleChange = (key: keyof MirathInput, value: number | boolean) => {
+        setFormValues(prev => ({
+            ...prev,
+            [key]: value,
+        }));
     };
 
     const handleSubmit = () => {
-        if (selectedHeirsNames.length === 0) {
-            alert("يجب اختيار وريث مفقود");
-            return;
+        if (!mirathInput) return;
+
+        const updated = { ...mirathInput };
+
+        for (const [key, value] of Object.entries(formValues)) {
+            const originalValue = mirathInput[key as keyof MirathInput];
+            const newKey = `${key}_mafgod`;
+
+            if (typeof originalValue === "number") {
+                const mafgodValue = typeof value === "number" ? value : 0;
+                updated[newKey as keyof MirathInput] = Math.min(mafgodValue, originalValue);
+            } else if (typeof originalValue === "boolean") {
+                updated[newKey as keyof MirathInput] = value === true;
+            }
         }
 
-        const dataToSave = selectedHeirsNames.map((key) => ({
-            name: key,
-            count: missingCounts[key] || 1,
-        }));
-
-        console.log("✅ Données sauvegardées :", dataToSave);
-        localStorage.setItem("missingHeirs", JSON.stringify(dataToSave));
-        router.visit("/tagsim-heritier");
+        localStorage.setItem("mirathInput", JSON.stringify(updated));
+        router.visit("/suivant"); // Modifier si le chemin suivant est différent
     };
 
     return (
         <GuestLayout>
-            <div className="min-h-screen flex flex-col items-center justify-center bg-yellow-200 p-4">
-                <div className="bg-yellow-100 shadow-md rounded-lg p-6 w-full max-w-3xl">
-                    <h2 className="text-center text-2xl font-bold mb-6">اختر الورثة المفقودين</h2>
+            <div className="p-6 max-w-3xl mx-auto bg-white shadow rounded-lg min-h-[300px]">
+                <h1 className="text-2xl font-bold mb-4 text-center">هل يوجد وريث مفقود؟</h1>
 
-                    <div className="mb-6 space-y-4">
-                        {heirFields.map(({ name, key }) => {
-                            const value = mirathInputData[key];
-                            const isSelected = selectedHeirsNames.includes(key);
-                            const isBoolean = typeof value === "boolean";
-                            const isNumber = typeof value === "number";
-                            const maxValue = isNumber ? value : undefined;
+                {filteredFields.length === 0 ? (
+                    <div className="text-center text-gray-600 mt-8 text-xl font-semibold">
+                        لا يوجد ورثة مختارون.
+                    </div>
+                ) : (
+                    <form onSubmit={(e) => e.preventDefault()}>
+                        <ul className="space-y-4">
+                            {filteredFields.map(([key, value]) => {
+                                const label = heirLabels[key] || key;
 
-                            return (
-                                <div
-                                    key={key}
-                                    className={`bg-white p-3 rounded-lg shadow-sm border-l-4 ${isSelected ? "border-red-500" : "border-blue-500"}`}
-                                >
-                                    <label className="flex items-center space-x-3 cursor-pointer">
-                                        <input
-                                            type="checkbox"
-                                            checked={isSelected}
-                                            onChange={() => handleHeirSelection(key)}
-                                            className="w-5 h-5 text-blue-600"
-                                        />
-                                        <div className="flex-1">
-                                            <div className="font-semibold text-lg">{name}</div>
-                                            <div className="text-gray-600 mt-1">
-                                                {value === undefined
-                                                    ? "غير محدد"
-                                                    : isNumber
-                                                    ? `العدد: ${value}`
-                                                    : isBoolean
-                                                    ? value
-                                                        ? "موجود"
-                                                        : "غير موجود"
-                                                    : String(value)}
+                                return (
+                                    <li key={key} className="bg-yellow-100 p-4 rounded shadow text-lg">
+                                        <div className="font-semibold">{label}</div>
+
+                                        {typeof value === "boolean" ? (
+                                            <div className="flex items-center gap-4 mt-2">
+                                                <label className="flex items-center gap-2">
+                                                    <input
+                                                        type="radio"
+                                                        name={key}
+                                                        value="true"
+                                                        checked={formValues[key] === true}
+                                                        onChange={() => handleChange(key, true)}
+                                                    />
+                                                    نعم
+                                                </label>
+                                                <label className="flex items-center gap-2">
+                                                    <input
+                                                        type="radio"
+                                                        name={key}
+                                                        value="false"
+                                                        checked={formValues[key] === false}
+                                                        onChange={() => handleChange(key, false)}
+                                                    />
+                                                    لا
+                                                </label>
                                             </div>
-                                        </div>
-                                    </label>
-
-                                    {isSelected && isNumber && (
-                                        <div className="mt-2">
+                                        ) : (
                                             <input
                                                 type="number"
-                                                min={1}
-                                                max={maxValue}
-                                                value={missingCounts[key] || ""}
-                                                onChange={(e) =>
-                                                    handleMissingCountChange(key, e.target.value, maxValue!)
-                                                }
-                                                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm"
-                                                placeholder={`أدخل عدد المفقودين (بين 1 و ${maxValue})`}
+                                                className="mt-2 p-2 border rounded w-full"
+                                                value={formValues[key] ?? 0}
+                                                onChange={(e) => handleChange(key, Number(e.target.value))}
+                                                min={0}
+                                                max={value}
                                             />
-                                            {missingCounts[key] > 1 && (
-                                                <div className="mt-1 text-sm text-gray-700 font-medium">
-                                                    عدد المفقودين: {missingCounts[key]}
-                                                </div>
-                                            )}
-                                        </div>
-                                    )}
-                                </div>
-                            );
-                        })}
-                    </div>
+                                        )}
+                                    </li>
+                                );
+                            })}
+                        </ul>
 
-                    <div className="mt-6 flex flex-col sm:flex-row justify-center gap-4">
-                        <button
-                            onClick={handleSubmit}
-                            className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg shadow-md transition-colors duration-200"
-                        >
-                            تأكيد الاختيار
-                        </button>
-                        <Link
-                            href="/cas-heritier"
-                            className="px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white font-medium rounded-lg shadow-md transition-colors duration-200 text-center"
-                        >
-                            العودة
-                        </Link>
-                    </div>
-                </div>
+                        <div className="mt-6 text-center">
+                            <button
+                                type="button"
+                                onClick={handleSubmit}
+                                className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                            >
+                                التالي
+                            </button>
+                        </div>
+                    </form>
+                )}
             </div>
         </GuestLayout>
     );

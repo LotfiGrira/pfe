@@ -1,102 +1,163 @@
 import { useEffect, useState } from "react";
 import GuestLayout from "@/Layouts/GuestLayout";
-import { Link, router } from "@inertiajs/react";
+import type { MirathInput } from "./MirathInput";
+import { router } from "@inertiajs/react";
 
 export default function KaferHeritier() {
-    const [selectedHeirs, setSelectedHeirs] = useState<{ name: string, value: string | number }[]>([]);
-    const [selectedHeir, setSelectedHeir] = useState<string>("");
+    const [mirathInput, setMirathInput] = useState<MirathInput | null>(null);
+    const [formValues, setFormValues] = useState<Partial<MirathInput>>({});
+
+    const heirLabels: Partial<Record<keyof MirathInput, string>> = {
+        zawj: "الزوج",
+        zawja: "الزوجة",
+        alab: "الأب",
+        alom: "الأم",
+        aljad: "الجد (أب الأب)",
+        aljadah_li_ab: "الجدة (أم الأب)",
+        aljadah_li_om: "الجدة (أم الأم)",
+        alabna: "الابن",
+        albanat: "البنت",
+        abna_alabna: "ابن الابن",
+        banat_alabna: "بنت الابن",
+        alikhwa_alashika: "الأخ الشقيق",
+        alikhwa_li_ab: "الأخ لأب",
+        alikhwa_li_om: "الأخ لأم",
+        alakhawat_ashakikat: "الأخت الشقيقة",
+        alakhawat_li_ab: "الأخت لأب",
+        alakhawat_li_om: "الأخت لأم",
+        abna_alikhwa_alashika: "ابن الأخ الشقيق",
+        abna_alikhwa_li_ab: "ابن الأخ لأب",
+        ala3mam_alashika: "العم الشقيق",
+        ala3mam_li_ab: "العم لأب",
+        abna_ala3mam_alashika: "ابن العم الشقيق",
+        abna_ala3mam_li_ab: "ابن العم لأب",
+    };
 
     useEffect(() => {
-        // Récupérer les héritiers sélectionnés depuis localStorage
-        const savedHeirs = localStorage.getItem("selectedHeirs");
-        
-        if (savedHeirs) {
-            const heirs = JSON.parse(savedHeirs);
-            const heirsArray = Object.entries(heirs)
-                .filter(([_, value]) => value !== "لا")
-                .map(([name, value]) => ({
-                    name,
-                    value
-                }));
-            setSelectedHeirs(heirsArray);
+        const stored = localStorage.getItem("mirathInput");
+        if (stored) {
+            setMirathInput(JSON.parse(stored));
         }
     }, []);
 
-    const handleHeirSelection = (heirName: string) => {
-        setSelectedHeir(heirName);
+    if (!mirathInput) {
+        return (
+            <GuestLayout>
+                <div className="text-center p-6 text-red-600 font-bold">
+                    لا توجد بيانات ورثة محفوظة.
+                </div>
+            </GuestLayout>
+        );
+    }
+
+    const filteredFields = Object.entries(mirathInput).filter(([key, value]) => {
+        if (
+            [
+                "gender", "tarika", "doyon", "wasiya", "hasPregnancy", "hasgatel",
+                "haskafer", "hasmafgod", "haswasiya", "heirDiedBeforeInheritance",
+                "noSpecialCases", "azawjat", "aljad_ma3a_alikhwa"
+            ].includes(key)
+        ) return false;
+
+        return (typeof value === "boolean" && value) || (typeof value === "number" && value !== 0);
+    }) as [keyof MirathInput, number | boolean][];
+
+    const handleChange = (key: keyof MirathInput, value: number | boolean) => {
+        setFormValues(prev => ({
+            ...prev,
+            [key]: value,
+        }));
     };
 
     const handleSubmit = () => {
-        if (!selectedHeir) {
-            alert("يجب اختيار وريث على خلاف الدين ");
-            return;
+        if (!mirathInput) return;
+
+        const updated = { ...mirathInput };
+
+        for (const [key, value] of Object.entries(formValues)) {
+            const originalValue = mirathInput[key as keyof MirathInput];
+            const newKey = `${key}_kafer`;
+
+            if (typeof originalValue === "number") {
+                const kaferValue = typeof value === "number" ? value : 0;
+                updated[newKey as keyof MirathInput] = Math.min(kaferValue, originalValue);
+            } else if (typeof originalValue === "boolean") {
+                updated[newKey as keyof MirathInput] = value === true;
+            }
         }
 
-        // Sauvegarder la sélection
-        localStorage.setItem("missingHeir", selectedHeir);
-        router.visit("/tagsim-heritier");
+        localStorage.setItem("mirathInput", JSON.stringify(updated));
+        router.visit("/mafgod-heritier"); // ou /suivant selon votre flow
     };
 
     return (
         <GuestLayout>
-            <div className="min-h-screen flex flex-col items-center justify-center bg-yellow-200 p-4">
-                <div className="bg-yellow-100 shadow-md rounded-lg p-6 w-full max-w-2xl">
-                    <h2 className="text-center text-2xl font-bold mb-6">اختر  من الورثة على غير الاسلام</h2>
-                    
-                    <div className="mb-6">
-                        {selectedHeirs.length > 0 ? (
-                            <div className="space-y-3">
-                                {selectedHeirs.map((heir, index) => (
-                                    <div 
-                                        key={index} 
-                                        className={`bg-white p-3 rounded-lg shadow-sm border-l-4 ${
-                                            selectedHeir === heir.name ? "border-red-500" : "border-blue-500"
-                                        }`}
-                                    >
-                                        <label className="flex items-center space-x-3 cursor-pointer">
-                                            <input
-                                                type="radio"
-                                                name="missingHeir"
-                                                value={heir.name}
-                                                checked={selectedHeir === heir.name}
-                                                onChange={() => handleHeirSelection(heir.name)}
-                                                className="w-5 h-5 text-blue-600"
-                                            />
-                                            <div className="flex-1">
-                                                <div className="font-semibold text-lg">
-                                                    {heir.name.replace("؟", "")}
-                                                </div>
-                                                <div className="text-gray-600 mt-1">
-                                                    {typeof heir.value === "number" 
-                                                        ? `العدد: ${heir.value}`
-                                                        : `الحالة: ${heir.value === "نعم" ? "موجود" : "غير موجود"}`}
-                                                </div>
-                                            </div>
-                                        </label>
-                                    </div>
-                                ))}
-                            </div>
-                        ) : (
-                            <div className="text-center py-4 bg-white rounded-lg">
-                                <p className="text-gray-600">لا يوجد ورثة مختارون</p>
-                            </div>
-                        )}
-                    </div>
+            <div className="p-6 max-w-3xl mx-auto bg-white shadow rounded-lg min-h-[300px]">
+                <h1 className="text-2xl font-bold mb-4 text-center">هل يوجد وريث كافر؟</h1>
 
-                    <div className="mt-6 flex flex-col sm:flex-row justify-center gap-4">
-                        <button
-                            onClick={handleSubmit}
-                            className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg shadow-md transition-colors duration-200"
-                        >
-                            تأكيد الاختيار
-                        </button>
-                        <Link
-                            href="/cas-heritier"
-                            className="px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white font-medium rounded-lg shadow-md transition-colors duration-200 text-center">
-                            العودة
-                        </Link>
+                {filteredFields.length === 0 ? (
+                    <div className="text-center text-gray-600 mt-8 text-xl font-semibold">
+                        لا يوجد ورثة مختارون.
                     </div>
-                </div>
+                ) : (
+                    <form onSubmit={(e) => e.preventDefault()}>
+                        <ul className="space-y-4">
+                            {filteredFields.map(([key, value]) => {
+                                const label = heirLabels[key] || key;
+
+                                return (
+                                    <li key={key} className="bg-yellow-100 p-4 rounded shadow text-lg">
+                                        <div className="font-semibold">{label}</div>
+
+                                        {typeof value === "boolean" ? (
+                                            <div className="flex items-center gap-4 mt-2">
+                                                <label className="flex items-center gap-2">
+                                                    <input
+                                                        type="radio"
+                                                        name={key}
+                                                        value="true"
+                                                        checked={formValues[key] === true}
+                                                        onChange={() => handleChange(key, true)}
+                                                    />
+                                                    نعم
+                                                </label>
+                                                <label className="flex items-center gap-2">
+                                                    <input
+                                                        type="radio"
+                                                        name={key}
+                                                        value="false"
+                                                        checked={formValues[key] === false}
+                                                        onChange={() => handleChange(key, false)}
+                                                    />
+                                                    لا
+                                                </label>
+                                            </div>
+                                        ) : (
+                                            <input
+                                                type="number"
+                                                className="mt-2 p-2 border rounded w-full"
+                                                value={formValues[key] ?? 0}
+                                                onChange={(e) => handleChange(key, Number(e.target.value))}
+                                                min={0}
+                                                max={value}
+                                            />
+                                        )}
+                                    </li>
+                                );
+                            })}
+                        </ul>
+
+                        <div className="mt-6 text-center">
+                            <button
+                                type="button"
+                                onClick={handleSubmit}
+                                className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                            >
+                                التالي
+                            </button>
+                        </div>
+                    </form>
+                )}
             </div>
         </GuestLayout>
     );
