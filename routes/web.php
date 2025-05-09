@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AboutController;
+use App\Http\Controllers\MirathController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -32,7 +33,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/examens/{examen}/questions/{id}/edit', [QuestionController::class, 'edit'])->name('questions.edit');
         Route::put('/examens/{examen}/questions/{id}', [QuestionController::class, 'update'])->name('questions.update');
         Route::delete('/examens/{examen}/questions/{id}', [QuestionController::class, 'destroy'])->name('examens.questions.destroy');
-       
+        Route::get('/examens/{examen}/questions/affichage', [QuestionController::class, 'affichage'])->name('question.affichage');
+
         Route::get('/article/create', [ArticleController::class, 'create'])->name('articles.create');
         Route::post('/articles', [ArticleController::class, 'store'])->name('articles.store');
         Route::get('/articles', [ArticleController::class, 'index'])->name('articles.index');
@@ -114,3 +116,9 @@ Route::get('/liste-monasa5at', function () {
 });
 
 Route::get('/listeheritier', [ListeHeritierController::class, 'index'])->name('listeheritier');
+
+Route::post('/mirath/calcul', [MirathController::class, 'calcul']);
+
+Route::get('/mirath/calcul', function () {
+    return Inertia::render('Miraths/CalculMirath');
+});
