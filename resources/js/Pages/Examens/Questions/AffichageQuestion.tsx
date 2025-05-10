@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, router } from '@inertiajs/react';
 import Breadcrumbs from '@/Components/Breadcrumbs';
+import GuestLayout from '@/Layouts/GuestLayout';
 
 interface Proposition {
   id: number;
@@ -37,6 +38,7 @@ const AffichageQuestion: React.FC<Props> = ({ questions = [], examenId }) => {
       };
 
   return (
+            <GuestLayout>
     <div className="min-h-screen bg-gray-100 p-6">
       <div className="max-w-3xl mx-auto bg-white shadow-md rounded-lg p-6">
         
@@ -95,6 +97,8 @@ const AffichageQuestion: React.FC<Props> = ({ questions = [], examenId }) => {
         )}
       </div>
     </div>
+            </GuestLayout>
+    
   );
 };
 

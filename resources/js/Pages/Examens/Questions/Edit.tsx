@@ -1,6 +1,7 @@
 import React from 'react';
 import { useForm, router } from '@inertiajs/react';
 import Breadcrumbs from '@/Components/Breadcrumbs';
+import GuestLayout from '@/Layouts/GuestLayout';
 
 interface Proposition {
   id: number;
@@ -65,6 +66,7 @@ const Edit: React.FC<Props> = ({ examenId, question }) => {
   };
 
   return (
+            <GuestLayout>
     <div className="min-h-screen bg-gray-100 p-6">
       <div className="max-w-3xl mx-auto bg-white shadow-md rounded-lg p-6">
       <Breadcrumbs
@@ -148,6 +150,8 @@ const Edit: React.FC<Props> = ({ examenId, question }) => {
         </form>
       </div>
     </div>
+            </GuestLayout>
+    
   );
 };
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import { useForm, router } from '@inertiajs/react';
 import Breadcrumbs from '@/Components/Breadcrumbs';
+import GuestLayout from '@/Layouts/GuestLayout';
 
 interface Props {
   examenId: number;
@@ -41,6 +42,7 @@ export default function CreateQuestion({ examenId }: Props) {
   };
 
   return (
+            <GuestLayout>
     <div className="max-w-xl mx-auto mt-10 bg-white p-6 rounded shadow">
       <Breadcrumbs
             items={[
@@ -118,5 +120,7 @@ export default function CreateQuestion({ examenId }: Props) {
         </div>
       </form>
     </div>
+            </GuestLayout>
+    
   );
 }

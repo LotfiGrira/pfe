@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, router } from '@inertiajs/react';
 import Breadcrumbs from '@/Components/Breadcrumbs';
+import GuestLayout from "@/Layouts/GuestLayout";
 
 interface Examen {
   id: number;
@@ -20,6 +21,7 @@ const ExamenIndex: React.FC<Props> = ({ examens, isAdmin }) => { // 👈 récup�
   };
 
   return (
+    <GuestLayout>
     <div className="p-6">
       <div className="max-w-3xl mx-auto bg-white shadow rounded-lg p-4">
       <Breadcrumbs
@@ -74,6 +76,7 @@ const ExamenIndex: React.FC<Props> = ({ examens, isAdmin }) => { // 👈 récup�
         </div>
       </div>
     </div>
+    </GuestLayout>
   );
 };
 

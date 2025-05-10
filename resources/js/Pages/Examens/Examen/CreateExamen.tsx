@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { router } from '@inertiajs/react';
 import Breadcrumbs from '@/Components/Breadcrumbs';
+import GuestLayout from "@/Layouts/GuestLayout";
 
 const CreateExamen = () => {
   const [titre, setTitre] = useState('');
@@ -15,6 +16,7 @@ const CreateExamen = () => {
   };
 
   return (
+    <GuestLayout>
     <div className="min-h-screen bg-gray-100 p-6">
       <div className="max-w-md mx-auto bg-white shadow-md rounded-lg p-6">
       <Breadcrumbs
@@ -46,6 +48,7 @@ const CreateExamen = () => {
         </form>
       </div>
     </div>
+    </GuestLayout>
   );
 };
 

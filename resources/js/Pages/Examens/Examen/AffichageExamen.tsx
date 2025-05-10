@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from '@inertiajs/react';
+import GuestLayout from "@/Layouts/GuestLayout";
 
 // ✅ Définir le type Examen
 interface Examen {
@@ -15,6 +16,7 @@ interface Props {
 // ✅ Un seul export default
 const AffichageExamen: React.FC<Props> = ({ examens }) => {
   return (
+    <GuestLayout>
     <div className="p-6">
       <div className="max-w-3xl mx-auto bg-white shadow rounded-lg p-4">
         <h1 className="text-2xl font-bold mb-4">📋 Examens disponibles</h1>
@@ -32,6 +34,7 @@ const AffichageExamen: React.FC<Props> = ({ examens }) => {
         </ul>
       </div>
     </div>
+    </GuestLayout>
   );
 };
 
