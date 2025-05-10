@@ -11,7 +11,7 @@ class MirathController extends Controller
 {
     protected $mirathService;
 
-    public function __construct(CasHeritierService $mirathService)
+    public function __construct(MirathService $mirathService)
     {
         $this->mirathService = $mirathService;
     }
