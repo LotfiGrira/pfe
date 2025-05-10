@@ -12,9 +12,7 @@ use Inertia\Inertia;
 class QuestionController extends Controller
 {
     // Afficher tous les questions
-    
-  
-    
+
     public function index(Examen $examen)
 {
     return Inertia::render('Examens/Questions/AffichageQuestion', [
@@ -22,8 +20,7 @@ class QuestionController extends Controller
         'examenId' => $examen->id, // ✅ Ceci est obligatoire
     ]);
 }
-    
- 
+
 
 
     // Afficher un questions spécifique

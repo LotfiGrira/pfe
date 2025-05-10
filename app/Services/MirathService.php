@@ -6,446 +6,404 @@ use App\Models\Mirath;
 
 class MirathService
 {
-    protected $input;
-    protected $hal;
+    protected $far3WarithDhakar;
+    protected $far3WarithOntha;
+    protected $far3Warith;
+    protected $rapport;
 
-    public function __construct($input, $hal)
-    {
-        $this->input = $input;
-        $this->hal = $hal;
+    public function calculMirath($mirathInput) {
+        $this->far3WarithDhakar = ($mirathInput['alabna'] > 0) + ($mirathInput['abna_alabna'] > 0) > 0;
+        $this->far3WarithOntha = ($mirathInput['albanat'] > 0) + ($mirathInput['banat_alabna'] > 0) > 0;
+        $this->far3Warith = $this->far3WarithDhakar || $this->far3WarithOntha;
+        //les appels:
+        $this->mirathazawj($mirathInput);
+        $this->mirathazawja($mirathInput);
+        $this->mirathalab($mirathInput);
+        $this->mirathalom($mirathInput);
+        $this->mirathaljad($mirathInput);
+        $this->Mirathaljadah_li_ab($mirathInput);
+        $this->Mirathaljadat_li_om($mirathInput);
+        $this->mirathalbanat($mirathInput);
+        $this->mirathbanat_alabna($mirathInput);
+        $this->mirathabana_albanat($mirathInput);
+        $this->mirathbanat_albanat($mirathInput);
+        $this->mirathalikhwa_li_om($mirathInput);
+        $this->mirathalakhawat_li_om($mirathInput);
+        $this->mirathalakhawat_alashakikat($mirathInput);
+        $this->mirathalakhawat_li_ab($mirathInput);
+        // beta3sib
+        $this->mirathalabna($mirathInput);
+        $this->mirathabna_alabna($mirathInput);
+        $this->mirathalikhwa_alashika($mirathInput);
+        $this->mirathalikhwa_li_ab($mirathInput);
+        $this->mirathabna_alikhwa_alashika($mirathInput);
+        $this->mirathabna_alikhwa_li_ab($mirathInput);
+        $this->mirathala3mam_alashika($mirathInput);
+        $this->mirathala3mam_li_ab($mirathInput);
+        $this->mirathabna_ala3mam_alashika($mirathInput);
+        $this->mirathabna_ala3mam_li_ab($mirathInput);
+        return $this->rapport;
     }
-      public function hissabMawarith()
-    {
-        // Définir les variables
-    $far3WarithDhakar = ($this->input['alabna'] > 0) + ($this->input['abna_alabna'] > 0) > 0;
-    $far3WarithOntha = ($this->input['albanat'] > 0) + ($this->input['banat_alabna'] > 0) > 0;
-    $far3Warith = $far3WarithDhakar || $far3WarithOntha;
-    }
+
+
     // zawjan//
-public function mirathazawj()
-    {
-        if (!$this->input["zawj"]) {
-            return;
-        }
-        if ($far3Warith) {    
-            $hal .= "الربع 1/4 فرضا\n";
-        } else {
-            $hal .= "النصف 1/2 فرضا\n";
-        }
-    }
-
-public function mirathazawja()
-    {
-        if (!$this->input["zawja"]) {
-            return;
-        }
-        
-        if ($far3Warith) {  
-            $hal .= "الربع 1/4 فرضا\n";
-        } else {
-            $hal .= "النصف 1/8 فرضا\n";
-        }
-    }
-    
-//Al osol//
-public function mirathalab()
-{
-    if (!$this->input["alab"])
-     {
-        return;
-    }
-   
-    if ($far3WarithDhakar) 
-    {
-        // Cas 1: Si un fils existe -> 1/6 فرضا فقط
-        $hal .= "السدس 1/6 فرضا فقط\n";
-    } elseif ($far3WarithOntha) 
-    {
-        // Cas 2: Si une fille seulement -> 1/6 + باقي تعصيب
-        $hal .= "السدس 1/6 فرضا والباقي تعصيبا بالنفس\n";
-    } else 
-    {
-        //  Cas 3:الأب يأخذ الباقي تعصيبًا
-        $hal .= "الباقي تعصيبا بالنفس\n";
-    }
-}
-
-
-public function mirathalom()
-    {
-        if (!$this->input["alom"]) {
-        return;
-     }
-     if
-         (!$this->input['far3_warith']) {
-            $hal .= "السدس 1/3 فرضا\n";
-        } else  {
-            $hal .= "السدس 1/6 فرضا\n";
-        }
-    }
- 
- public function mirathaljad()
-    {// Si le père est vivant, le grand-père est bloqué
-        if (!$this->input["aljad"] || $this->input["alab"]) {
-            
-            return;
-        }
-        
-     if ($far3WarithDhakar) 
-     {
-        // Cas 1: Si un fils existe -> 1/6 فرضا فقط
-        $hal .= "السدس 1/6 فرضا فقط\n";
-     } elseif ($this->input->hasFar3WarithOntha()) 
-     {
-        // Cas 2: Si une fille seulement -> 1/6 + باقي تعصيب
-        $hal .= "السدس 1/6 فرضا والباقي تعصيبا بالنفس\n";
-     } else 
-     {
-        //  Cas 3:الجد يأخذ الباقي تعصيبًا
-        $hal .= "الباقي تعصيبا بالنفس\n";
-     }
-    }
-
-
-public function mirathaljadah_li_ab()
-    {
-        if (!$this->input["aljadah_li_ab"] || $this->input["alab"]|| $this->input["alom"]) {
-            return; 
-        }
-        if (!$this->input["aljadah_li_om"]) {
-                $hal .= "الجدة لأب في السدس 1/6 فرضا\n"; 
+    public function mirathazawj($mirathInput)
+        {
+            if (!$mirathInput["zawj"]) {
+                return;
+            }
+            if ($this->far3Warith) {
+                $this->rapport .= "الربع 1/4 فرضا\n";
             } else {
-                $hal .= "ترث السدس 1/12 فرضا\n";
-            }   
-    }
-
-public function mirathaljadat_li_om()
-    {
-        if (!$this->input["aljadah_li_om"] || $this->input["alom"]) {
-            return; 
+                $this->rapport .= "النصف 1/2 فرضا\n";
+            }
         }
-         if (!$this->input["aljadah_li_ab"]) {
-                $hal .= "الجدة لأم في السدس 1/6 فرضا\n";   
+
+    public function mirathazawja($mirathInput)
+        {
+            if (!$mirathInput["zawja"]) {
+                return;
+            }
+
+            if ($this->far3Warith) {
+                $this->rapport .= "الربع 1/4 فرضا\n";
             } else {
-                $hal .= "ترث السدس 1/12 فرضا\n";
+                $this->rapport .= "الثمن 1/8 فرضا\n";
             }
-   }
-//el foro3//
-public function  mirathalbanat()
-    {
-     if (!$this->input["albanat"]) {
-        return;
-     }
-     
-     if (($this->input["albanat"] ==1) && ($this->input["alabna"] == 0)){
-                $hal .= "ترث  1/2 فرضا\n";
-                }
-     else if  (($this->input["albanat"] > 1) && ($this->input["alabna"] == 0)) {
-                $hal .= "ترث  2/3 فرضا\n";
-     }     
-     else if  (($this->input["albanat"] > 0) && ($this->input["alabna"] > 0)) {
-                $hal .= "ترث  1/2 الابناء\n";
-     } 
-    } 
- 
-
- public function mirathalabna()
-{
-    if (!$this->input["alabna"]) {return;  }
-    
-    if ($input["albanat"] == 0) {
-        $hal .= "الباقي تعصيبا بالنفس\n";
-    } else {
-        $hal .= "للذكر مثل حظ الانثيين\n";
         }
-}
 
-
-public function mirathabna_alabna()
-{
- if ($this->input["abna_alabna"] == 0 || $this->input["abna"] > 0) {
-            return; 
+    //Al osol//
+    public function miratrapportab($mirathInput)
+    {
+        if (!$mirathInput["alab"])
+        {
+            return;
         }
-    $nbr_a = $input["alabna_alabna"];
-    if ($nbr_a === 0) {return;}
-    
-    $nbr_b = $input["banat_alabna"];
-    if ($nbr_b === 0) {
-        $hal .= "الباقي تعصيبا بالنفس\n";
-    } else {
-        $hal = 2 * $nbr_a + $nbr_b;
-        $hal .= "للذكر مثل حظ الانثيين\n";
+
+        if ($this->far3WarithDhakar)
+        {
+            // Cas 1: Si un fils existe -> 1/6 فرضا فقط
+            $this->rapport .= "السدس 1/6 فرضا فقط\n";
+        } elseif ($this->far3WarithOntha)
+        {
+            // Cas 2: Si une fille seulement -> 1/6 + باقي تعصيب
+            $this->rapport .= "السدس 1/6 فرضا والباقي تعصيبا بالنفس\n";
+        } else
+        {
+            //  Cas 3:الأب يأخذ الباقي تعصيبًا
+            $this->rapport .= "الباقي تعصيبا بالنفس\n";
         }
-}
-
-public function  mirathbanat_alabna()
-    {
-        if ($this->input["banat_alabna"]== 0 || $this->input["abna"] > 0 || $this->input["albnat"] > 1 ) {
-            return; 
-        }
-     
-     if (($this->input["banat_alabna"] ==1) && ($this->input["abna_alabna"] == 0)){
-                $hal .= "ترث  1/2 فرضا\n";
-                }
-     if  (($this->input["banat_elabna"] > 1) && ($this->input["abna_alabna"] == 0)) {
-                $hal .= "ترث  2/3 فرضا\n";
-     }     
-     if  (($this->input["banat_albanat"] > 0) && ($this->input["abna_alabna"] > 0)) {
-                $hal .= "ترث نصف 1/2 الابناء\n";
-     } 
-    } 
-
- // wasiya wajiba//
- public function  mirathabana_albanat()
-    {
-        if ($this->input["abna_albanat"]== 0 || $this->input["albanat"] > 0  ) {
-            return; 
-        }
-      if($this->input["banat_albanat"]== 0){
-                $hal .= "ميراث  الام && 1/3";
-                }
-                else{
-                    $nbr_b = $input["banat_alabna"];
-                    $nbr_a = $input["alabna_alabna"];
-                    $hal = 2 * $nbr_a + $nbr_b;
-                    $hal .= "ترث نصف 1/2 الابناء\n";
-                }
-
-    }
-public function  mirathbanat_albanat()
-    {
-        if ($this->input["banat_albanat"]== 0 || $this->input["albanat"] > 0  ) {
-            return; 
-        }
-      if($this->input["abna_albanat"]== 0){
-                $hal .= "ميراث  الام && > 1/3";
-                }
-                else{
-                 $hal .= "ترث نصف 1/2 الابناء\n";
-                }
-    }
-// al 7awachi //
-public function mirathalikhwa_li_om()
-    {
-    
-        if ($this->input["alikhwa_li_om"] == 0|| $this->input["fara3_warith"]> 0 ||!input['alab']
-        || !input['aljad']) {
-              return; 
-            }
-            
-                if ($this->input["alakhawat_li_om"] > 0){
-                  $hal .= "الإخوة لأم يرثون الثلث 1/3 فرضًا بالتساوي\n";  }
-                  else{
-                  $hal .= "الإخوة لأم يرثون الثلث 1/6 فرضًا بالتساوي\n";
-                  }
-
-    }
-            
-
-public function mirathalakhawat_li_om()
-    {
-        
-        if ($this->input["alakhawat_li_om"] == 0|| $this->input["fara3_warith"]> 0 ||!input["alab"]
-        || !input["aljad"]){
-              return; 
-            }
-            
-                if($this->input['alikhwa_li_om'] > 0){
-                  $hal .= "الإخوات  لأم ترثن الثلث 1/3 فرضًا بالتساوي\n";}
-                  else{
-                  $hal .= "الإخوات لأم ترثن الثلث 1/6 فرضًا بالتساوي\n";
-                  }
-                
-    }
-
-public function mirathalikhwa_alashika()
-    {
-        $nbr_a = $input["alikhwa_alashika"] > 0;
-        $nbr_b = $input["alakhawat_ashakikat"] > 0;
-        
-        if ($this->input["alikhwa_alashika"] == 0|| $this->input["fara3_warith"]> 0 ||!input["alab"]) {
-              return; 
-            }
-              
-                    if ($nbr_b == 0) {
-        $hal .= "الباقي تعصيبا بالنفس\n";
-     } else {
-        $hal = 2 * $nbr_a + $nbr_b;}
     }
 
 
-public function mirathalakhawat_alashakikat()
-    {
-        $nbr_a = $input["alikhwa_alashika"] > 0;
-        $nbr_b = $input["alakhawat_ashakikat"] > 0;
-        
-        if (
-            $this->input["alakhawat_alashakikat"] == 0
-            || $this->input["fara3_warith"]> 0 
-            ||!input["alab"]
-            ) {
-              return; 
+    public function miratrapportom($mirathInput)
+        {
+            if (!$mirathInput["alom"]) {
+            return;
+        }
+        if
+            (!$mirathInput['far3_warith']) {
+                $this->rapport .= "السدس 1/3 فرضا\n";
+            } else  {
+                $this->rapport .= "السدس 1/6 فرضا\n";
             }
-            
-     if (($this->input["alakhawat_ashakikat"] ==1) && ($this->input["alikhwa_alashika"] == 0)){
-                $hal .= "ترث  1/2 فرضا\n";
+        }
+
+    public function miratrapportjad($mirathInput)
+        {// Si le père est vivant, le grand-père est bloqué
+            if (!$mirathInput["aljad"] || $mirathInput["alab"]) {
+
+                return;
+            }
+
+        if ($this->far3WarithDhakar)
+        {
+            // Cas 1: Si un fils existe -> 1/6 فرضا فقط
+            $this->rapport .= "السدس 1/6 فرضا فقط\n";
+        } elseif ($mirathInput->hasFar3WarithOntha())
+        {
+            // Cas 2: Si une fille seulement -> 1/6 + باقي تعصيب
+            $this->rapport .= "السدس 1/6 فرضا والباقي تعصيبا بالنفس\n";
+        } else
+        {
+            //  Cas 3:الجد يأخذ الباقي تعصيبًا
+            $this->rapport .= "الباقي تعصيبا بالنفس\n";
+        }
+        }
+
+
+    public function miratrapportjadah_li_ab($mirathInput)
+        {
+            if (!$mirathInput["aljadah_li_ab"] || $mirathInput["alab"]|| $mirathInput["alom"]) {
+                return;
+            }
+            if (!$mirathInput["aljadah_li_om"]) {
+                    $this->rapport .= "الجدة لأب في السدس 1/6 فرضا\n";
+                } else {
+                    $this->rapport .= "ترث السدس 1/12 فرضا\n";
                 }
-     if  (($this->input["alakhawat_ashakikat"] > 1) && ($this->input["alikhwa_alashika"] == 0)) {
-                $hal .= "ترث  2/3 فرضا\n";
-     }     
-     if  (($this->input["alakhawat_ashakikat"] > 0) && ($this->input["alikhwa_alashika"] > 0)) {
-                $hal .= "ترث  1/2 الاخوة الأشقاء\n";
-     } 
- } 
- 
+        }
 
-public function mirathalikhwa_li_ab()
-    {
-        $nbr_a = $input["alikhwa_li_ab"] > 0;
-        $nbr_b = $input["alakhawat_li_ab"] > 0;
-        
-        if (
-            $this->input["alikhwa_li_ab"] == 0
-            || $this->input["fara3_warith"]> 0 
-            ||!input["alab"]
-            || $this->input["alikhwa_alashika"]> 0
-             ) {
-              return; 
+    public function miratrapportjadat_li_om($mirathInput)
+        {
+            if (!$mirathInput["aljadah_li_om"] || $mirathInput["alom"]) {
+                return;
             }
-              
-                    if ($nbr_b == 0) {
-        $hal .= "الباقي تعصيبا بالنفس\n";
-     } else {
-        $hal = 2 * $nbr_a + $nbr_b;
-     }
-}
-
-public function mirathalakhawat_li_ab()
-    {
-        if (
-            $this->input["alakhawat_li_ab"] == 0
-            || $this->input["fara3_warith"]> 0 
-            ||!$input["alab"]
-            || $this->input["alikhwa_alashika"]> 0 
-            || $this->input["alakhwat_alashakikat"]> 1 
-            ) {
-              return; 
-            }
-            
-     if (($this->input["alakhawat_li_ab"] ==1) && ($this->input["alikhwa_li_ab"] == 0)&& !input["aljad"]) {
-                $hal .= "ترث  1/2 فرضا\n";
+            if (!$mirathInput["aljadah_li_ab"]) {
+                    $this->rapport .= "الجدة لأم في السدس 1/6 فرضا\n";
+                } else {
+                    $this->rapport .= "ترث السدس 1/12 فرضا\n";
                 }
-     if  (($this->input["alakhawat_li_ab"] > 1) && ($this->input["alikhwa_li_ab"] == 0) &&!input["aljad"]) {
-                $hal .= "ترث  2/3 فرضا\n";
-     }     
-     if  (($this->input["alakhawat_li_ab"] > 0) && ($this->input["alikhwa_li_ab"] > 0)) {
-                $hal .= "ترث  1/2 الاخوة الأشقاء\n";
-     } 
-   } 
- 
+    }
+    //el foro3//
+    public function  miratrapportbanat($mirathInput)
+        {
+        if (!$mirathInput["albanat"]) {
+            return;
+        }
 
- public function mirathabna_alikhwa_alashika()
-{
-    if (
-        $this->input["abna_alikhwa_alashika"] == 0
-        || $this->input["fara3_warith"]> 0 
-        ||!input["alab"]
-        || $this->input["alikhwa_alashika"]> 0 
-        || $this->input["alikhwa_li_ab"]> 0 
-        ||!input["aljad"]
-        ) {
-              return; 
+        if (($mirathInput["albanat"] ==1) && ($mirathInput["alabna"] == 0)){
+                    $this->rapport .= "ترث  1/2 فرضا\n";
+                    }
+        else if  (($mirathInput["albanat"] > 1) && ($mirathInput["alabna"] == 0)) {
+                    $this->rapport .= "ترث  2/3 فرضا\n";
+        }
+        else if  (($mirathInput["albanat"] > 0) && ($mirathInput["alabna"] > 0)) {
+                    $this->rapport .= "ترث  1/2 الابناء\n";
+        }
+        }
+
+
+    public function miratrapportabna($mirathInput)
+    {
+        if (!$mirathInput["alabna"]) {return;  }
+
+        if ($mirathInput["albanat"] == 0) {
+            $this->rapport .= "الباقي تعصيبا بالنفس\n";
+        } else {
+            $this->rapport .= "للذكر مثل حظ الانثيين\n";
+            }
+    }
+
+
+    public function mirathabna_alabna($mirathInput)
+    {
+        if ($mirathInput["abna_alabna"] == 0 || $mirathInput["abna"] > 0) {
+            return;
+        }
+        if ($mirathInput["alabna_alabna"] === 0) {return;}
+
+        if ($mirathInput["banat_alabna"] === 0) {
+            $this->rapport .= "الباقي تعصيبا بالنفس\n";
+        } else {
+            $this->rapport = 2 * $mirathInput["alabna_alabna"] + $mirathInput["banat_alabna"];
+            $this->rapport .= "للذكر مثل حظ الانثيين\n";
+        }
+    }
+
+    public function  mirathbanat_alabna($mirathInput)
+        {
+            if ($mirathInput["banat_alabna"]== 0 || $mirathInput["abna"] > 0 || $mirathInput["albanat"] > 1 ) {
+                return;
             }
 
-    $hal .= "الباقي تعصيبا بالنفس\n";
-}
+            if (($mirathInput["banat_alabna"] ==1) && ($mirathInput["abna_alabna"] == 0)){
+                $this->rapport .= "ترث  1/2 فرضا\n";
+            }
+            if (($mirathInput["banat_alabna"] > 1) && ($mirathInput["abna_alabna"] == 0)) {
+                $this->rapport .= "ترث  2/3 فرضا\n";
+            }
+            if (($mirathInput["banat_alabna"] > 0) && ($mirathInput["abna_alabna"] > 0)) {
+                $this->rapport .= "ترث نصف 1/2 الابناء\n";
+            }
+        }
 
-public function mirathabna_alikhwa_li_ab()
-{
-    if ($this->input["abna_alikhwa_li_ab"] == 0
-    || $this->input["fara3_warith"]> 0 
-    ||!input["alab"]
-    || $this->input["alikhwa_alashika"]> 0 
-    || $this->input["alikhwa_li_ab"]> 0 
-    ||!input["aljad"]
-    || $this->input["abna_alikhwa_alashika"]> 0
-    ) {
-              return; 
+    // wasiya wajiba//
+    public function  mirathabana_albanat($mirathInput)
+        {
+            if ($mirathInput["abna_albanat"]== 0 || $mirathInput["albanat"] > 0  ) {
+                return;
+            }
+            if($mirathInput["banat_albanat"]== 0){
+                $this->rapport .= "ميراث الام 1/3\n";
+            } else {
+                $nbr_b = $mirathInput["banat_alabna"];
+                $nbr_a = $mirathInput["abna_alabna"];
+                $this->rapport = 2 * $nbr_a + $nbr_b;
+                $this->rapport .= "ترث نصف 1/2 الابناء\n";
+            }
+        }
+
+    public function  mirathbanat_albanat($mirathInput)
+        {
+            if ($mirathInput["banat_albanat"]== 0 || $mirathInput["albanat"] > 0  ) {
+                return;
+            }
+            if($mirathInput["abna_albanat"]== 0){
+                $this->rapport .= "ميراث الام 1/3\n";
+            } else {
+                $this->rapport .= "ترث نصف 1/2 الابناء\n";
+            }
+        }
+    // al 7awachi //
+    public function miratrapportikhwa_li_om($mirathInput)
+        {
+            if ($mirathInput["alikhwa_li_om"] == 0 || $this->far3Warith > 0 || !$mirathInput['alab'] || !$mirathInput['aljad']) {
+                return;
             }
 
-    $hal .= "الباقي تعصيبا بالنفس\n";
-}
+            if ($mirathInput["alakhawat_li_om"] > 0) {
+                $this->rapport .= "الإخوة لأم يرثون الثلث 1/3 فرضًا بالتساوي\n";
+            } else {
+                $this->rapport .= "الإخوة لأم يرثون الثلث 1/6 فرضًا بالتساوي\n";
+            }
+        }
 
-public function mirathala3mam_alashika()
-{
-    if ($this->input["ala3mam_alashika"] == 0 
-    || $this->input["fara3_warith"]> 0 ||!input["alab"]
-    || $this->input["alikhwa_alashika"]> 0 
-    || $this->input["alikhwa_li_ab"]> 0 
-    ||!input["aljad"]
-    || $this->input["abna_alikhwa_alashika"]> 0
-    || $this->input["abna_alikhwa_li_ab"]> 0
-    ) {
-              return; 
+
+    public function miratrapportakhawat_li_om($mirathInput)
+        {
+            if ($mirathInput["alakhawat_li_om"] == 0 || $this->far3Warith > 0 || !$mirathInput["alab"] || !$mirathInput["aljad"]) {
+                return;
             }
 
-    $hal .= "الباقي تعصيبا بالنفس\n";
-}
+            if ($mirathInput['alikhwa_li_om'] > 0) {
+                $this->rapport .= "الإخوات لأم ترثن الثلث 1/3 فرضًا بالتساوي\n";
+            } else {
+                $this->rapport .= "الإخوات لأم ترثن الثلث 1/6 فرضًا بالتساوي\n";
+            }
+        }
 
-public function mirathala3mam_li_ab()
-{
-    if ($this->input["ala3mam_li_ab"] == 0
-    || $this->input["fara3_warith"]> 0 
-    ||!input["alab"]
-    || $this->input["alikhwa_alashika"]> 0 
-    || $this->input["alikhwa_li_ab"]> 0 
-    ||!input["aljad"]
-    || $this->input["abna_alikhwa_alashika"]> 0
-    || $this->input["abna_alikhwa_li_ab"]> 0
-    || $this->input["ala3mam_alashika"]> 0
-    ){
-              return; 
+    public function miratrapportikhwa_alashika($mirathInput)
+        {
+            if ($mirathInput["alikhwa_alashika"] == 0 || $this->far3Warith > 0 || !$mirathInput["alab"]) {
+                return;
             }
 
-    $hal .= "الباقي تعصيبا بالنفس\n";
-}
-
-public function mirathabna_ala3mam_alashika()
-{
-    if (
-        $this->input["abna_ala3mam_alashika"] == 0
-        || $this->input["fara3_warith"]> 0 
-        ||!input["alab"]
-        || $this->input["alikhwa_alashika"]> 0 
-        || $this->input["alikhwa_li_ab"]> 0 
-        ||!input["aljad"]
-        || $this->input["abna_alikhwa_alashika"]> 0
-        || $this->input["abna_alikhwa_li_ab"]> 0
-        || $this->input["ala3mam_alashika"]> 0
-        || $this->input["ala3mam_li_ab"]> 0){
-              return; 
+            if ($mirathInput["alakhawat_alashakikat"] == 0) {
+                $this->rapport .= "الباقي تعصيبا بالنفس\n";
+            } else {
+                $this->rapport = 2 * $mirathInput["alikhwa_alashika"] + $mirathInput["alakhawat_alashakikat"];
             }
-    $hal .= "الباقي تعصيبا بالنفس\n";
-}
+        }
 
-public function mirathabna_ala3mam_li_ab()
-{
-    if (
-        $this->input["abna_ala3mam_li_ab"] == 0
-        || $this->input["fara3_warith"]> 0 
-        ||!input["alab"]
-        || $this->input["alikhwa_alashika"]> 0 
-        || $this->input["alikhwa_li_ab"]> 0 
-        ||!input["aljad"]
-        || $this->input["abna_alikhwa_alashika"]> 0
-        || $this->input["abna_alikhwa_li_ab"]> 0
-        || $this->input["ala3mam_alashika"]> 0
-        || $this->input["ala3mam_li_ab"]> 0 
-        || $this->input["abna_ala3mam_alashika"]> 0
-         ){
-              return; 
+
+    public function miratrapportakhawat_alashakikat($mirathInput)
+        {
+            if ($mirathInput["alakhawat_alashakikat"] == 0 || $this->far3Warith > 0 || !$mirathInput["alab"]) {
+                return;
             }
-    $hal .= "الباقي تعصيبا بالنفس\n";
-}}
-}
+
+            if (($mirathInput["alakhawat_alashakikat"] == 1) && ($mirathInput["alikhwa_alashika"] == 0)) {
+                $this->rapport .= "ترث 1/2 فرضا\n";
+            }
+            if (($mirathInput["alakhawat_alashakikat"] > 1) && ($mirathInput["alikhwa_alashika"] == 0)) {
+                $this->rapport .= "ترث 2/3 فرضا\n";
+            }
+            if (($mirathInput["alakhawat_alashakikat"] > 0) && ($mirathInput["alikhwa_alashika"] > 0)) {
+                $this->rapport .= "ترث 1/2 الاخوة الأشقاء\n";
+            }
+        }
+
+
+    public function miratrapportikhwa_li_ab($mirathInput)
+        {
+            if ($mirathInput["alikhwa_li_ab"] == 0 || $this->far3Warith > 0 || !$mirathInput["alab"] || $mirathInput["alikhwa_alashika"] > 0) {
+                return;
+            }
+
+            if ($mirathInput["alakhawat_li_ab"] == 0) {
+                $this->rapport .= "الباقي تعصيبا بالنفس\n";
+            } else {
+                $this->rapport = 2 * $mirathInput["alikhwa_li_ab"] + $mirathInput["alakhawat_li_ab"];
+            }
+        }
+
+    public function miratrapportakhawat_li_ab($mirathInput)
+        {
+            if ($mirathInput["alakhawat_li_ab"] == 0 || $this->far3Warith > 0 || !$mirathInput["alab"] || 
+                $mirathInput["alikhwa_alashika"] > 0 || $mirathInput["alakhawat_alashakikat"] > 1) {
+                return;
+            }
+
+            if (($mirathInput["alakhawat_li_ab"] == 1) && ($mirathInput["alikhwa_li_ab"] == 0) && !$mirathInput["aljad"]) {
+                $this->rapport .= "ترث 1/2 فرضا\n";
+            }
+            if (($mirathInput["alakhawat_li_ab"] > 1) && ($mirathInput["alikhwa_li_ab"] == 0) && !$mirathInput["aljad"]) {
+                $this->rapport .= "ترث 2/3 فرضا\n";
+            }
+            if (($mirathInput["alakhawat_li_ab"] > 0) && ($mirathInput["alikhwa_li_ab"] > 0)) {
+                $this->rapport .= "ترث 1/2 الاخوة الأشقاء\n";
+            }
+        }
+
+
+    public function mirathabna_alikhwa_alashika($mirathInput)
+    {
+        if ($mirathInput["abna_alikhwa_alashika"] == 0 || $this->far3Warith > 0 || !$mirathInput["alab"] || 
+            $mirathInput["alikhwa_alashika"] > 0 || $mirathInput["alikhwa_li_ab"] > 0 || !$mirathInput["aljad"]) {
+            return;
+        }
+
+        $this->rapport .= "الباقي تعصيبا بالنفس\n";
+    }
+
+    public function mirathabna_alikhwa_li_ab($mirathInput)
+    {
+        if ($mirathInput["abna_alikhwa_li_ab"] == 0 || $this->far3Warith > 0 || !$mirathInput["alab"] || 
+            $mirathInput["alikhwa_alashika"] > 0 || $mirathInput["alikhwa_li_ab"] > 0 || !$mirathInput["aljad"] || 
+            $mirathInput["abna_alikhwa_alashika"] > 0) {
+            return;
+        }
+
+        $this->rapport .= "الباقي تعصيبا بالنفس\n";
+    }
+
+    public function miratrapporta3mam_alashika($mirathInput)
+    {
+        if ($mirathInput["ala3mam_alashika"] == 0 || $this->far3Warith > 0 || !$mirathInput["alab"] || 
+            $mirathInput["alikhwa_alashika"] > 0 || $mirathInput["alikhwa_li_ab"] > 0 || !$mirathInput["aljad"] || 
+            $mirathInput["abna_alikhwa_alashika"] > 0 || $mirathInput["abna_alikhwa_li_ab"] > 0) {
+            return;
+        }
+
+        $this->rapport .= "الباقي تعصيبا بالنفس\n";
+    }
+
+    public function miratrapporta3mam_li_ab($mirathInput)
+    {
+        if ($mirathInput["ala3mam_li_ab"] == 0 || $this->far3Warith > 0 || !$mirathInput["alab"] || 
+            $mirathInput["alikhwa_alashika"] > 0 || $mirathInput["alikhwa_li_ab"] > 0 || !$mirathInput["aljad"] || 
+            $mirathInput["abna_alikhwa_alashika"] > 0 || $mirathInput["abna_alikhwa_li_ab"] > 0 || 
+            $mirathInput["ala3mam_alashika"] > 0) {
+            return;
+        }
+
+        $this->rapport .= "الباقي تعصيبا بالنفس\n";
+    }
+
+    public function mirathabna_ala3mam_alashika($mirathInput)
+    {
+        if ($mirathInput["abna_ala3mam_alashika"] == 0 || $this->far3Warith > 0 || !$mirathInput["alab"] || 
+            $mirathInput["alikhwa_alashika"] > 0 || $mirathInput["alikhwa_li_ab"] > 0 || !$mirathInput["aljad"] || 
+            $mirathInput["abna_alikhwa_alashika"] > 0 || $mirathInput["abna_alikhwa_li_ab"] > 0 || 
+            $mirathInput["ala3mam_alashika"] > 0 || $mirathInput["ala3mam_li_ab"] > 0) {
+            return;
+        }
+
+        $this->rapport .= "الباقي تعصيبا بالنفس\n";
+    }
+
+    public function mirathabna_ala3mam_li_ab($mirathInput)
+    {
+        if ($mirathInput["abna_ala3mam_li_ab"] == 0 || $this->far3Warith > 0 || !$mirathInput["alab"] || 
+            $mirathInput["alikhwa_alashika"] > 0 || $mirathInput["alikhwa_li_ab"] > 0 || !$mirathInput["aljad"] || 
+            $mirathInput["abna_alikhwa_alashika"] > 0 || $mirathInput["abna_alikhwa_li_ab"] > 0 || 
+            $mirathInput["ala3mam_alashika"] > 0 || $mirathInput["ala3mam_li_ab"] > 0 || 
+            $mirathInput["abna_ala3mam_alashika"] > 0) {
+            return;
+        }
+
+        $this->rapport .= "الباقي تعصيبا بالنفس\n";
+    }
+
 }

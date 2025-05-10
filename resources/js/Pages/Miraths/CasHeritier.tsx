@@ -16,8 +16,9 @@ export default function CasHeritier() {
 
     useEffect(() => {
         const mirathInputRaw = localStorage.getItem("mirathInput");
+        let mirathInput = {} as Partial<MirathInput>;
         if (mirathInputRaw) {
-            const mirathInput = JSON.parse(mirathInputRaw) as Partial<MirathInput>;
+            mirathInput = JSON.parse(mirathInputRaw) as Partial<MirathInput>;
 
             setSelectedCases({
                 heirDiedBeforeInheritance: mirathInput.heirDiedBeforeInheritance || false,
@@ -70,11 +71,13 @@ export default function CasHeritier() {
         localStorage.setItem("mirathInput", JSON.stringify(mergedInput));
     };
 
-    const handleCalculateInheritance = () => {
-        // On peut aussi revalider ici les données au besoin
-
+    const handleCalculateInheritance = (e: Event) => {
         if (selectedCases.noSpecialCases) {
-            router.visit("/RepartitionHeritier");
+            e.preventDefault();
+            const mirathInput = JSON.parse(localStorage.getItem("mirathInput") || "{}");
+            router.post('/cas-heritier', { mirathInput }, {
+                onError: (err: any) => alert(err),
+              });
         } else if (selectedCases.heirDiedBeforeInheritance) {
             router.visit("/Monasa5atHeritier");
         } else if (selectedCases.hasPregnancy) {

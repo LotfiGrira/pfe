@@ -86,9 +86,7 @@ Route::get('/calculator', function () {
 Route::get('/liste-heritier', function () {
     return Inertia::render('Miraths/ListeHeritier'); // Vérifiez si ça pointe vers "NewCalcule"
 });
-Route::get('/cas-heritier', function () {
-    return Inertia::render('Miraths/CasHeritier');
-});
+Route::post('/cas-heritier', [MirathController::class, 'calculateMirath'])->name('cas-heritier.calculateMirath');
 Route::get('/Monasa5atHeritier', function () {
     return Inertia::render('Miraths/Monasa5atHeritier');
 })->name('monasa5at.heritier');
@@ -129,9 +127,7 @@ Route::get('/results', [MirathController::class, 'showResults'])->name('results'
 Route::get('/results', function () {
     return Inertia::render('Miraths/Results');
 })->name('results');
-Route::get('/mirath/calculate', function () {
-    return Inertia::render('Miraths/NewCalcule');
-});
+
 
 // Reçoit le POST du calcul
 Route::post('/mirath/calculate', [MirathController::class, 'calculateMirath']);
