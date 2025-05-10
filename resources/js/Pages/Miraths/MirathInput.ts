@@ -40,7 +40,7 @@ export interface MirathInput {
     abna_ala3mam_li_ab?: number;
 
     // Derived/computed flags (can be calculated server-side if needed)
-    far3_warith?: boolean;
+    far3warith?: boolean;
 
     // === Cas particuliers ===
 
