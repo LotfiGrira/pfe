@@ -20,15 +20,8 @@ export default function Authenticated({
                     <div className="flex h-16 justify-between items-center">
                         {/* Logo + lien dashboard */}
                         <div className="flex items-center gap-8">
-                            <Link href="/">
-                                <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800" />
-                            </Link>
-                            <NavLink
-                                href={route('dashboard')}
-                                active={route().current('dashboard')}
-                            >
-                                Dashboard
-                            </NavLink>
+                            
+                            
                         </div>
 
                         {/* Avatar + Dropdown */}
@@ -152,3 +145,5 @@ export default function Authenticated({
         </div>
     );
 }
+
+
