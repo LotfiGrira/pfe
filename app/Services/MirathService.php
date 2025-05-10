@@ -21,8 +21,8 @@ class MirathService
         $this->mirathalab($mirathInput);
         $this->mirathalom($mirathInput);
         $this->mirathaljad($mirathInput);
-        $this->Mirathaljadah_li_ab($mirathInput);
-        $this->Mirathaljadat_li_om($mirathInput);
+        $this->mirathaljadah_li_ab($mirathInput);
+        $this->mirathaljadat_li_om($mirathInput);
         $this->mirathalbanat($mirathInput);
         $this->mirathbanat_alabna($mirathInput);
         $this->mirathabana_albanat($mirathInput);
@@ -73,7 +73,7 @@ class MirathService
         }
 
     //Al osol//
-    public function miratrapportab($mirathInput)
+    public function mirathalab($mirathInput)
     {
         if (!$mirathInput["alab"])
         {
@@ -96,7 +96,7 @@ class MirathService
     }
 
 
-    public function miratrapportom($mirathInput)
+    public function mirathalom($mirathInput)
         {
             if (!$mirathInput["alom"]) {
             return;
@@ -109,7 +109,7 @@ class MirathService
             }
         }
 
-    public function miratrapportjad($mirathInput)
+    public function mirathaljad($mirathInput)
         {// Si le père est vivant, le grand-père est bloqué
             if (!$mirathInput["aljad"] || $mirathInput["alab"]) {
 
@@ -132,7 +132,7 @@ class MirathService
         }
 
 
-    public function miratrapportjadah_li_ab($mirathInput)
+    public function mirathaljadah_li_ab($mirathInput)
         {
             if (!$mirathInput["aljadah_li_ab"] || $mirathInput["alab"]|| $mirathInput["alom"]) {
                 return;
@@ -144,7 +144,7 @@ class MirathService
                 }
         }
 
-    public function miratrapportjadat_li_om($mirathInput)
+    public function mirathaljadat_li_om($mirathInput)
         {
             if (!$mirathInput["aljadah_li_om"] || $mirathInput["alom"]) {
                 return;
@@ -156,7 +156,7 @@ class MirathService
                 }
     }
     //el foro3//
-    public function  miratrapportbanat($mirathInput)
+    public function  mirathalbanat($mirathInput)
         {
         if (!$mirathInput["albanat"]) {
             return;
@@ -174,7 +174,7 @@ class MirathService
         }
 
 
-    public function miratrapportabna($mirathInput)
+    public function mirathalabna($mirathInput)
     {
         if (!$mirathInput["alabna"]) {return;  }
 
@@ -191,12 +191,10 @@ class MirathService
         if ($mirathInput["abna_alabna"] == 0 || $mirathInput["abna"] > 0) {
             return;
         }
-        if ($mirathInput["alabna_alabna"] === 0) {return;}
 
-        if ($mirathInput["banat_alabna"] === 0) {
+        if ($mirathInput["banat_alabna"] == 0) {
             $this->rapport .= "الباقي تعصيبا بالنفس\n";
         } else {
-            $this->rapport = 2 * $mirathInput["alabna_alabna"] + $mirathInput["banat_alabna"];
             $this->rapport .= "للذكر مثل حظ الانثيين\n";
         }
     }
@@ -229,7 +227,6 @@ class MirathService
             } else {
                 $nbr_b = $mirathInput["banat_alabna"];
                 $nbr_a = $mirathInput["abna_alabna"];
-                $this->rapport = 2 * $nbr_a + $nbr_b;
                 $this->rapport .= "ترث نصف 1/2 الابناء\n";
             }
         }
@@ -245,8 +242,8 @@ class MirathService
                 $this->rapport .= "ترث نصف 1/2 الابناء\n";
             }
         }
-    // al 7awachi //
-    public function miratrapportikhwa_li_om($mirathInput)
+    // al 7awachi
+    public function mirathalikhwa_li_om($mirathInput)
         {
             if ($mirathInput["alikhwa_li_om"] == 0 || $this->far3Warith > 0 || !$mirathInput['alab'] || !$mirathInput['aljad']) {
                 return;
@@ -260,7 +257,7 @@ class MirathService
         }
 
 
-    public function miratrapportakhawat_li_om($mirathInput)
+    public function mirathalakhawat_li_om($mirathInput)
         {
             if ($mirathInput["alakhawat_li_om"] == 0 || $this->far3Warith > 0 || !$mirathInput["alab"] || !$mirathInput["aljad"]) {
                 return;
@@ -273,7 +270,7 @@ class MirathService
             }
         }
 
-    public function miratrapportikhwa_alashika($mirathInput)
+    public function mirathalikhwa_alashika($mirathInput)
         {
             if ($mirathInput["alikhwa_alashika"] == 0 || $this->far3Warith > 0 || !$mirathInput["alab"]) {
                 return;
@@ -282,12 +279,12 @@ class MirathService
             if ($mirathInput["alakhawat_alashakikat"] == 0) {
                 $this->rapport .= "الباقي تعصيبا بالنفس\n";
             } else {
-                $this->rapport = 2 * $mirathInput["alikhwa_alashika"] + $mirathInput["alakhawat_alashakikat"];
+                $this->rapport .= "TODO\n";
             }
         }
 
 
-    public function miratrapportakhawat_alashakikat($mirathInput)
+    public function mirathalakhawat_alashakikat($mirathInput)
         {
             if ($mirathInput["alakhawat_alashakikat"] == 0 || $this->far3Warith > 0 || !$mirathInput["alab"]) {
                 return;
@@ -305,7 +302,7 @@ class MirathService
         }
 
 
-    public function miratrapportikhwa_li_ab($mirathInput)
+    public function mirathalikhwa_li_ab($mirathInput)
         {
             if ($mirathInput["alikhwa_li_ab"] == 0 || $this->far3Warith > 0 || !$mirathInput["alab"] || $mirathInput["alikhwa_alashika"] > 0) {
                 return;
@@ -314,13 +311,13 @@ class MirathService
             if ($mirathInput["alakhawat_li_ab"] == 0) {
                 $this->rapport .= "الباقي تعصيبا بالنفس\n";
             } else {
-                $this->rapport = 2 * $mirathInput["alikhwa_li_ab"] + $mirathInput["alakhawat_li_ab"];
+                $this->rapport .= "TODO\n";
             }
         }
 
-    public function miratrapportakhawat_li_ab($mirathInput)
+    public function mirathalakhawat_li_ab($mirathInput)
         {
-            if ($mirathInput["alakhawat_li_ab"] == 0 || $this->far3Warith > 0 || !$mirathInput["alab"] || 
+            if ($mirathInput["alakhawat_li_ab"] == 0 || $this->far3Warith > 0 || !$mirathInput["alab"] ||
                 $mirathInput["alikhwa_alashika"] > 0 || $mirathInput["alakhawat_alashakikat"] > 1) {
                 return;
             }
@@ -339,7 +336,7 @@ class MirathService
 
     public function mirathabna_alikhwa_alashika($mirathInput)
     {
-        if ($mirathInput["abna_alikhwa_alashika"] == 0 || $this->far3Warith > 0 || !$mirathInput["alab"] || 
+        if ($mirathInput["abna_alikhwa_alashika"] == 0 || $this->far3Warith > 0 || !$mirathInput["alab"] ||
             $mirathInput["alikhwa_alashika"] > 0 || $mirathInput["alikhwa_li_ab"] > 0 || !$mirathInput["aljad"]) {
             return;
         }
@@ -349,8 +346,8 @@ class MirathService
 
     public function mirathabna_alikhwa_li_ab($mirathInput)
     {
-        if ($mirathInput["abna_alikhwa_li_ab"] == 0 || $this->far3Warith > 0 || !$mirathInput["alab"] || 
-            $mirathInput["alikhwa_alashika"] > 0 || $mirathInput["alikhwa_li_ab"] > 0 || !$mirathInput["aljad"] || 
+        if ($mirathInput["abna_alikhwa_li_ab"] == 0 || $this->far3Warith > 0 || !$mirathInput["alab"] ||
+            $mirathInput["alikhwa_alashika"] > 0 || $mirathInput["alikhwa_li_ab"] > 0 || !$mirathInput["aljad"] ||
             $mirathInput["abna_alikhwa_alashika"] > 0) {
             return;
         }
@@ -358,10 +355,10 @@ class MirathService
         $this->rapport .= "الباقي تعصيبا بالنفس\n";
     }
 
-    public function miratrapporta3mam_alashika($mirathInput)
+    public function mirathala3mam_alashika($mirathInput)
     {
-        if ($mirathInput["ala3mam_alashika"] == 0 || $this->far3Warith > 0 || !$mirathInput["alab"] || 
-            $mirathInput["alikhwa_alashika"] > 0 || $mirathInput["alikhwa_li_ab"] > 0 || !$mirathInput["aljad"] || 
+        if ($mirathInput["ala3mam_alashika"] == 0 || $this->far3Warith > 0 || !$mirathInput["alab"] ||
+            $mirathInput["alikhwa_alashika"] > 0 || $mirathInput["alikhwa_li_ab"] > 0 || !$mirathInput["aljad"] ||
             $mirathInput["abna_alikhwa_alashika"] > 0 || $mirathInput["abna_alikhwa_li_ab"] > 0) {
             return;
         }
@@ -369,11 +366,11 @@ class MirathService
         $this->rapport .= "الباقي تعصيبا بالنفس\n";
     }
 
-    public function miratrapporta3mam_li_ab($mirathInput)
+    public function mirathala3mam_li_ab($mirathInput)
     {
-        if ($mirathInput["ala3mam_li_ab"] == 0 || $this->far3Warith > 0 || !$mirathInput["alab"] || 
-            $mirathInput["alikhwa_alashika"] > 0 || $mirathInput["alikhwa_li_ab"] > 0 || !$mirathInput["aljad"] || 
-            $mirathInput["abna_alikhwa_alashika"] > 0 || $mirathInput["abna_alikhwa_li_ab"] > 0 || 
+        if ($mirathInput["ala3mam_li_ab"] == 0 || $this->far3Warith > 0 || !$mirathInput["alab"] ||
+            $mirathInput["alikhwa_alashika"] > 0 || $mirathInput["alikhwa_li_ab"] > 0 || !$mirathInput["aljad"] ||
+            $mirathInput["abna_alikhwa_alashika"] > 0 || $mirathInput["abna_alikhwa_li_ab"] > 0 ||
             $mirathInput["ala3mam_alashika"] > 0) {
             return;
         }
@@ -383,9 +380,9 @@ class MirathService
 
     public function mirathabna_ala3mam_alashika($mirathInput)
     {
-        if ($mirathInput["abna_ala3mam_alashika"] == 0 || $this->far3Warith > 0 || !$mirathInput["alab"] || 
-            $mirathInput["alikhwa_alashika"] > 0 || $mirathInput["alikhwa_li_ab"] > 0 || !$mirathInput["aljad"] || 
-            $mirathInput["abna_alikhwa_alashika"] > 0 || $mirathInput["abna_alikhwa_li_ab"] > 0 || 
+        if ($mirathInput["abna_ala3mam_alashika"] == 0 || $this->far3Warith > 0 || !$mirathInput["alab"] ||
+            $mirathInput["alikhwa_alashika"] > 0 || $mirathInput["alikhwa_li_ab"] > 0 || !$mirathInput["aljad"] ||
+            $mirathInput["abna_alikhwa_alashika"] > 0 || $mirathInput["abna_alikhwa_li_ab"] > 0 ||
             $mirathInput["ala3mam_alashika"] > 0 || $mirathInput["ala3mam_li_ab"] > 0) {
             return;
         }
@@ -395,10 +392,10 @@ class MirathService
 
     public function mirathabna_ala3mam_li_ab($mirathInput)
     {
-        if ($mirathInput["abna_ala3mam_li_ab"] == 0 || $this->far3Warith > 0 || !$mirathInput["alab"] || 
-            $mirathInput["alikhwa_alashika"] > 0 || $mirathInput["alikhwa_li_ab"] > 0 || !$mirathInput["aljad"] || 
-            $mirathInput["abna_alikhwa_alashika"] > 0 || $mirathInput["abna_alikhwa_li_ab"] > 0 || 
-            $mirathInput["ala3mam_alashika"] > 0 || $mirathInput["ala3mam_li_ab"] > 0 || 
+        if ($mirathInput["abna_ala3mam_li_ab"] == 0 || $this->far3Warith > 0 || !$mirathInput["alab"] ||
+            $mirathInput["alikhwa_alashika"] > 0 || $mirathInput["alikhwa_li_ab"] > 0 || !$mirathInput["aljad"] ||
+            $mirathInput["abna_alikhwa_alashika"] > 0 || $mirathInput["abna_alikhwa_li_ab"] > 0 ||
+            $mirathInput["ala3mam_alashika"] > 0 || $mirathInput["ala3mam_li_ab"] > 0 ||
             $mirathInput["abna_ala3mam_alashika"] > 0) {
             return;
         }
