@@ -122,3 +122,19 @@ Route::post('/mirath/calcul', [MirathController::class, 'calcul']);
 Route::get('/mirath/calcul', function () {
     return Inertia::render('Miraths/CalculMirath');
 });
+
+Route::post('/mirath/calculate', [MirathController::class, 'calculateMirath']);
+
+Route::get('/results', [MirathController::class, 'showResults'])->name('results');
+Route::get('/results', function () {
+    return Inertia::render('Miraths/Results');
+})->name('results');
+Route::get('/mirath/calculate', function () {
+    return Inertia::render('Miraths/NewCalcule');
+});
+
+// Reçoit le POST du calcul
+Route::post('/mirath/calculate', [MirathController::class, 'calculateMirath']);
+
+// Affiche les résultats
+Route::get('/results', [MirathController::class, 'showResults'])->name('results');
