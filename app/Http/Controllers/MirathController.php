@@ -23,13 +23,11 @@ class MirathController extends Controller
 
     public function calculateMirath(Request $request)
     {
-        // Création de l'objet de données à partir de la requête
-        $mirathInput = new MirathInput($request->all());
-
+        $data = $request->all();
         // Calcul des résultats
         $rapport = [];
 
-        $rapport = $this->mirathService->calculMirath($mirathInput);
+        $rapport = $this->mirathService->calculMirath($data["mirathInput"]);
 
         return Inertia::render('Miraths/resulatMirath', [
             'result' => $rapport,
