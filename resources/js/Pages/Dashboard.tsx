@@ -1,5 +1,6 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link, usePage } from "@inertiajs/react";
+import GuestLayout from '@/Layouts/GuestLayout';
 
 export default function Dashboard() {
     const user = usePage().props?.auth?.user;
@@ -7,50 +8,34 @@ export default function Dashboard() {
     const isAdmin = roles.includes("admin");
 
     return (
-        <AuthenticatedLayout
-            header={
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                    <div className="flex flex-wrap gap-3">
-                        {isAdmin ?<Link
-                            href={route("examens.index")}
-                            className="bg-green-600 hover:bg-green-700 text-white text-sm font-semibold py-2 px-4 rounded-lg shadow"
-                        >
-                            📋 Liste des Examens
-                        </Link> :null}
-                        {!isAdmin ?<Link
-                            href={route("examens.listeexamen")}
-                            className="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold py-2 px-4 rounded-lg shadow"
-                        >
-                            👀 Affichage Examens
-                        </Link> :null}
-                        {isAdmin ? <Link
-                            href={route("articles.index")}
-                            className="bg-green-600 hover:bg-green-700 text-white text-sm font-semibold py-2 px-4 rounded-lg shadow"
-                        >
-                            📋 Liste des Articles
-                        </Link> :null}
-                        {!isAdmin ? <Link href={route("articles.liste")} className="...">
-                            👀 Affichage Articles
-                        </Link>:null}
+        <GuestLayout>
+           
+                header={
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                        <div className="flex flex-wrap gap-3">
+                            
+                            
+                           
+                           
+                        </div>
                     </div>
-                </div>
-            }
-        >
-            <Head title="Dashboard" />
+                }
+            
+                <Head title="Dashboard" />
 
-            <div className="py-10">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-                    {/* Bloc d'accueil */}
-                    <div className="bg-white shadow rounded-lg p-6">
-                        <h3 className="text-lg font-semibold text-gray-700 mb-2">
-                            Bonjour, {user?.name} 👋
-                        </h3>
-                        <p className="text-gray-600">
-                            Bienvenue sur votre tableau de bord.
-                        </p>
+                <div className="py-10 bg-amber-50 min-h-screen">
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+                        {/* Bloc d'accueil */}
+                        <div className="bg-white shadow-lg border border-amber-200 rounded-xl p-6">
+                            <h3 className="text-xl font-bold text-yellow-900 mb-2">
+                                Bonjour, {user?.name} 👋
+                            </h3>
+                            <p className="text-gray-700">
+                                Bienvenue sur votre tableau de bord.
+                            </p>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </AuthenticatedLayout>
+        </GuestLayout>
     );
 }
