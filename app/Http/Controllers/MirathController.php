@@ -16,6 +16,11 @@ class MirathController extends Controller
         $this->mirathService = $mirathService;
     }
 
+    public function showPageCasHeritier()
+    {
+        return Inertia::render('Miraths/CasHeritier');
+    }
+
     public function calculateMirath(Request $request)
     {
         // Création de l'objet de données à partir de la requête

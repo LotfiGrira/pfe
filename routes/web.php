@@ -121,6 +121,7 @@ Route::get('/mirath/calcul', function () {
     return Inertia::render('Miraths/CalculMirath');
 });
 
+Route::get('/mirath/calculate', [MirathController::class, 'showPageCasHeritier']);
 Route::post('/mirath/calculate', [MirathController::class, 'calculateMirath']);
 
 Route::get('/results', [MirathController::class, 'showResults'])->name('results');
