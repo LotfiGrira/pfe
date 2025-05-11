@@ -4,7 +4,11 @@ import { Link } from "@inertiajs/react";
 import type { MirathInput } from "./MirathInput";
 
 export default function ListeHeritier() {
-    const heirFields: { label: string; key: keyof MirathInput; type: "boolean" | "number" }[] = [
+    const heirFields: {
+        label: string;
+        key: keyof MirathInput;
+        type: "boolean" | "number";
+    }[] = [
         { label: "هل يوجد زوج؟", key: "zawj", type: "boolean" },
         { label: "هل يوجد زوجة؟", key: "zawja", type: "boolean" },
         { label: "هل يوجد أب؟", key: "alab", type: "boolean" },
@@ -22,44 +26,50 @@ export default function ListeHeritier() {
         { label: "الأخت الشقيقة", key: "alakhawat_ashakikat", type: "number" },
         { label: "الأخت لأب", key: "alakhawat_li_ab", type: "number" },
         { label: "الأخت لأم", key: "alakhawat_li_om", type: "number" },
-        { label: "ابن الأخ الشقيق", key: "abna_alikhwa_alashika", type: "number" },
+        {
+            label: "ابن الأخ الشقيق",
+            key: "abna_alikhwa_alashika",
+            type: "number",
+        },
         { label: "ابن الأخ لأب", key: "abna_alikhwa_li_ab", type: "number" },
         { label: "العم الشقيق", key: "ala3mam_alashika", type: "number" },
         { label: "العم لأب", key: "ala3mam_li_ab", type: "number" },
-        { label: "ابن العم الشقيق", key: "abna_ala3mam_alashika", type: "number" },
-        { label: "ابن العم لأب", key: "abna_ala3mam_li_ab", type: "number" }
+        {
+            label: "ابن العم الشقيق",
+            key: "abna_ala3mam_alashika",
+            type: "number",
+        },
+        { label: "ابن العم لأب", key: "abna_ala3mam_li_ab", type: "number" },
     ];
 
     const [mirathInput, setMirathInput] = useState<MirathInput>(() => {
         const stored = localStorage.getItem("mirathInput");
-        const parsed = (stored ? JSON.parse(stored) : {}) as Partial<MirathInput>;
-    
-        console.log("mirathInput before ");
-        console.log(parsed);
+        const parsed = (
+            stored ? JSON.parse(stored) : {}
+        ) as Partial<MirathInput>;
+
         return {
             ...parsed,
-            ...Object.fromEntries(
-            heirFields.map(({ key, type }) => [
-                key,
-                parsed[key as keyof MirathInput] ?? (type === "boolean" ? false : 0)
-            ])
-        ) as unknown as MirathInput};        
-        
+            ...(Object.fromEntries(
+                heirFields.map(({ key, type }) => [
+                    key,
+                    parsed[key as keyof MirathInput] ??
+                        (type === "boolean" ? false : 0),
+                ])
+            ) as unknown as MirathInput),
+        };
     });
-    console.log("mirathInput");
-    console.log(mirathInput);
-    
-
 
     const handleNext = () => {
         localStorage.setItem("mirathInput", JSON.stringify(mirathInput));
-        alert("تم حفظ قائمة الورثة بنجاح في التخزين المحلي.");
     };
 
     return (
         <GuestLayout>
             <div className="p-1 bg-yellow-100 shadow-md rounded-lg max-w-4xl mx-auto min-h-[500px]">
-                <h1 className="text-2xl font-bold text-center mb-4">قائمة الورثة</h1>
+                <h1 className="text-2xl font-bold text-center mb-4">
+                    قائمة الورثة
+                </h1>
 
                 <div className="text-center mb-6">
                     <span className="bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-lg font-semibold">
@@ -70,20 +80,33 @@ export default function ListeHeritier() {
                 <div className="bg-gray-200 p-4 rounded-lg shadow-md grid grid-cols-2 gap-4">
                     {heirFields
                         .filter(({ key }) => {
-                            if (mirathInput["gender"] === "ذكر" && key === "zawj") return false;
-                            if (mirathInput["gender"] === "أنثى" && key === "zawja") return false;
+                            if (
+                                mirathInput["gender"] === "ذكر" &&
+                                key === "zawj"
+                            )
+                                return false;
+                            if (
+                                mirathInput["gender"] === "أنثى" &&
+                                key === "zawja"
+                            )
+                                return false;
                             return true;
                         })
                         .map(({ label, key, type }, index) => (
-                            <div key={index} className="flex justify-between items-center bg-yellow-500 p-3 rounded-md">
-                                <label className="text-white font-bold text-lg">{label}</label>
+                            <div
+                                key={index}
+                                className="flex justify-between items-center bg-yellow-500 p-3 rounded-md"
+                            >
+                                <label className="text-white font-bold text-lg">
+                                    {label}
+                                </label>
                                 {type === "boolean" ? (
                                     <select
                                         value={mirathInput[key] ? "نعم" : "لا"}
                                         onChange={(e) =>
-                                            setMirathInput(prev => ({
+                                            setMirathInput((prev) => ({
                                                 ...prev,
-                                                [key]: e.target.value === "نعم"
+                                                [key]: e.target.value === "نعم",
                                             }))
                                         }
                                         className="border-2 px-3 py-1 rounded-lg bg-white text-gray-800"
@@ -92,27 +115,20 @@ export default function ListeHeritier() {
                                         <option value="نعم">نعم</option>
                                     </select>
                                 ) : (
-                                    <select
-                                        value={
-                                            typeof mirathInput[key] === "number" && mirathInput[key] !== 0
-                                                ? mirathInput[key]?.toString()
-                                                : "لا"
-                                        }
-                                        onChange={(e) =>
-                                            setMirathInput(prev => ({
+                                    <input
+                                        className="block w-full rounded-md bg-white px-3.5 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600"
+                                        type="number"
+                                        onChange={(e) => {
+                                            console.log({
+                                                v: parseInt(e.target.value),
+                                                key
+                                            });
+                                            setMirathInput((prev) => ({
                                                 ...prev,
-                                                [key]: e.target.value === "لا" ? 0 : parseInt(e.target.value)
-                                            }))
-                                        }
-                                        className="border-2 px-3 py-1 rounded-lg bg-white text-gray-800"
-                                    >
-                                        <option value="لا">لا</option>
-                                        {[...Array(50).keys()].map(i => (
-                                            <option key={i + 1} value={i + 1}>
-                                                {i + 1}
-                                            </option>
-                                        ))}
-                                    </select>
+                                                [key]: parseInt(e.target.value),
+                                            }));
+                                        }}
+                                    />
                                 )}
                             </div>
                         ))}
@@ -127,13 +143,11 @@ export default function ListeHeritier() {
                     </Link>
 
                     <button
-
                         onClick={handleNext}
                         className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg shadow-md transition-colors duration-200"
                     >
                         التالي
                     </button>
-                    
                 </div>
             </div>
         </GuestLayout>
