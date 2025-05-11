@@ -29,7 +29,7 @@ class MirathController extends Controller
 
         $rapport = $this->mirathService->calculMirath($data["mirathInput"]);
 
-        return Inertia::render('Miraths/resulatMirath', [
+        return Inertia::render('Miraths/CasHeritierResult', [
             'result' => $rapport,
         ]);
 
