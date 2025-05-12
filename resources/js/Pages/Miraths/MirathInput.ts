@@ -3,9 +3,9 @@ export interface MirathInput {
     // lmotawafi
 
     gender: "ذكر" | "أنثى";
-    tarika: string;
-    doyon: string;
-    wasiya: string;
+    tarika: number;
+    doyon: number;
+    wasiya: number;
 
     // lwaratha
     zawj?: boolean;
