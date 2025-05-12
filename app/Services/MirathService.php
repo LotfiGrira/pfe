@@ -11,14 +11,9 @@ class MirathService
     protected $far3Warith;
     protected $rapport;
 
-<<<<<<< Updated upstream
-    public function calculMirath($mirathInput)
-    {
-=======
+
     public function calculMirath($mirathInput) {
         // nsjlou table 9esma bech yaatina id (cle primaire)
-
->>>>>>> Stashed changes
         $this->far3WarithDhakar = ($mirathInput['alabna'] > 0) + ($mirathInput['abna_alabna'] > 0) > 0;
         $this->far3WarithOntha = ($mirathInput['albanat'] > 0) + ($mirathInput['banat_alabna'] > 0) > 0;
         $this->far3Warith = $this->far3WarithDhakar || $this->far3WarithOntha;
@@ -47,11 +42,7 @@ class MirathService
         $this->mirathala3mam_li_ab($mirathInput);
         $this->mirathabna_ala3mam_alashika($mirathInput);
         $this->mirathabna_ala3mam_li_ab($mirathInput);
-<<<<<<< Updated upstream
-
-=======
         // n3amrou table jdid resultat b données (id_9esma men fog, $this->rapport)
->>>>>>> Stashed changes
         return $this->rapport;
     }
 
@@ -75,21 +66,13 @@ class MirathService
             return;
         }
 
-<<<<<<< Updated upstream
-        if ($this->far3Warith) {
+        $type = "zawja";
+        if (!$this->far3Warith) {
+            $part = $mirathInput['tarika'] * (1/4);
             $this->rapport .= "الربع 1/4 فرضا\n";
         } else {
+            $part = $mirathInput['tarika'] * (1/8);
             $this->rapport .= "الثمن 1/8 فرضا\n";
-=======
-            $type = "zawja";
-            if (!$this->far3Warith) {
-                $part = $mirathInput['tarika'] * (1/4);
-                $this->rapport .= "الربع 1/4 فرضا\n";
-            } else {
-                $part = $mirathInput['tarika'] * (1/8);
-                $this->rapport .= "الثمن 1/8 فرضا\n";
-            }
->>>>>>> Stashed changes
         }
     }
 
@@ -209,49 +192,6 @@ class MirathService
             $this->rapport .= "الباقي تعصيبا بالنفس\n";
         } else {
             $this->rapport .= "للذكر مثل حظ الانثيين\n";
-        }
-    }
-
-    public function  mirathbanat_alabna($mirathInput)
-    {
-        if ($mirathInput["banat_alabna"] == 0 || $mirathInput["alabna"] > 0 || $mirathInput["albanat"] > 1) {
-            return;
-        }
-
-<<<<<<< Updated upstream
-        if (($mirathInput["banat_alabna"] == 1) && ($mirathInput["abna_alabna"] == 0)) {
-            $this->rapport .= "ترث  1/2 فرضا\n";
-=======
-    // wasiya wajiba//
-    public function  mirathabana_albanat($mirathInput)
-        {
-            if ($mirathInput["abna_albanat"]== 0 || $mirathInput["albanat"] > 0  ) {
-                return;
-            }
-            if($mirathInput["banat_albanat"]== 0){
-                $this->rapport .= "ميراث الام 1/3\n";
-            } else {
-                $this->rapport .= "ترث نصف 1/2 الابناء\n";
-            }
-        }
-
-    public function  mirathbanat_albanat($mirathInput)
-        {
-            if ($mirathInput["banat_albanat"]== 0 || $mirathInput["albanat"] > 0  ) {
-                return;
-            }
-            if($mirathInput["abna_albanat"]== 0){
-                $this->rapport .= "ميراث الام 1/3\n";
-            } else {
-                $this->rapport .= "ترث نصف 1/2 الابناء\n";
-            }
->>>>>>> Stashed changes
-        }
-        if (($mirathInput["banat_alabna"] > 1) && ($mirathInput["abna_alabna"] == 0)) {
-            $this->rapport .= "ترث  2/3 فرضا\n";
-        }
-        if (($mirathInput["banat_alabna"] > 0) && ($mirathInput["abna_alabna"] > 0)) {
-            $this->rapport .= "ترث نصف 1/2 الابناء\n";
         }
     }
 
