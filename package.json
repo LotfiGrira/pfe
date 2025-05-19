@@ -1,7 +1,9 @@
 {
     "type": "module",
     "dependencies": {
+        "arabic-persian-reshaper": "^1.0.1",
         "axios": "^1.9.0",
+        "pdfmake": "^0.2.20",
         "react-router-dom": "^7.1.5"
     },
     "devDependencies": {
