@@ -11,8 +11,8 @@ export default function ListeHeritier() {
     }[] = [
         { label: "هل يوجد زوج؟", key: "zawj", type: "boolean" },
         { label: "هل يوجد زوجة؟", key: "zawja", type: "boolean" },
-        { label: "هل يوجد أب؟", key: "alab", type: "boolean" },
         { label: "هل يوجد أم؟", key: "alom", type: "boolean" },
+        { label: "هل يوجد أب؟", key: "alab", type: "boolean" },
         { label: "جد (أب الأب)؟", key: "aljad", type: "boolean" },
         { label: "جدة (أم الأب)؟", key: "aljadah_li_ab", type: "boolean" },
         { label: "جدة (أم الأم)؟", key: "aljadah_li_om", type: "boolean" },
