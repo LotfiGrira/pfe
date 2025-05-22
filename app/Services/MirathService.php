@@ -117,7 +117,7 @@ class MirathService
             // Rule 5: Mix of 1/8 and Type Two
             $commonDenominator = 24;
         }
-
+        $totalBast = 0;
         // === Reinitialize the 6 shares ===
         if ($hasHalf) {
             $this->nesef = ["bast" => $commonDenominator / 2, "ma9am" => 0];
