@@ -131,19 +131,19 @@ class MirathService
         $this->mirathazawj($mirathInput);
         $this->mirathazawja($mirathInput);
         $this->mirathalom($mirathInput);
-        $this->mirathalab($mirathInput);
-        $this->mirathaljad($mirathInput);
         $this->mirathaljadah_li_ab($mirathInput);
         $this->mirathaljadat_li_om($mirathInput);
         $this->mirathalbanat($mirathInput);
-        $this->mirathabna_alabna($mirathInput);
         $this->mirathbanat_alabna($mirathInput);
         $this->mirathalikhwa_li_om($mirathInput);
         $this->mirathalakhawat_li_om($mirathInput);
         $this->mirathalakhawat_ashakikat($mirathInput);
         $this->mirathalakhawat_li_ab($mirathInput);
         // beta3sib
+        $this->mirathabna_alabna($mirathInput);
         $this->mirathalabna($mirathInput);
+        $this->mirathalab($mirathInput);
+        $this->mirathaljad($mirathInput);
         $this->mirathalikhwa_alashika($mirathInput);
         $this->mirathalikhwa_li_ab($mirathInput);
         $this->mirathabna_alikhwa_alashika($mirathInput);
