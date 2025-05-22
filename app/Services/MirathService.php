@@ -19,14 +19,14 @@ class MirathService
     protected float $wasiya = 0;
     protected float $partActuel = 0.0;
     protected float $reste = 0;
-    // 6 variable //
-    protected flot $nesef = [ "bast" => 1, "ma9am" =>2];
-    protected flot $robo3 = [ "bast" => 1, "ma9am" => 4];
-    protected flot $thomon = [ "bast" => 1, "ma9am" => 8];
-    protected flot $tholothin = [ "bast" => 2, "ma9am" => 3];
-    protected flot $tholoth = [ "bast" => 1, "ma9am" => 3];
-    protected flot $sodoss = [ "bast" => 1, "ma9am" => 6];
-    protected flot $nesefsodos = [ "bast" => 1, "ma9am" => 12];
+    // 6 variable
+    protected array $nesef = [ "bast" => 1, "ma9am" =>2];
+    protected array $robo3 = [ "bast" => 1, "ma9am" => 4];
+    protected array $thomon = [ "bast" => 1, "ma9am" => 8];
+    protected array $tholothin = [ "bast" => 2, "ma9am" => 3];
+    protected array $tholoth = [ "bast" => 1, "ma9am" => 3];
+    protected array $sodoss = [ "bast" => 1, "ma9am" => 6];
+    protected array $nesefsodos = [ "bast" => 1, "ma9am" => 12];
 
 
     public function __construct(array $input = [])
@@ -39,28 +39,7 @@ class MirathService
         $this->wasiya = isset($input['wasiya']) ? (float) $input['wasiya'] : 0;
     }
 
-    protected function ta3sibBiNafes($tarika, $partActuel = 0): float
-    {
-        return $tarika - $partActuel;
-    }
-    protected function ta3sibBiGhayr($tarika, $partActuel = 0): float
-    {
-        return $tarika - $partActuel;
-    }
-    protected function ta3sibMa3aGhayr($tarika, $partActuel = 0): float
-    {
-        return $tarika - $partActuel;
-    }
 
-    public function getRapport()
-    {
-        return $this->rapport;
-    }
-
-    public function getType()
-    {
-        return $this->type;
-    }
 
     public function calculMirath(&$mirathInput)
     {
@@ -71,195 +50,82 @@ class MirathService
         $mirathInput['safi_tarika'] = $mirathInput['tarika'] - $mirathInput['doyon'] - $mirathInput['wasiya'];
         $mirathInput['reste'] = $mirathInput['safi_tarika'];
 
-        // n7aded naw3 l9a3da li bech nkamlou beha bina2an 3al  waratha (hal tab3in naw3 1 wala 2 wala mkhaltin)
-        // mithal li yorthou nos 1/2 homa li tab3in naw3 l2awal elli homa mithal zawj, albent men ghir khou, ...
-        
-        // =======================
-        // NAWA3 AWAL (1/2, 1/4, 1/8)
-        // =======================
-                    
-        if ($mirathInput['zawj'] || $mirathInput['albanat'] || $mirathInput['banat_alabna'] || $mirathInput['alakhawat_ashakikat'] || $mirathInput['alakhawat_li_ab']) {
-            if ()
-        }
-
-
-// TODO clean
-if ($this->has('zawj') &&
- !$this->has('Fara3Warith')) {
-    $this->mirathazawj('1/2');
-}
-
-if ($this->has('albanat') === 1 &&
- !$this->has('alabna')) {
-    $this->mirathalbanat('1/2');
-}
-
-if ($this->has('banat_alabna') === 1 &&
- !$this->has('alabna') && 
- !$this->has('abna_alabna')&&
-  $this->has('albanat')<2) {
-    $this->mirathbanat_alabna('1/2');
-}
-
-if ($this->has('alakhawat_ashakikat') === 1 &&
- !$this->has('alab') && 
- !$this->has('Fara3Warith') && 
- !$this->has('alikhwa_ashakika') && 
- !$this->has('aljad')) {
-    $this->mirathalakhawat_ashakikat('1/2');
-}
-
-if ($this->has('alakhawat_li_ab') === 1 &&
- !$this->has('alab') && 
- !$this->has('Fara3Warith') && 
- !$this->has('alikhwa_ashakika') &&
-  $this->has('alakhawat_ashakikat') < 2 &&
- !$this->has('alikhwa_li_ab') && 
- !$this->has('aljad')) {
-    $this->mirathalakhawat_li_ab('1/2');
-}
-//1/3
-// === 1/4 (robo3)
-if ($this->has('zawj') &&
- $this->has('Fara3Warith')) {
-    $this->mirathazawj('1/4');
-}
-
-if ($this->has('zawja') && 
-!$this->has('Fara3Warith')) {
-    $this->mirathazawja('1/4');
-}
-
-// === 1/8 (thomoun)
-if ($this->has('zawja') && 
-$this->has('Fara3Warith')) {
-    $this->mirathazawja('1/8');
-}
-
-// =======================
-// NAWA3 THANI (2/3, 1/3, 1/6)
-// =======================
-
-// === 2/3 (thoulouthayn)
-if ($this->has('albanat') >= 2 && 
-!$this->has('alabna')) {
-    $this->mirathalbanat('2/3');
-}
-
-if ($this->has('banat_alabna') >= 2 && 
-!$this->has('alabna') && 
-!$this->has('abna_alabna')&&
-!$this->has('alabnat')) {
-    $this->mirathbanat_alabna('2/3');
-}
-
-if ($this->has('alakhawat_ashakikat') >= 2 && 
-!$this->has('alab') && 
-!$this->has('Fara3Warith') && 
-!$this->has('alikhwa_ashakika') && 
-!$this->has('aljad')) {
-    $this->mirathalakhawat_ashakikat('2/3');
-}
-if ($this->has('alakhawat_li_ab') >= 2 && 
-!$this->has('alab') && 
-!$this->has('Fara3Warith') && 
-!$this->has('alikhwa_ashakika') &&
- !$this->has('alakhawat_ashakikat')  && 
- !$this->has('alikhwa_li_ab') && 
- !$this->has('aljad')) {
-    $this->mirathalakhawat_li_ab('2/3');
-}
-
-// === 1/3 (tholoth)
-
-if (($this->has('alikhwa_li_om') >= 2 || $this->has('alakhawat_li_om') >0) &&
- !$this->has('Fara3Warith') &&
-  !$this->has('alab') && 
-  !$this->has('aljad')) {
-    $this->mirathalikhwa_li_om('1/3');
-}
-if (($this->has('alakhawat_li_om') >= 2 || $this->has('alikhwa_li_om') >0) &&
- !$this->has('Fara3Warith') &&
-  !$this->has('alab') && 
-  !$this->has('aljad')) {
-    $this->mirathalakhawat_li_om('1/3');
-}
-if ($this->has('alom') && 
-!$this->has('Fara3Warith')) {
-    $this->mirathalom('1/3');
-}
-
-// === 1/6 (sodos)
-if ($this->has('alab') && 
-   $this->has('Fara3Warith')) {
-    $this->mirathalab('1/6');
-}
-if ($this->has('alom') && 
-   $this->has('Fara3Warith')) {
-    $this->mirathalom('1/6');
-}
-
-if ($this->has('banat_alabna') === 1 &&
- !$this->has('abna_alabna')) {
-    $this->mirathbanat_albna('1/6');
-}
-
-if ($this->has('alakhawat_alashika') === 1 &&
- !$this->has('alab') && 
- !$this->has('Fara3Warith_alashika') && 
- !$this->has('alikhwa_li_ab') && 
- !$this->has('aljad')) {
-    $this->mirathalakhawat_li_ab('1/6');
-}
-
-if ($this->has('alikhwa_li_om') === 1 &&
- !$this->has('alakhawat_li_om') &&
-  !$this->has('Fara3Warith') && 
-  !$this->has('alab') && 
-  !$this->has('aljad')) {
-    $this->mirathalikhwa_li_om('1/6');
-}
-
-if ($this->has('alakhawat_li_om') === 1 &&
- !$this->has('alikhwa_li_om') && 
- !$this->has('Fara3Warith') && 
- !$this->has('alab') && 
- !$this->has('aljad')) {
-    $this->mirathalakhawat_li_om('1/6');
-}
-
-if ($this->has('aljadah_li_om') &&
- !$this->has('aljadah_li_ab') && 
- !$this->has('alom')) {
-    $this->mirathaljadah_li_om('1/6');
-}
-
-if ($this->has('aljadah_li_ab') &&
- !$this->has('aljadah_li_om') && 
- !$this->has('alom') && 
- !$this->has('alab')) {
-    $this->mirathaljadah_li_ab('1/6');
-}
-if ($this->has('aljad') &&
- $this->has('Fara3Warith') && 
- !$this->has('alab')) {
-    $this->mirathaljad('1/6');
-}
-        {
-            if(ay wa7ed mena naw3 theni) 
-            {
-               // re initialisation des 6 variable(sodos nosf ...)
-            //    9a3da 3
-               $nosf = {bast => 3, ma9am => 6};
-               .. 
-            } else (ma3andi hata wa7ed mena naw3 theni) {
-                9a3da 1
+        // === Type One (½, ¼, ⅛) ===
+        $hasHalf = (
+            $mirathInput['zawj'] ||
+            ($mirathInput['albanat'] == 1 && $mirathInput['alabna'] == 0) ||
+            ($mirathInput['banat_alabna'] == 1 && $mirathInput['abna_alabna'] == 0 && $mirathInput['alabna'] == 0 && $mirathInput['albanat'] < 2) ||
+            ($mirathInput['alakhawat_ashakikat'] == 1 && $mirathInput['alab'] == 0 && !$this->far3Warith && $mirathInput['alikhwa_alashika'] == 0 && $mirathInput['aljad'] == 0) ||
+            ($mirathInput['alakhawat_li_ab'] == 1 && $mirathInput['alab'] == 0 && !$this->far3Warith && $mirathInput['alikhwa_alashika'] == 0 && $mirathInput['alakhawat_ashakikat'] <= 2 && $mirathInput['alikhwa_li_ab'] == 0 && $mirathInput['aljad'] == 0)
+        );
+    
+        $hasQuarter = (
+            ($mirathInput['zawj'] && $this->far3Warith) ||
+            ($mirathInput['zawja'] && !$this->far3Warith)
+        );
+    
+        $hasEighth = (
+            $mirathInput['zawja'] && $this->far3Warith
+        );
+    
+        // === Type Two (⅔, ⅓, ⅙) ===
+        $hasTwoThirds = (
+            ($mirathInput['albanat'] >= 2 && $mirathInput['alabna'] == 0) ||
+            ($mirathInput['banat_alabna'] >= 2 && $mirathInput['abna_alabna'] == 0 && $mirathInput['alabna'] == 0 && $mirathInput['albanat'] == 0) ||
+            ($mirathInput['alakhawat_ashakikat'] >= 2 && $mirathInput['alab'] == 0 && !$this->far3Warith && $mirathInput['alikhwa_alashika'] == 0 && $mirathInput['aljad'] == 0) ||
+            ($mirathInput['alakhawat_li_ab'] >= 2 && $mirathInput['alab'] == 0 && !$this->far3Warith && $mirathInput['alikhwa_alashika'] == 0 && $mirathInput['alakhawat_ashakikat'] <= 2 && $mirathInput['aljad'] == 0)
+        );
+    
+        $hasOneThird = (
+            ($mirathInput['alom'] && !$this->far3Warith) ||
+            (($mirathInput['alikhwa_li_om'] + $mirathInput['alakhawat_li_om']) >= 2 && !$this->far3Warith && $mirathInput['alab'] == 0 && $mirathInput['aljad'] == 0)
+        );
+    
+        $hasOneSixth = (
+            ($mirathInput['alom'] && $this->far3Warith) ||
+            ($mirathInput['banat_alabna'] == 1 && $mirathInput['albanat'] == 1 && $mirathInput['abna_alabna'] == 0) ||
+            ($mirathInput['alakhawat_li_ab'] == 1 && $mirathInput['alakhawat_ashakikat'] == 1 && $mirathInput['alikhwa_alashika'] == 0 && $mirathInput['alikhwa_li_ab'] == 0 && $mirathInput['alab'] == 0 && $mirathInput['aljad'] == 0) ||
+            ($mirathInput['alikhwa_li_om'] == 1 && $mirathInput['alakhawat_li_om'] == 0 && !$this->far3Warith && $mirathInput['alab'] == 0 && $mirathInput['aljad'] == 0) ||
+            ($mirathInput['alakhawat_li_om'] == 1 && $mirathInput['alikhwa_li_om'] == 0 && !$this->far3Warith && $mirathInput['alab'] == 0 && $mirathInput['aljad'] == 0)
+        );
+    
+        $hasTypeOne = $hasHalf || $hasQuarter || $hasEighth;
+        $hasTypeTwo = $hasTwoThirds || $hasOneThird || $hasOneSixth;
+    
+        // === Rule Determination ===
+        $commonDenominator = 1;
+    
+        if ($hasTypeOne && !$hasTypeTwo) {
+            // Rule 1: Only Type One
+            if ($hasEighth) {
+                $commonDenominator = 8;
+            } elseif ($hasQuarter) {
+                $commonDenominator = 4;
+            } elseif ($hasHalf) {
+                $commonDenominator = 2;
             }
+        } elseif (!$hasTypeOne && $hasTypeTwo) {
+            // Rule 2: Only Type Two
+            $commonDenominator = 6;
+        } elseif ($hasHalf && $hasTypeTwo) {
+            // Rule 3: Mix of 1/2 and Type Two
+            $commonDenominator = 6;
+        } elseif ($hasQuarter && $hasTypeTwo) {
+            // Rule 4: Mix of 1/4 and Type Two
+            $commonDenominator = 12;
+        } elseif ($hasEighth && $hasTypeTwo) {
+            // Rule 5: Mix of 1/8 and Type Two
+            $commonDenominator = 24;
         }
-        else if((ay wa7ed men jma3et tholoth && men sodos) || (...))) {
-            9a3da 2
-        }
-        .. tkamal tasna3 les if
+    
+        // === Reinitialize the 6 shares ===
+        $this->nesef     = [ "bast" => $commonDenominator / 2, "ma9am" => $commonDenominator ];
+        $this->robo3     = [ "bast" => $commonDenominator / 4, "ma9am" => $commonDenominator ];
+        $this->thomon    = [ "bast" => $commonDenominator / 8, "ma9am" => $commonDenominator ];
+        $this->tholothin = [ "bast" => 2 * $commonDenominator / 3, "ma9am" => $commonDenominator ];
+        $this->tholoth   = [ "bast" => $commonDenominator / 3, "ma9am" => $commonDenominator ];
+        $this->sodoss    = [ "bast" => $commonDenominator / 6, "ma9am" => $commonDenominator ];
+        $this->nesefsodos = [ "bast" => $commonDenominator / 12, "ma9am" => $commonDenominator ];
 
         //les appels:
         $this->mirathazawj($mirathInput);
