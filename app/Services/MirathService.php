@@ -119,13 +119,26 @@ class MirathService
         }
 
         // === Reinitialize the 6 shares ===
-        $this->nesef     = ["bast" => $commonDenominator / 2, "ma9am" => $commonDenominator];
-        $this->robo3     = ["bast" => $commonDenominator / 4, "ma9am" => $commonDenominator];
-        $this->thomon    = ["bast" => $commonDenominator / 8, "ma9am" => $commonDenominator];
-        $this->tholothin = ["bast" => 2 * $commonDenominator / 3, "ma9am" => $commonDenominator];
-        $this->tholoth   = ["bast" => $commonDenominator / 3, "ma9am" => $commonDenominator];
-        $this->sodoss    = ["bast" => $commonDenominator / 6, "ma9am" => $commonDenominator];
-        $this->nesefsodos = ["bast" => $commonDenominator / 12, "ma9am" => $commonDenominator];
+        $this->nesef     = ["bast" => $commonDenominator / 2, "ma9am" => 0];
+        $this->robo3     = ["bast" => $commonDenominator / 4, "ma9am" => 0];
+        $this->thomon    = ["bast" => $commonDenominator / 8, "ma9am" => 0];
+        $this->tholothin = ["bast" => 2 * $commonDenominator / 3, "ma9am" => 0];
+        $this->tholoth   = ["bast" => $commonDenominator / 3, "ma9am" => 0];
+        $this->sodoss    = ["bast" => $commonDenominator / 6, "ma9am" => 0];
+        $this->nesefsodos = ["bast" => $commonDenominator / 12, "ma9am" => 0];
+
+        // Second part: Calculate ma9am as sum of all bast
+        $totalBast = $this->nesef['bast'] + $this->robo3['bast'] + $this->thomon['bast'] + 
+                    $this->tholothin['bast'] + $this->tholoth['bast'] + $this->sodoss['bast'] + 
+                    $this->nesefsodos['bast'];
+
+        $this->nesef['ma9am'] = $totalBast;
+        $this->robo3['ma9am'] = $totalBast;
+        $this->thomon['ma9am'] = $totalBast;
+        $this->tholothin['ma9am'] = $totalBast;
+        $this->tholoth['ma9am'] = $totalBast;
+        $this->sodoss['ma9am'] = $totalBast;
+        $this->nesefsodos['ma9am'] = $totalBast;
 
         //les appels:
         $this->mirathazawj($mirathInput);
@@ -135,7 +148,6 @@ class MirathService
         $this->mirathaljad($mirathInput);
         $this->mirathaljadah_li_ab($mirathInput);
         $this->mirathaljadat_li_om($mirathInput);
-        $this->mirathalbanat($mirathInput);
         $this->mirathbanat_alabna($mirathInput);
         $this->mirathalikhwa_li_om($mirathInput);
         $this->mirathalakhawat_li_om($mirathInput);
@@ -144,6 +156,11 @@ class MirathService
         // beta3sib
         $this->mirathalabna($mirathInput);
         $this->mirathabna_alabna($mirathInput);
+        $this->mirathalabna($mirathInput);
+        // albanat laysat beta3sib laken l part mta3ha depend mel part mta3 labna
+        $this->mirathalbanat($mirathInput);
+        $this->mirathalab($mirathInput);
+        $this->mirathaljad($mirathInput);
         $this->mirathalikhwa_alashika($mirathInput);
         $this->mirathalikhwa_li_ab($mirathInput);
         $this->mirathabna_alikhwa_alashika($mirathInput);
@@ -152,7 +169,13 @@ class MirathService
         $this->mirathala3mam_li_ab($mirathInput);
         $this->mirathabna_ala3mam_alashika($mirathInput);
         $this->mirathabna_ala3mam_li_ab($mirathInput);
-        // n3amrou table jdid resultat b données (id_9esma men fog, $this->rapport)
+        // si thama reste > 0 yaani 9esma na9sa => n9asmou reste bin lwaratha gad gad
+        if ($mirathInput['reste'] > 0) {
+            $partReste = $mirathInput['reste'] / count($this->part);
+            foreach ($this->part as $key => $value) {
+                $this->part[$key]['part'] += $partReste;
+            }
+        }
         $this->doyon = $mirathInput['doyon'] ?? 0;
         $this->wasiya = $mirathInput['wasiya'] ?? 0;
         //
@@ -374,7 +397,8 @@ class MirathService
             $mirathInput['reste'] -= $part;
             $this->rapport .= "البنات يرثن  2/3 فرضا \n";
         } else if (($mirathInput["albanat"] > 0) && ($mirathInput["alabna"] > 0)) {
-            $part = $mirathInput['reste'] * 1 / 3;
+            $part = $this->part['الابناء']['part'] * 1 / 2;
+            $mirathInput['reste'] -= $part;
             $this->rapport .= "البنات  يرثن  1/2 الابناء\n";
         }
         $this->part[] =
@@ -399,7 +423,7 @@ class MirathService
         }
         $this->part[] =
             [
-                'type' => 'الابناء ',
+                'type' => 'الابناء',
                 'part' => $part,
             ];
     }
