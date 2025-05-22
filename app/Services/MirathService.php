@@ -128,9 +128,9 @@ class MirathService
         $this->nesefsodos = ["bast" => $commonDenominator / 12, "ma9am" => 0];
 
         // Second part: Calculate ma9am as sum of all bast
-        $totalBast = $this->nesef['bast'] + $this->robo3['bast'] + $this->thomon['bast'] + 
-                    $this->tholothin['bast'] + $this->tholoth['bast'] + $this->sodoss['bast'] + 
-                    $this->nesefsodos['bast'];
+        $totalBast = $this->nesef['bast'] + $this->robo3['bast'] + $this->thomon['bast'] +
+            $this->tholothin['bast'] + $this->tholoth['bast'] + $this->sodoss['bast'] +
+            $this->nesefsodos['bast'];
 
         $this->nesef['ma9am'] = $totalBast;
         $this->robo3['ma9am'] = $totalBast;
@@ -144,8 +144,6 @@ class MirathService
         $this->mirathazawj($mirathInput);
         $this->mirathazawja($mirathInput);
         $this->mirathalom($mirathInput);
-        $this->mirathalab($mirathInput);
-        $this->mirathaljad($mirathInput);
         $this->mirathaljadah_li_ab($mirathInput);
         $this->mirathaljadat_li_om($mirathInput);
         $this->mirathbanat_alabna($mirathInput);
@@ -155,12 +153,11 @@ class MirathService
         $this->mirathalakhawat_li_ab($mirathInput);
         // beta3sib
         $this->mirathalabna($mirathInput);
-        $this->mirathabna_alabna($mirathInput);
-        $this->mirathalabna($mirathInput);
         // albanat laysat beta3sib laken l part mta3ha depend mel part mta3 labna
         $this->mirathalbanat($mirathInput);
         $this->mirathalab($mirathInput);
         $this->mirathaljad($mirathInput);
+        $this->mirathabna_alabna($mirathInput);
         $this->mirathalikhwa_alashika($mirathInput);
         $this->mirathalikhwa_li_ab($mirathInput);
         $this->mirathabna_alikhwa_alashika($mirathInput);
@@ -397,7 +394,7 @@ class MirathService
             $mirathInput['reste'] -= $part;
             $this->rapport .= "البنات يرثن  2/3 فرضا \n";
         } else if (($mirathInput["albanat"] > 0) && ($mirathInput["alabna"] > 0)) {
-            $part = $this->part['الابناء']['part'] * 1 / 2;
+            $part = $this->part['alabna']['part'] * 1 / 2;
             $mirathInput['reste'] -= $part;
             $this->rapport .= "البنات  يرثن  1/2 الابناء\n";
         }
@@ -564,9 +561,11 @@ class MirathService
 
     public function mirathalakhawat_ashakikat(&$mirathInput)
     {
-        if ($mirathInput["alakhawat_ashakikat"] == 0 ||
-         $this->far3Warith > 0 || 
-         $mirathInput["alab"] || ($mirathInput["aljad"] && $this->far3Warith <= 0)) {
+        if (
+            $mirathInput["alakhawat_ashakikat"] == 0 ||
+            $this->far3Warith > 0 ||
+            $mirathInput["alab"] || ($mirathInput["aljad"] && $this->far3Warith <= 0)
+        ) {
             return;
         }
 
