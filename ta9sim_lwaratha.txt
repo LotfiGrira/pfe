@@ -1,0 +1,47 @@
+1) bech t3amer lfichier hedhi
+// 1/2
+zawj si pas fara3 warithe
+albanat si 1 et pas de albanat
+banat alabna si 1 et pas de alabna et pas de abna alabna et  albanat <2
+alakhawat chakika  si 1 et pas de alab et pas de fara3 warithe  et pas alikhwa alachika  et pas de aljad.
+alakhawat  alab si 1  et pas de alab et pas de fara3 warithe  et pas alikhwa alachika  et pas de alakhawat alachika>2 et pas  de alikhWa li ab et pas de aljad  ..
+// 1/4
+zawj si il y a fara3 warithe
+zawja si pas fara3 warithe
+//1/8
+zawja si il y a fara3 warithe
+// 2/3
+albanat si >= 2 en cas de pas de alabna
+banat alabna si >= 2 en cas de pas alabna ou pas albanat ou abna alabna
+alakhawat alachika si >=2  et pas de alab et pas de fara3 warithe  et pas de alikhWa alachika et pas de aljad
+alakhawat li ab si >= 2 et et pas de alab et pas de fara3 warithe  et pas de alikhWa alachika  et pasalakhawat alachika>2 et pas de alab  et pas de aljad
+//1/3
+alom si pas de fara3 warithe
+alikhwa li om si>= 2 ou il y a alakhawat li om et  pas de fara3 warithe et pas de alab et pas de aljad
+alakhawat li om si>= 2 ou il y a alikhwa li om et  pas de fara3 warithe et pas de alab et pas de aljad
+//1/6
+alom si il y a de fara3 warithe
+bnat alabna  si albanat =1  et pas de abna alabna
+alakhawat li ab si alakhawat alachika ==1  ET pas de alab  et pas de fara3 warithe et pas de alikhwa alachika et pas de alikhWa li ab  et pas de aljad
+alikhwa li om  si ==1 et pas alakhawat li om et pas el fara3 warithe et pas de alab et pas de aljad 
+alakhawat li om  si ==1 et pas alikhwa li om et pas el fara3 warithe et pas de alab et pas de aljad 
+aljada li om si pas aljada li ab et pa de alom 
+aljada li ab si pas aljada li om et pa de alom  et pas alab
+aljad si il ya fara3 warithe et pas de alab
+
+2) initialiser les 6 variables global (ligne 22)
+3) tkamel les if  w fi wast kol if tekteb esm l9a3da f commentaire w t3ada
+4) fi wast kol if bech t3awedh kalmet 9a3da 3 2... bi initialisation jdida mta3 les 6 variable (mitahml nosf bast 1 ma9am 2 bech twali bast 3 ma9am 6)
+5) fi wast kol fonction lcalcul mta3 lpart bech ytbadal: 
+function calculNesef($tarika)
+    {
+        return $tarika * (1 / 2);
+    }
+
+    bech twalli 
+function calculNesef($tarika)
+    {
+         return $tarika * ($nosf->bast / $nosf->ma9am);
+    }
+6) kamalt sala7t les fonction lkol baa3d lappel mta3 les fonction bech testi 3andi reste wala, khater ken 3andi reste yaani elli 9esma na9sa
+=> bech nemchi ne9sm reste 3la 3adad lwaratha betasawi w nboucles 3la les part lkol w nkol wa7ed nzida baya m reste
