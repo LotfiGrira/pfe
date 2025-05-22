@@ -20,13 +20,13 @@ class MirathService
     protected float $partActuel = 0.0;
     protected float $reste = 0;
     // 6 variable
-    protected array $nesef = [ "bast" => 1, "ma9am" =>2];
-    protected array $robo3 = [ "bast" => 1, "ma9am" => 4];
-    protected array $thomon = [ "bast" => 1, "ma9am" => 8];
-    protected array $tholothin = [ "bast" => 2, "ma9am" => 3];
-    protected array $tholoth = [ "bast" => 1, "ma9am" => 3];
-    protected array $sodoss = [ "bast" => 1, "ma9am" => 6];
-    protected array $nesefsodos = [ "bast" => 1, "ma9am" => 12];
+    protected array $nesef = ["bast" => 1, "ma9am" => 2];
+    protected array $robo3 = ["bast" => 1, "ma9am" => 4];
+    protected array $thomon = ["bast" => 1, "ma9am" => 8];
+    protected array $tholothin = ["bast" => 2, "ma9am" => 3];
+    protected array $tholoth = ["bast" => 1, "ma9am" => 3];
+    protected array $sodoss = ["bast" => 1, "ma9am" => 6];
+    protected array $nesefsodos = ["bast" => 1, "ma9am" => 12];
 
 
     public function __construct(array $input = [])
@@ -58,16 +58,16 @@ class MirathService
             ($mirathInput['alakhawat_ashakikat'] == 1 && $mirathInput['alab'] == 0 && !$this->far3Warith && $mirathInput['alikhwa_alashika'] == 0 && $mirathInput['aljad'] == 0) ||
             ($mirathInput['alakhawat_li_ab'] == 1 && $mirathInput['alab'] == 0 && !$this->far3Warith && $mirathInput['alikhwa_alashika'] == 0 && $mirathInput['alakhawat_ashakikat'] < 2 && $mirathInput['alikhwa_li_ab'] == 0 && $mirathInput['aljad'] == 0)
         );
-    
+
         $hasQuarter = (
             ($mirathInput['zawj'] && $this->far3Warith) ||
             ($mirathInput['zawja'] && !$this->far3Warith)
         );
-    
+
         $hasEighth = (
             $mirathInput['zawja'] && $this->far3Warith
         );
-    
+
         // === Type Two (⅔, ⅓, ⅙) ===
         $hasTwoThirds = (
             ($mirathInput['albanat'] >= 2 && $mirathInput['alabna'] == 0) ||
@@ -75,12 +75,12 @@ class MirathService
             ($mirathInput['alakhawat_ashakikat'] >= 2 && $mirathInput['alab'] == 0 && !$this->far3Warith && $mirathInput['alikhwa_alashika'] == 0 && $mirathInput['aljad'] == 0) ||
             ($mirathInput['alakhawat_li_ab'] >= 2 && $mirathInput['alab'] == 0 && !$this->far3Warith && $mirathInput['alikhwa_alashika'] == 0 && $mirathInput['alakhawat_ashakikat'] < 2 && $mirathInput['aljad'] == 0)
         );
-    
+
         $hasOneThird = (
             ($mirathInput['alom'] && !$this->far3Warith) ||
             (($mirathInput['alikhwa_li_om'] + $mirathInput['alakhawat_li_om']) >= 2 && !$this->far3Warith && $mirathInput['alab'] == 0 && $mirathInput['aljad'] == 0)
         );
-    
+
         $hasOneSixth = (
             ($mirathInput['alom'] && $this->far3Warith) ||
             ($mirathInput['banat_alabna'] == 1 && $mirathInput['albanat'] == 1 && $mirathInput['abna_alabna'] == 0) ||
@@ -88,13 +88,13 @@ class MirathService
             ($mirathInput['alikhwa_li_om'] == 1 && $mirathInput['alakhawat_li_om'] == 0 && !$this->far3Warith && $mirathInput['alab'] == 0 && $mirathInput['aljad'] == 0) ||
             ($mirathInput['alakhawat_li_om'] == 1 && $mirathInput['alikhwa_li_om'] == 0 && !$this->far3Warith && $mirathInput['alab'] == 0 && $mirathInput['aljad'] == 0)
         );
-    
+
         $hasTypeOne = $hasHalf || $hasQuarter || $hasEighth;
         $hasTypeTwo = $hasTwoThirds || $hasOneThird || $hasOneSixth;
-    
+
         // === Rule Determination ===
         $commonDenominator = 1;
-    
+
         if ($hasTypeOne && !$hasTypeTwo) {
             // Rule 1: Only Type One
             if ($hasEighth) {
@@ -117,15 +117,15 @@ class MirathService
             // Rule 5: Mix of 1/8 and Type Two
             $commonDenominator = 24;
         }
-    
+
         // === Reinitialize the 6 shares ===
-        $this->nesef     = [ "bast" => $commonDenominator / 2, "ma9am" => $commonDenominator ];
-        $this->robo3     = [ "bast" => $commonDenominator / 4, "ma9am" => $commonDenominator ];
-        $this->thomon    = [ "bast" => $commonDenominator / 8, "ma9am" => $commonDenominator ];
-        $this->tholothin = [ "bast" => 2 * $commonDenominator / 3, "ma9am" => $commonDenominator ];
-        $this->tholoth   = [ "bast" => $commonDenominator / 3, "ma9am" => $commonDenominator ];
-        $this->sodoss    = [ "bast" => $commonDenominator / 6, "ma9am" => $commonDenominator ];
-        $this->nesefsodos = [ "bast" => $commonDenominator / 12, "ma9am" => $commonDenominator ];
+        $this->nesef     = ["bast" => $commonDenominator / 2, "ma9am" => $commonDenominator];
+        $this->robo3     = ["bast" => $commonDenominator / 4, "ma9am" => $commonDenominator];
+        $this->thomon    = ["bast" => $commonDenominator / 8, "ma9am" => $commonDenominator];
+        $this->tholothin = ["bast" => 2 * $commonDenominator / 3, "ma9am" => $commonDenominator];
+        $this->tholoth   = ["bast" => $commonDenominator / 3, "ma9am" => $commonDenominator];
+        $this->sodoss    = ["bast" => $commonDenominator / 6, "ma9am" => $commonDenominator];
+        $this->nesefsodos = ["bast" => $commonDenominator / 12, "ma9am" => $commonDenominator];
 
         //les appels:
         $this->mirathazawj($mirathInput);
@@ -136,6 +136,7 @@ class MirathService
         $this->mirathaljadah_li_ab($mirathInput);
         $this->mirathaljadat_li_om($mirathInput);
         $this->mirathalbanat($mirathInput);
+        $this->mirathabna_alabna($mirathInput);
         $this->mirathbanat_alabna($mirathInput);
         $this->mirathalikhwa_li_om($mirathInput);
         $this->mirathalakhawat_li_om($mirathInput);
@@ -143,7 +144,6 @@ class MirathService
         $this->mirathalakhawat_li_ab($mirathInput);
         // beta3sib
         $this->mirathalabna($mirathInput);
-        $this->mirathabna_alabna($mirathInput);
         $this->mirathalikhwa_alashika($mirathInput);
         $this->mirathalikhwa_li_ab($mirathInput);
         $this->mirathabna_alikhwa_alashika($mirathInput);
@@ -164,7 +164,7 @@ class MirathService
         ];
     }
 
-    
+
     function calculNesef($tarika)
     {
         return $tarika * ($this->nesef['bast'] / $this->nesef['ma9am']);
@@ -203,9 +203,11 @@ class MirathService
         }
         if ($this->far3Warith) {
             $part = $this->calculRobo3($mirathInput['safi_tarika']);
+            $mirathInput['reste'] -= $part;
             $this->rapport .= "الزوج يرث الربع 1/4 فرضا\n";
         } else {
             $part = $this->calculNesef($mirathInput['safi_tarika']);
+            $mirathInput['reste'] -= $part;
             $this->rapport .= "الزوج يرث النصف 1/2 فرضا\n";
         }
         $this->part[] =
@@ -215,7 +217,7 @@ class MirathService
             ];
     }
 
-   
+
     public function mirathazawja(&$mirathInput)
     {
         if (!$mirathInput["zawja"]) {
@@ -240,20 +242,22 @@ class MirathService
     }
 
     //Al osol//
- private function mirathalom(&$mirathInput)
+    private function mirathalom(&$mirathInput)
     {
         if (!$mirathInput["alom"]) return;
 
         $part = 0;
-        
+
         if ($this->far3Warith) {
             $part = $this->calculSodoss($mirathInput['safi_tarika']);
+            $mirathInput['reste'] -= $part;
             $this->rapport .= "الأم ترث السدس 1/6 فرضا\n";
         } else {
             $part = $this->calculTholoth($mirathInput['safi_tarika']);
+            $mirathInput['reste'] -= $part;
             $this->rapport .= "الأم ترث الثلث 1/3 فرضا\n";
         }
-
+        $mirathInput['reste'] -= $part;
         $this->part[] = [
             'type' => 'الأم',
             'part' => $part
@@ -283,7 +287,7 @@ class MirathService
             $mirathInput['reste'] = 0;
             $this->rapport .= "الاب يرث الباقي تعصيبا بالنفس\n";
         }
-
+        $mirathInput['reste'] -= $part;
         $this->part[] = [
             'type' => 'الاب',
             'part' => $part,
@@ -313,6 +317,7 @@ class MirathService
             $mirathInput['reste'] = 0;
             $this->rapport .= "الجد يرث الباقي تعصيبا بالنفس\n";
         }
+        $mirathInput['reste'] -= $part;
         $this->part[] =
             [
                 'type' => ' الجد لاب',
@@ -376,6 +381,7 @@ class MirathService
             $part = $mirathInput['reste'] * 1 / 3;
             $this->rapport .= "البنات  يرثن  1/2 الابناء\n";
         }
+
         $this->part[] =
             [
                 'type' => 'البنات ',
@@ -537,7 +543,7 @@ class MirathService
 
 
 
-   public function mirathalakhawat_ashakikat(&$mirathInput)
+    public function mirathalakhawat_ashakikat(&$mirathInput)
     {
         if ($mirathInput["alakhawat_ashakikat"] == 0 || $this->far3Warith > 0 || $mirathInput["alab"] || ($mirathInput["aljad"] && $this->far3Warith <= 0)) {
             return;
