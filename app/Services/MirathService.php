@@ -180,7 +180,7 @@ class MirathService
             'rapport' => $this->rapport,
             'parts' => $this->part,
             'type' => $this->type,
-            'tarika' => $totalBast,
+            'tarika' => $commonDenominator,
         ];
     }
 
