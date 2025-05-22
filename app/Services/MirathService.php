@@ -119,18 +119,33 @@ class MirathService
         }
 
         // === Reinitialize the 6 shares ===
-        $this->nesef     = ["bast" => $commonDenominator / 2, "ma9am" => 0];
-        $this->robo3     = ["bast" => $commonDenominator / 4, "ma9am" => 0];
-        $this->thomon    = ["bast" => $commonDenominator / 8, "ma9am" => 0];
-        $this->tholothin = ["bast" => 2 * $commonDenominator / 3, "ma9am" => 0];
-        $this->tholoth   = ["bast" => $commonDenominator / 3, "ma9am" => 0];
-        $this->sodoss    = ["bast" => $commonDenominator / 6, "ma9am" => 0];
-        $this->nesefsodos = ["bast" => $commonDenominator / 12, "ma9am" => 0];
-
-        // Second part: Calculate ma9am as sum of all bast
-        $totalBast = $this->nesef['bast'] + $this->robo3['bast'] + $this->thomon['bast'] +
-            $this->tholothin['bast'] + $this->tholoth['bast'] + $this->sodoss['bast'] +
-            $this->nesefsodos['bast'];
+        if ($hasHalf) {
+            $this->nesef = ["bast" => $commonDenominator / 2, "ma9am" => 0];
+            $totalBast = $this->nesef['bast'];
+        }
+        if ($hasQuarter) {
+            $this->robo3 = ["bast" => $commonDenominator / 4, "ma9am" => 0];
+            $totalBast += $this->robo3['bast'];
+        }
+        if ($hasEighth) {
+            $this->thomon = ["bast" => $commonDenominator / 8, "ma9am" => 0];
+            $totalBast += $this->thomon['bast'];
+        }
+        if ($hasTwoThirds) {
+            $this->tholothin = ["bast" => 2 * $commonDenominator / 3, "ma9am" => 0];
+            $totalBast += $this->tholothin['bast'];
+        }
+        if ($hasOneThird) {
+            $this->tholoth = ["bast" => $commonDenominator / 3, "ma9am" => 0];
+            $totalBast += $this->tholoth['bast'];
+        }
+        if ($hasOneSixth) {
+            $this->sodoss = ["bast" => $commonDenominator / 6, "ma9am" => 0];
+            $totalBast += $this->sodoss['bast'];
+        }
+        // if ($hasNesefsodos) {
+        //     $this->nesefsodos = ["bast" => $commonDenominator / 12, "ma9am" => 0];
+        // }
 
         $this->nesef['ma9am'] = $totalBast;
         $this->robo3['ma9am'] = $totalBast;
@@ -138,7 +153,7 @@ class MirathService
         $this->tholothin['ma9am'] = $totalBast;
         $this->tholoth['ma9am'] = $totalBast;
         $this->sodoss['ma9am'] = $totalBast;
-        $this->nesefsodos['ma9am'] = $totalBast;
+        // $this->nesefsodos['ma9am'] = $totalBast;
 
         //les appels:
         $this->mirathazawj($mirathInput);
