@@ -56,7 +56,7 @@ class MirathService
             ($mirathInput['albanat'] == 1 && $mirathInput['alabna'] == 0) ||
             ($mirathInput['banat_alabna'] == 1 && $mirathInput['abna_alabna'] == 0 && $mirathInput['alabna'] == 0 && $mirathInput['albanat'] < 2) ||
             ($mirathInput['alakhawat_ashakikat'] == 1 && $mirathInput['alab'] == 0 && !$this->far3Warith && $mirathInput['alikhwa_alashika'] == 0 && $mirathInput['aljad'] == 0) ||
-            ($mirathInput['alakhawat_li_ab'] == 1 && $mirathInput['alab'] == 0 && !$this->far3Warith && $mirathInput['alikhwa_alashika'] == 0 && $mirathInput['alakhawat_ashakikat'] <= 2 && $mirathInput['alikhwa_li_ab'] == 0 && $mirathInput['aljad'] == 0)
+            ($mirathInput['alakhawat_li_ab'] == 1 && $mirathInput['alab'] == 0 && !$this->far3Warith && $mirathInput['alikhwa_alashika'] == 0 && $mirathInput['alakhawat_ashakikat'] < 2 && $mirathInput['alikhwa_li_ab'] == 0 && $mirathInput['aljad'] == 0)
         );
     
         $hasQuarter = (
@@ -73,7 +73,7 @@ class MirathService
             ($mirathInput['albanat'] >= 2 && $mirathInput['alabna'] == 0) ||
             ($mirathInput['banat_alabna'] >= 2 && $mirathInput['abna_alabna'] == 0 && $mirathInput['alabna'] == 0 && $mirathInput['albanat'] == 0) ||
             ($mirathInput['alakhawat_ashakikat'] >= 2 && $mirathInput['alab'] == 0 && !$this->far3Warith && $mirathInput['alikhwa_alashika'] == 0 && $mirathInput['aljad'] == 0) ||
-            ($mirathInput['alakhawat_li_ab'] >= 2 && $mirathInput['alab'] == 0 && !$this->far3Warith && $mirathInput['alikhwa_alashika'] == 0 && $mirathInput['alakhawat_ashakikat'] <= 2 && $mirathInput['aljad'] == 0)
+            ($mirathInput['alakhawat_li_ab'] >= 2 && $mirathInput['alab'] == 0 && !$this->far3Warith && $mirathInput['alikhwa_alashika'] == 0 && $mirathInput['alakhawat_ashakikat'] < 2 && $mirathInput['aljad'] == 0)
         );
     
         $hasOneThird = (
@@ -167,32 +167,32 @@ class MirathService
     
     function calculNesef($tarika)
     {
-        return $tarika * (1 / 2);
+        return $tarika * ($this->nesef['bast'] / $this->nesef['ma9am']);
     }
-    
+
     function calculRobo3($tarika)
     {
-        return $tarika * (1 / 4);
+        return $tarika * ($this->robo3['bast'] / $this->robo3['ma9am']);
     }
     function calculThomon($tarika)
     {
-        return $tarika * (1 / 8);
+        return $tarika * ($this->thomon['bast'] / $this->thomon['ma9am']);
     }
     function calculTholothin($tarika)
     {
-        return $tarika * (2 / 3);
+        return $tarika * ($this->tholothin['bast'] / $this->tholothin['ma9am']);
     }
     function calculTholoth($tarika)
     {
-        return $tarika * (1 / 3);
+        return $tarika * ($this->tholoth['bast'] / $this->tholoth['ma9am']);
     }
     function calculSodoss($tarika)
     {
-        return $tarika * (1 / 6);
+        return $tarika * ($this->sodoss['bast'] / $this->sodoss['ma9am']);
     }
     function calculNesefsodos($tarika)
     {
-        return $tarika * (1 / 12);
+        return $tarika * ($this->nesefsodos['bast'] / $this->nesefsodos['ma9am']);
     }
 
     // zawjan//
@@ -214,6 +214,8 @@ class MirathService
                 'part' => $part,
             ];
     }
+
+   
     public function mirathazawja(&$mirathInput)
     {
         if (!$mirathInput["zawja"]) {
@@ -222,9 +224,11 @@ class MirathService
 
         if ($this->far3Warith) {
             $part = $this->calculThomon($mirathInput['safi_tarika']);
+            $mirathInput['reste'] -= $part;
             $this->rapport .= "الزوجة ترث الثمن 1/8 فرضا\n";
         } else {
             $part = $this->calculRobo3($mirathInput['safi_tarika']);
+            $mirathInput['reste'] -= $part;
             $this->rapport .= "الزوجة ترث الربع 1/4 فرضا\n";
         }
         $mirathInput['reste'] -= $part;
@@ -236,24 +240,24 @@ class MirathService
     }
 
     //Al osol//
-    public function mirathalom(&$mirathInput)
+ private function mirathalom(&$mirathInput)
     {
-        if (!$mirathInput["alom"]) {
-            return;
-        }
+        if (!$mirathInput["alom"]) return;
+
+        $part = 0;
+        
         if ($this->far3Warith) {
             $part = $this->calculSodoss($mirathInput['safi_tarika']);
-            $this->rapport .= "الام ترث السدس 1/6 فرضا\n";
+            $this->rapport .= "الأم ترث السدس 1/6 فرضا\n";
         } else {
             $part = $this->calculTholoth($mirathInput['safi_tarika']);
-            $this->rapport .= "الام ترث السدس 1/3 فرضا\n";
+            $this->rapport .= "الأم ترث الثلث 1/3 فرضا\n";
         }
-        $mirathInput['reste'] -= $part;
-        $this->part[] =
-            [
-                'type' => 'الام ',
-                'part' => $part,
-            ];
+
+        $this->part[] = [
+            'type' => 'الأم',
+            'part' => $part
+        ];
     }
 
     public function mirathalab(&$mirathInput)
@@ -270,7 +274,7 @@ class MirathService
         } elseif ($this->far3WarithOntha) {
             $part = $this->calculSodoss($mirathInput['safi_tarika']);
             // remove 1/2 form the rest
-            $mirathInput['reste'] -= $mirathInput['reste'] / 2;
+            $part = $this->calculSodoss($mirathInput['safi_tarika']);
             $mirathInput['reste'] -= $part;
             $part += $mirathInput['reste'];
             $this->rapport .= "الاب يرث السدس 1/6 فرضا والباقي تعصيبا بالغير\n";
@@ -300,7 +304,7 @@ class MirathService
         } elseif ($this->far3WarithOntha) {
             $part = $this->calculSodoss($mirathInput['safi_tarika']);
             // remove 1/2 form the rest
-            $mirathInput['reste'] -= $mirathInput['reste'] / 2;
+            $part = $this->calculSodoss($mirathInput['safi_tarika']);
             $mirathInput['reste'] -= $part;
             $part += $mirathInput['reste'];
             $this->rapport .= "الجد يرث السدس 1/6 فرضا والباقي تعصيبا بالغير\n";
@@ -533,7 +537,7 @@ class MirathService
 
 
 
-    public function mirathalakhawat_ashakikat(&$mirathInput)
+   public function mirathalakhawat_ashakikat(&$mirathInput)
     {
         if ($mirathInput["alakhawat_ashakikat"] == 0 || $this->far3Warith > 0 || $mirathInput["alab"] || ($mirathInput["aljad"] && $this->far3Warith <= 0)) {
             return;
