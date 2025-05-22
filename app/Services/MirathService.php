@@ -336,7 +336,7 @@ class MirathService
         }
         $this->part[] =
             [
-                'type' => ' الجد لاب',
+                'type' => 'الجد لاب',
                 'part' => $part,
             ];
     }
@@ -355,7 +355,7 @@ class MirathService
         }
         $this->part[] =
             [
-                'type' => 'الحدة لاب ',
+                'type' => 'الحدة لاب',
                 'part' => $part,
             ];
     }
@@ -374,7 +374,7 @@ class MirathService
         }
         $this->part[] =
             [
-                'type' => 'الجدة لام ',
+                'type' => 'الجدة لام',
                 'part' => $part,
             ];
     }
@@ -394,13 +394,17 @@ class MirathService
             $mirathInput['reste'] -= $part;
             $this->rapport .= "البنات يرثن  2/3 فرضا \n";
         } else if (($mirathInput["albanat"] > 0) && ($mirathInput["alabna"] > 0)) {
-            $part = $this->part['alabna']['part'] * 1 / 2;
+            $alabnaPart = array_filter($this->part, function($item) {
+                return $item['type'] === 'الابناء';
+            });
+            $alabnaPart = reset($alabnaPart); // Get first matching element
+            $part = $alabnaPart['part'] * 1 / 2;
             $mirathInput['reste'] -= $part;
             $this->rapport .= "البنات  يرثن  1/2 الابناء\n";
         }
         $this->part[] =
             [
-                'type' => 'البنات ',
+                'type' => 'البنات',
                 'part' => $part,
             ];
     }
@@ -477,7 +481,7 @@ class MirathService
         }
         $this->part[] =
             [
-                'type' => '   بنات  الابناء',
+                'type' => 'بنات  الابناء',
                 'part' => $part,
             ];
     }
@@ -503,7 +507,7 @@ class MirathService
         }
         $this->part[] =
             [
-                'type' => 'الاخوة لام ',
+                'type' => 'الاخوة لام',
                 'part' => $part,
             ];
     }
@@ -526,7 +530,7 @@ class MirathService
         }
         $this->part[] =
             [
-                'type' => 'الاخوات لام  ',
+                'type' => 'الاخوات لام',
                 'part' => $part,
             ];
     }
@@ -552,7 +556,7 @@ class MirathService
         }
         $this->part[] =
             [
-                'type' => 'الاخوة الاشقاء ',
+                'type' => 'الاخوة الاشقاء',
                 'part' => $part,
             ];
     }
@@ -585,7 +589,7 @@ class MirathService
         }
         $this->part[] =
             [
-                'type' => 'الاخوات الشقيقات ',
+                'type' => 'الاخوات الشقيقات',
                 'part' => $part,
             ];
     }
@@ -607,7 +611,7 @@ class MirathService
         }
         $this->part[] =
             [
-                'type' => 'الاخوة لاب ',
+                'type' => 'الاخوة لاب',
                 'part' => $part,
             ];
     }
@@ -646,7 +650,7 @@ class MirathService
         }
         $this->part[] =
             [
-                'type' => 'الاخوات لاب ',
+                'type' => 'الاخوات لاب',
                 'part' => $part,
             ];
     }
@@ -685,7 +689,7 @@ class MirathService
         $this->rapport .= "ابناء الاخوة لاب يرثون الباقي تعصيبا بالنفس\n";
         $this->part[] =
             [
-                'type' => 'ابناء الاخوة لاب ',
+                'type' => 'ابناء الاخوة لاب',
                 'part' => $part,
                 'fraction' => 'الباقي تعصيباً'
             ];
@@ -705,7 +709,7 @@ class MirathService
         $this->rapport .= "الاعمام الاشقاء يرثون الباقي تعصيبا بالنفس\n";
         $this->part[] =
             [
-                'type' => 'الاعمام الاشقاء ',
+                'type' => 'الاعمام الاشقاء',
                 'part' => $part,
                 'fraction' => 'الباقي تعصيباً'
             ];
@@ -726,7 +730,7 @@ class MirathService
         $this->rapport .= "الاعمام لاب يرثون الباقي تعصيبا بالنفس\n";
         $this->part[] =
             [
-                'type' => 'الاعمام لاب ',
+                'type' => 'الاعمام لاب',
                 'part' => $part,
                 'fraction' => 'الباقي تعصيباً'
             ];
@@ -747,7 +751,7 @@ class MirathService
         $this->rapport .= "ابناء الاعمام الاشقاء يرثون الباقي تعصيبا بالنفس\n";
         $this->part[] =
             [
-                'type' => 'ابناء الاعمام الاشقاء ',
+                'type' => 'ابناء الاعمام الاشقاء',
                 'part' => $part,
                 'fraction' => 'الباقي تعصيباً'
             ];
@@ -769,7 +773,7 @@ class MirathService
         $this->rapport .= "ابناء الاعمام لاب  يرثون الباقي تعصيبا بالنفس\n";
         $this->part[] =
             [
-                'type' => 'ابناء الاعمام لاب ',
+                'type' => 'ابناء الاعمام لاب',
                 'part' => $part,
                 'fraction' => 'الباقي تعصيباً'
             ];
