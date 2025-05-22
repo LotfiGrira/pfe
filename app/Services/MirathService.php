@@ -192,10 +192,10 @@ class MirathService
         $this->wasiya = $mirathInput['wasiya'] ?? 0;
         //
         return [
-            'rapport' => $this->rapport,
+            'rapport' => $commonDenominator,
             'parts' => $this->part,
             'type' => $this->type,
-            'tarika' => $commonDenominator,
+            'tarika' => $totalBast,
         ];
     }
 
