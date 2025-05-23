@@ -125,6 +125,18 @@ export default function CasHeritierResult({ result }: PageProps<{ result: any }>
       <div>
         <h2 className="text-xl font-semibold">🧮 Tarika (Total): {result.tarika} unités</h2>
       </div>
+      
+      <div>
+        <h2 className="text-xl font-semibold">🧮 tafsil kol bast : {result.totalBastDisplay} </h2>
+      </div>
+
+      <div>
+        <h2 className="text-xl font-semibold">🧮 total jam3 lBast : {result.totalBast} </h2>
+      </div>
+
+      <div>
+        <h2 className="text-xl font-semibold">🧮 taw7id lma9am 9abla jam3 lbast : {result.commonDenominator} </h2>
+      </div>
 
       <div>
         <h2 className="text-xl font-semibold">🧮 Rapport :</h2>
