@@ -51,43 +51,57 @@ class MirathService
         $mirathInput['reste'] = $mirathInput['safi_tarika'];
 
         // === Type One (½, ¼, ⅛) ===
-        $hasHalf = (
-            $mirathInput['zawj'] ||
-            ($mirathInput['albanat'] == 1 && $mirathInput['alabna'] == 0) ||
-            ($mirathInput['banat_alabna'] == 1 && $mirathInput['abna_alabna'] == 0 && $mirathInput['alabna'] == 0 && $mirathInput['albanat'] < 2) ||
-            ($mirathInput['alakhawat_ashakikat'] == 1 && $mirathInput['alab'] == 0 && !$this->far3Warith && $mirathInput['alikhwa_alashika'] == 0 && $mirathInput['aljad'] == 0) ||
-            ($mirathInput['alakhawat_li_ab'] == 1 && $mirathInput['alab'] == 0 && !$this->far3Warith && $mirathInput['alikhwa_alashika'] == 0 && $mirathInput['alakhawat_ashakikat'] < 2 && $mirathInput['alikhwa_li_ab'] == 0 && $mirathInput['aljad'] == 0)
-        );
+        $hasHalfConditions = [
+            'zawj' => $mirathInput['zawj'],
+            'albanat' => ($mirathInput['albanat'] == 1 && $mirathInput['alabna'] == 0),
+            'banat_alabna' => ($mirathInput['banat_alabna'] == 1 && $mirathInput['abna_alabna'] == 0 && $mirathInput['alabna'] == 0 && $mirathInput['albanat'] < 2),
+            'alakhawat_ashakikat' => ($mirathInput['alakhawat_ashakikat'] == 1 && $mirathInput['alab'] == 0 && !$this->far3Warith && $mirathInput['alikhwa_alashika'] == 0 && $mirathInput['aljad'] == 0),
+            'alakhawat_li_ab' => ($mirathInput['alakhawat_li_ab'] == 1 && $mirathInput['alab'] == 0 && !$this->far3Warith && $mirathInput['alikhwa_alashika'] == 0 && $mirathInput['alakhawat_ashakikat'] < 2 && $mirathInput['alikhwa_li_ab'] == 0 && $mirathInput['aljad'] == 0)
+        ];
 
-        $hasQuarter = (
-            ($mirathInput['zawj'] && $this->far3Warith) ||
-            ($mirathInput['zawja'] && !$this->far3Warith)
-        );
+        $hasQuarterConditions = [
+            'zawj_with_far3' => ($mirathInput['zawj'] && $this->far3Warith),
+            'zawja_without_far3' => ($mirathInput['zawja'] && !$this->far3Warith)
+        ];
 
-        $hasEighth = (
-            $mirathInput['zawja'] && $this->far3Warith
-        );
+        $hasEighthConditions = [
+            'zawja_with_far3' => ($mirathInput['zawja'] && $this->far3Warith)
+        ];
 
-        // === Type Two (⅔, ⅓, ⅙) ===
-        $hasTwoThirds = (
-            ($mirathInput['albanat'] >= 2 && $mirathInput['alabna'] == 0) ||
-            ($mirathInput['banat_alabna'] >= 2 && $mirathInput['abna_alabna'] == 0 && $mirathInput['alabna'] == 0 && $mirathInput['albanat'] == 0) ||
-            ($mirathInput['alakhawat_ashakikat'] >= 2 && $mirathInput['alab'] == 0 && !$this->far3Warith && $mirathInput['alikhwa_alashika'] == 0 && $mirathInput['aljad'] == 0) ||
-            ($mirathInput['alakhawat_li_ab'] >= 2 && $mirathInput['alab'] == 0 && !$this->far3Warith && $mirathInput['alikhwa_alashika'] == 0 && $mirathInput['alakhawat_ashakikat'] < 2 && $mirathInput['aljad'] == 0)
-        );
+        $hasTwoThirdsConditions = [
+            'albanat' => ($mirathInput['albanat'] >= 2 && $mirathInput['alabna'] == 0),
+            'banat_alabna' => ($mirathInput['banat_alabna'] >= 2 && $mirathInput['abna_alabna'] == 0 && $mirathInput['alabna'] == 0 && $mirathInput['albanat'] == 0),
+            'alakhawat_ashakikat' => ($mirathInput['alakhawat_ashakikat'] >= 2 && $mirathInput['alab'] == 0 && !$this->far3Warith && $mirathInput['alikhwa_alashika'] == 0 && $mirathInput['aljad'] == 0),
+            'alakhawat_li_ab' => ($mirathInput['alakhawat_li_ab'] >= 2 && $mirathInput['alab'] == 0 && !$this->far3Warith && $mirathInput['alikhwa_alashika'] == 0 && $mirathInput['alakhawat_ashakikat'] < 2 && $mirathInput['aljad'] == 0)
+        ];
 
-        $hasOneThird = (
-            ($mirathInput['alom'] && !$this->far3Warith) ||
-            (($mirathInput['alikhwa_li_om'] + $mirathInput['alakhawat_li_om']) >= 2 && !$this->far3Warith && $mirathInput['alab'] == 0 && $mirathInput['aljad'] == 0)
-        );
+        $hasOneThirdConditions = [
+            'alom' => ($mirathInput['alom'] && !$this->far3Warith),
+            'alikhwa_li_om' => (($mirathInput['alikhwa_li_om'] + $mirathInput['alakhawat_li_om']) >= 2 && !$this->far3Warith && $mirathInput['alab'] == 0 && $mirathInput['aljad'] == 0)
+        ];
 
-        $hasOneSixth = (
-            ($mirathInput['alom'] && $this->far3Warith) ||
-            ($mirathInput['banat_alabna'] == 1 && $mirathInput['albanat'] == 1 && $mirathInput['abna_alabna'] == 0) ||
-            ($mirathInput['alakhawat_li_ab'] == 1 && $mirathInput['alakhawat_ashakikat'] == 1 && $mirathInput['alikhwa_alashika'] == 0 && $mirathInput['alikhwa_li_ab'] == 0 && $mirathInput['alab'] == 0 && $mirathInput['aljad'] == 0) ||
-            ($mirathInput['alikhwa_li_om'] == 1 && $mirathInput['alakhawat_li_om'] == 0 && !$this->far3Warith && $mirathInput['alab'] == 0 && $mirathInput['aljad'] == 0) ||
-            ($mirathInput['alakhawat_li_om'] == 1 && $mirathInput['alikhwa_li_om'] == 0 && !$this->far3Warith && $mirathInput['alab'] == 0 && $mirathInput['aljad'] == 0)
-        );
+        $hasOneSixthConditions = [
+            'alom_with_far3' => ($mirathInput['alom'] && $this->far3Warith),
+            'banat_alabna' => ($mirathInput['banat_alabna'] == 1 && $mirathInput['albanat'] == 1 && $mirathInput['abna_alabna'] == 0),
+            'alakhawat_li_ab' => ($mirathInput['alakhawat_li_ab'] == 1 && $mirathInput['alakhawat_ashakikat'] == 1 && $mirathInput['alikhwa_alashika'] == 0 && $mirathInput['alikhwa_li_ab'] == 0 && $mirathInput['alab'] == 0 && $mirathInput['aljad'] == 0),
+            'alikhwa_li_om' => ($mirathInput['alikhwa_li_om'] == 1 && $mirathInput['alakhawat_li_om'] == 0 && !$this->far3Warith && $mirathInput['alab'] == 0 && $mirathInput['aljad'] == 0),
+            'alakhawat_li_om' => ($mirathInput['alakhawat_li_om'] == 1 && $mirathInput['alikhwa_li_om'] == 0 && !$this->far3Warith && $mirathInput['alab'] == 0 && $mirathInput['aljad'] == 0)
+        ];
+
+        $hasHalf = in_array(true, $hasHalfConditions);
+        $hasQuarter = in_array(true, $hasQuarterConditions);
+        $hasEighth = in_array(true, $hasEighthConditions);
+        $hasTwoThirds = in_array(true, $hasTwoThirdsConditions);
+        $hasOneThird = in_array(true, $hasOneThirdConditions);
+        $hasOneSixth = in_array(true, $hasOneSixthConditions);
+
+        $halfCount = count(array_filter($hasHalfConditions));
+        $quarterCount = count(array_filter($hasQuarterConditions));
+        $eighthCount = count(array_filter($hasEighthConditions));
+        $twoThirdsCount = count(array_filter($hasTwoThirdsConditions));
+        $oneThirdCount = count(array_filter($hasOneThirdConditions));
+        $oneSixthCount = count(array_filter($hasOneSixthConditions));
+
 
         $hasTypeOne = $hasHalf || $hasQuarter || $hasEighth;
         $hasTypeTwo = $hasTwoThirds || $hasOneThird || $hasOneSixth;
@@ -170,18 +184,22 @@ class MirathService
         $this->mirathalom($mirathInput);
         $this->mirathaljadat_li_om($mirathInput);
         $this->mirathaljadah_li_ab($mirathInput);
-        $this->mirathalbanat($mirathInput);
+        if ($mirathInput['alabna'] == 0) {
+            $this->mirathalbanat($mirathInput);
+        }
         $this->mirathbanat_alabna($mirathInput);
         $this->mirathalikhwa_li_om($mirathInput);
         $this->mirathalakhawat_li_om($mirathInput);
         $this->mirathalakhawat_ashakikat($mirathInput);
         $this->mirathalakhawat_li_ab($mirathInput);
-        $this->mirathalabna($mirathInput);
         $this->mirathabna_alabna($mirathInput);
         $this->mirathalab($mirathInput);
         $this->mirathaljad($mirathInput);
         // beta3sib
-        // albanat laysat beta3sib laken l part mta3ha depend mel part mta3 labna
+        $this->mirathalabna($mirathInput);
+        if ($mirathInput['alabna'] > 0) {
+            $this->mirathalbanat($mirathInput);
+        }
         $this->mirathalikhwa_alashika($mirathInput);
         $this->mirathalikhwa_li_ab($mirathInput);
         $this->mirathabna_alikhwa_alashika($mirathInput);
