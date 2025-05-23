@@ -144,27 +144,27 @@ class MirathService
         // === Reinitialize the 6 shares ===
         if ($hasHalf) {
             $this->nesef = ["bast" => $commonDenominator / 2, "ma9am" => 0];
-            $totalBast = $this->nesef['bast'];
+            $totalBast = $this->nesef['bast'] * $halfCount;
         }
         if ($hasQuarter) {
             $this->robo3 = ["bast" => $commonDenominator / 4, "ma9am" => 0];
-            $totalBast += $this->robo3['bast'];
+            $totalBast += $this->robo3['bast'] * $quarterCount;
         }
         if ($hasEighth) {
             $this->thomon = ["bast" => $commonDenominator / 8, "ma9am" => 0];
-            $totalBast += $this->thomon['bast'];
+            $totalBast += $this->thomon['bast'] * $eighthCount;
         }
         if ($hasTwoThirds) {
             $this->tholothin = ["bast" => 2 * $commonDenominator / 3, "ma9am" => 0];
-            $totalBast += $this->tholothin['bast'];
+            $totalBast += $this->tholothin['bast'] * $twoThirdsCount;
         }
         if ($hasOneThird) {
             $this->tholoth = ["bast" => $commonDenominator / 3, "ma9am" => 0];
-            $totalBast += $this->tholoth['bast'];
+            $totalBast += $this->tholoth['bast'] * $oneThirdCount;
         }
         if ($hasOneSixth) {
             $this->sodoss = ["bast" => $commonDenominator / 6, "ma9am" => 0];
-            $totalBast += $this->sodoss['bast'];
+            $totalBast += $this->sodoss['bast'] * $oneSixthCount;
         }
         // if ($hasNesefsodos) {
         //     $this->nesefsodos = ["bast" => $commonDenominator / 12, "ma9am" => 0];
