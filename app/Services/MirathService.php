@@ -226,7 +226,7 @@ class MirathService
         $this->wasiya = $mirathInput['wasiya'] ?? 0;
         //
         return [
-            'rapport' => $commonDenominator,
+            'rapport' => $this->rapport,
             'parts' => $this->part,
             'type' => $this->type,
             'tarika' => $totalBast,
@@ -345,7 +345,6 @@ class MirathService
             $mirathInput['reste'] -= $part;
             $this->rapport .= "الاب يرث السدس 1/6 فرضا فقط\n";
         } elseif ($this->far3WarithOntha) {
-            $part = $this->calculSodoss($mirathInput['safi_tarika']);
             // remove 1/2 form the rest
             $part = $this->calculSodoss($mirathInput['safi_tarika']);
             $mirathInput['reste'] -= $part;
