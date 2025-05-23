@@ -141,30 +141,37 @@ class MirathService
             $commonDenominator = 24;
         }
         $totalBast = 0;
+        $totalBastDisplay = "";
         // === Reinitialize the 6 shares ===
         if ($hasHalf) {
             $this->nesef = ["bast" => $commonDenominator / 2, "ma9am" => 0];
             $totalBast = $this->nesef['bast'] * $halfCount;
+            $totalBastDisplay .= " " . $this->nesef['bast'] . " => " . $halfCount . " total \n";
         }
         if ($hasQuarter) {
             $this->robo3 = ["bast" => $commonDenominator / 4, "ma9am" => 0];
             $totalBast += $this->robo3['bast'] * $quarterCount;
+            $totalBastDisplay .= " " . $this->robo3['bast'] . " => " . $quarterCount . " total \n";
         }
         if ($hasEighth) {
             $this->thomon = ["bast" => $commonDenominator / 8, "ma9am" => 0];
             $totalBast += $this->thomon['bast'] * $eighthCount;
+            $totalBastDisplay .= " " . $this->thomon['bast'] . " => " . $eighthCount . " total \n";
         }
         if ($hasTwoThirds) {
             $this->tholothin = ["bast" => 2 * $commonDenominator / 3, "ma9am" => 0];
             $totalBast += $this->tholothin['bast'] * $twoThirdsCount;
+            $totalBastDisplay .= " " . $this->tholothin['bast'] . " => " . $twoThirdsCount . " total \n";
         }
         if ($hasOneThird) {
             $this->tholoth = ["bast" => $commonDenominator / 3, "ma9am" => 0];
             $totalBast += $this->tholoth['bast'] * $oneThirdCount;
+            $totalBastDisplay .= " " . $this->tholoth['bast'] . " => " . $oneThirdCount . " total \n";
         }
         if ($hasOneSixth) {
             $this->sodoss = ["bast" => $commonDenominator / 6, "ma9am" => 0];
             $totalBast += $this->sodoss['bast'] * $oneSixthCount;
+            $totalBastDisplay .= " " . $this->sodoss['bast'] . " => " . $oneSixthCount . " total \n";
         }
         // if ($hasNesefsodos) {
         //     $this->nesefsodos = ["bast" => $commonDenominator / 12, "ma9am" => 0];
@@ -223,6 +230,9 @@ class MirathService
             'parts' => $this->part,
             'type' => $this->type,
             'tarika' => $totalBast,
+            'totalBastDisplay' => $totalBastDisplay,
+            'totalBast' => $totalBast,
+            'commonDenominator' => $commonDenominator,
         ];
     }
 
