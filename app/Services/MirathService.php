@@ -107,14 +107,23 @@ class MirathService
         } elseif (!$hasTypeOne && $hasTypeTwo) {
             // Rule 2: Only Type Two
             $commonDenominator = 6;
-        } elseif ($hasHalf && $hasTypeTwo) {
+        } elseif ($hasHalf && !$hasQuarter && !$hasEighth &&  $hasTypeTwo) {
             // Rule 3: Mix of 1/2 and Type Two
             $commonDenominator = 6;
-        } elseif ($hasQuarter && $hasTypeTwo) {
+        } elseif ($hasQuarter && !$hasHalf && !$hasEighth &&  $hasTypeTwo) {
             // Rule 4: Mix of 1/4 and Type Two
             $commonDenominator = 12;
-        } elseif ($hasEighth && $hasTypeTwo) {
+        } elseif ($hasEighth && !$hasHalf && !$hasQuarter && $hasTypeTwo) {
             // Rule 5: Mix of 1/8 and Type Two
+            $commonDenominator = 24;
+        } elseif ($hasHalf && $hasQuarter && !$hasEighth &&  $hasTypeTwo) {
+            // Rule 3: Mix of 1/2 and Type Two
+            $commonDenominator = 12;
+        } elseif ($hasHalf && !$hasQuarter && $hasEighth &&  $hasTypeTwo) {
+            // Rule 3: Mix of 1/2 and Type Two
+            $commonDenominator = 24;
+        } elseif (!$hasHalf && $hasQuarter && $hasEighth &&  $hasTypeTwo) {
+            // Rule 3: Mix of 1/2 and Type Two
             $commonDenominator = 24;
         }
         $totalBast = 0;
@@ -159,20 +168,20 @@ class MirathService
         $this->mirathazawj($mirathInput);
         $this->mirathazawja($mirathInput);
         $this->mirathalom($mirathInput);
-        $this->mirathaljadah_li_ab($mirathInput);
         $this->mirathaljadat_li_om($mirathInput);
+        $this->mirathaljadah_li_ab($mirathInput);
+        $this->mirathalbanat($mirathInput);
         $this->mirathbanat_alabna($mirathInput);
         $this->mirathalikhwa_li_om($mirathInput);
         $this->mirathalakhawat_li_om($mirathInput);
         $this->mirathalakhawat_ashakikat($mirathInput);
         $this->mirathalakhawat_li_ab($mirathInput);
-        // beta3sib
         $this->mirathalabna($mirathInput);
-        // albanat laysat beta3sib laken l part mta3ha depend mel part mta3 labna
-        $this->mirathalbanat($mirathInput);
+        $this->mirathabna_alabna($mirathInput);
         $this->mirathalab($mirathInput);
         $this->mirathaljad($mirathInput);
-        $this->mirathabna_alabna($mirathInput);
+        // beta3sib
+        // albanat laysat beta3sib laken l part mta3ha depend mel part mta3 labna
         $this->mirathalikhwa_alashika($mirathInput);
         $this->mirathalikhwa_li_ab($mirathInput);
         $this->mirathabna_alikhwa_alashika($mirathInput);
@@ -280,7 +289,6 @@ class MirathService
     {
         if (!$mirathInput["alom"]) return;
 
-        $part = 0;
 
         if ($this->far3Warith) {
             $part = $this->calculSodoss($mirathInput['safi_tarika']);
@@ -409,7 +417,7 @@ class MirathService
             $mirathInput['reste'] -= $part;
             $this->rapport .= "البنات يرثن  2/3 فرضا \n";
         } else if (($mirathInput["albanat"] > 0) && ($mirathInput["alabna"] > 0)) {
-            $alabnaPart = array_filter($this->part, function($item) {
+            $alabnaPart = array_filter($this->part, function ($item) {
                 return $item['type'] === 'الابناء';
             });
             $alabnaPart = reset($alabnaPart); // Get first matching element
