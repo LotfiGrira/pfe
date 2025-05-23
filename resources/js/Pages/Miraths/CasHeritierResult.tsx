@@ -129,6 +129,10 @@ export default function CasHeritierResult({ result }: PageProps<{ result: any }>
       <div>
         <h2 className="text-xl font-semibold">🧮 tafsil kol bast : {result.totalBastDisplay} </h2>
       </div>
+      
+      <div>
+        <h2 className="text-xl font-semibold">🧮 tafsil nesef : {result.tafsilNesef} </h2>
+      </div>
 
       <div>
         <h2 className="text-xl font-semibold">🧮 total jam3 lBast : {result.totalBast} </h2>

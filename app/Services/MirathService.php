@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Data\MirathInput;
 use App\Models\Mirath;
 use Symfony\Component\VarDumper\VarDumper;
 
@@ -52,7 +53,7 @@ class MirathService
 
         // === Type One (½, ¼, ⅛) ===
         $hasHalfConditions = [
-            'zawj' => $mirathInput['zawj'],
+            'zawj' => ($mirathInput['zawj'] && !$this->far3Warith),
             'albanat' => ($mirathInput['albanat'] == 1 && $mirathInput['alabna'] == 0),
             'banat_alabna' => ($mirathInput['banat_alabna'] == 1 && $mirathInput['abna_alabna'] == 0 && $mirathInput['alabna'] == 0 && $mirathInput['albanat'] < 2),
             'alakhawat_ashakikat' => ($mirathInput['alakhawat_ashakikat'] == 1 && $mirathInput['alab'] == 0 && !$this->far3Warith && $mirathInput['alikhwa_alashika'] == 0 && $mirathInput['aljad'] == 0),
@@ -81,12 +82,15 @@ class MirathService
         ];
 
         $hasOneSixthConditions = [
+            'alab' => ($mirathInput['alab'] && $this->far3Warith),
             'alom_with_far3' => ($mirathInput['alom'] && $this->far3Warith),
             'banat_alabna' => ($mirathInput['banat_alabna'] == 1 && $mirathInput['albanat'] == 1 && $mirathInput['abna_alabna'] == 0),
             'alakhawat_li_ab' => ($mirathInput['alakhawat_li_ab'] == 1 && $mirathInput['alakhawat_ashakikat'] == 1 && $mirathInput['alikhwa_alashika'] == 0 && $mirathInput['alikhwa_li_ab'] == 0 && $mirathInput['alab'] == 0 && $mirathInput['aljad'] == 0),
             'alikhwa_li_om' => ($mirathInput['alikhwa_li_om'] == 1 && $mirathInput['alakhawat_li_om'] == 0 && !$this->far3Warith && $mirathInput['alab'] == 0 && $mirathInput['aljad'] == 0),
             'alakhawat_li_om' => ($mirathInput['alakhawat_li_om'] == 1 && $mirathInput['alikhwa_li_om'] == 0 && !$this->far3Warith && $mirathInput['alab'] == 0 && $mirathInput['aljad'] == 0)
         ];
+
+        
 
         $hasHalf = in_array(true, $hasHalfConditions);
         $hasQuarter = in_array(true, $hasQuarterConditions);
@@ -146,32 +150,35 @@ class MirathService
         if ($hasHalf) {
             $this->nesef = ["bast" => $commonDenominator / 2, "ma9am" => 0];
             $totalBast = $this->nesef['bast'] * $halfCount;
-            $totalBastDisplay .= " " . $this->nesef['bast'] . " => " . $halfCount . " total \n";
+            $totalBastDisplay .= "nesef " . $this->nesef['bast'] . " => " . $halfCount . " total \n";
         }
         if ($hasQuarter) {
             $this->robo3 = ["bast" => $commonDenominator / 4, "ma9am" => 0];
             $totalBast += $this->robo3['bast'] * $quarterCount;
-            $totalBastDisplay .= " " . $this->robo3['bast'] . " => " . $quarterCount . " total \n";
+            $totalBastDisplay .= "robo3 " . $this->robo3['bast'] . " => " . $quarterCount . " total \n";
         }
         if ($hasEighth) {
             $this->thomon = ["bast" => $commonDenominator / 8, "ma9am" => 0];
             $totalBast += $this->thomon['bast'] * $eighthCount;
-            $totalBastDisplay .= " " . $this->thomon['bast'] . " => " . $eighthCount . " total \n";
+            $totalBastDisplay .= "thomon " . $this->thomon['bast'] . " => " . $eighthCount . " total \n";
         }
         if ($hasTwoThirds) {
             $this->tholothin = ["bast" => 2 * $commonDenominator / 3, "ma9am" => 0];
             $totalBast += $this->tholothin['bast'] * $twoThirdsCount;
-            $totalBastDisplay .= " " . $this->tholothin['bast'] . " => " . $twoThirdsCount . " total \n";
+            $totalBastDisplay .= "tholothin " . $this->tholothin['bast'] . " => " . $twoThirdsCount . " total \n";
         }
         if ($hasOneThird) {
             $this->tholoth = ["bast" => $commonDenominator / 3, "ma9am" => 0];
             $totalBast += $this->tholoth['bast'] * $oneThirdCount;
-            $totalBastDisplay .= " " . $this->tholoth['bast'] . " => " . $oneThirdCount . " total \n";
+            $totalBastDisplay .= "tholoth " . $this->tholoth['bast'] . " => " . $oneThirdCount . " total \n";
         }
         if ($hasOneSixth) {
             $this->sodoss = ["bast" => $commonDenominator / 6, "ma9am" => 0];
             $totalBast += $this->sodoss['bast'] * $oneSixthCount;
-            $totalBastDisplay .= " " . $this->sodoss['bast'] . " => " . $oneSixthCount . " total \n";
+            $totalBastDisplay .= "sodos " . $this->sodoss['bast'] . " => " . $oneSixthCount . " total \n";
+        }
+        if ($totalBast < $commonDenominator) {
+            $totalBast = $commonDenominator;
         }
         // if ($hasNesefsodos) {
         //     $this->nesefsodos = ["bast" => $commonDenominator / 12, "ma9am" => 0];
@@ -199,13 +206,18 @@ class MirathService
         $this->mirathalakhawat_li_om($mirathInput);
         $this->mirathalakhawat_ashakikat($mirathInput);
         $this->mirathalakhawat_li_ab($mirathInput);
-        $this->mirathabna_alabna($mirathInput);
+        if (!($mirathInput["banat_alabna"] == 0 || ($mirathInput["banat_alabna"] > 0 && $mirathInput["albanat"] > 1))) {
+            $this->mirathabna_alabna($mirathInput);
+        }
         $this->mirathalab($mirathInput);
         $this->mirathaljad($mirathInput);
         // beta3sib
         $this->mirathalabna($mirathInput);
         if ($mirathInput['alabna'] > 0) {
             $this->mirathalbanat($mirathInput);
+        }
+        if ($mirathInput["banat_alabna"] == 0 || ($mirathInput["banat_alabna"] > 0 && $mirathInput["albanat"] > 1)) {
+            $this->mirathabna_alabna($mirathInput);
         }
         $this->mirathalikhwa_alashika($mirathInput);
         $this->mirathalikhwa_li_ab($mirathInput);
@@ -231,6 +243,7 @@ class MirathService
             'type' => $this->type,
             'tarika' => $totalBast,
             'totalBastDisplay' => $totalBastDisplay,
+            'tafsilNesef' => implode(' | ', $hasHalfConditions),
             'totalBast' => $totalBast,
             'commonDenominator' => $commonDenominator,
         ];
