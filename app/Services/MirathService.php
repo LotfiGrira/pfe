@@ -462,26 +462,38 @@ class MirathService
     //el foro3//
     public function mirathalbanat(&$mirathInput)
 {
-    if (!$mirathInput["albanat"]) {
+    if (empty($mirathInput["albanat"])) {
         return;
     }
 
-    if (($mirathInput["albanat"] == 1) && ($mirathInput["alabna"] == 0)) {
-        $part = $this->calculNesef($mirathInput['safi_tarika']);
+    $nbFilles = $mirathInput["albanat"];
+    $nbFils = $mirathInput["alabna"] ?? 0;
+    $safiTarika = $mirathInput['safi_tarika'];
+
+    // Cas : 1 fille seule, pas de fils
+    if ($nbFilles === 1 && $nbFils === 0) {
+        $part = $this->calculNesef($safiTarika);
         $mirathInput['reste'] -= $part;
-        $this->rapport .= "البنات يرثن  1/2 فرضا \n";
-    } else if (($mirathInput["albanat"] > 1) && ($mirathInput["alabna"] == 0)) {
-        $part = $this->calculTholothin($mirathInput['safi_tarika']);
+        $this->rapport .= "البنات يرثن 1/2 فرضا\n";
+    }
+    // Cas : plusieurs filles, pas de fils
+    else if ($nbFilles > 1 && $nbFils === 0) {
+        $part = $this->calculTholothin($safiTarika);
         $mirathInput['reste'] -= $part;
-        $this->rapport .= "البنات يرثن  2/3 فرضا \n";
-    } else if (($mirathInput["albanat"] > 0) && ($mirathInput["alabna"] > 0)) {
+        $this->rapport .= "البنات يرثن 2/3 فرضا\n";
+    }
+    // Cas : filles + fils (تعصيب مع الغير)
+    else if ($nbFilles > 0 && $nbFils > 0) {
         $alabnaPart = array_filter($this->part, fn($item) => $item['type'] === 'الابناء');
         $alabnaPart = reset($alabnaPart);
 
         if ($alabnaPart) {
-            $part = $alabnaPart['part'] * 1 / 2;
+            // 💡 On suppose que الابناء ont eu leur part globale
+            $partParFille = ($alabnaPart['part'] / (2 * $nbFils)) * 1; // chaque fille = 1/2 d’un fils
+            $part = $partParFille * $nbFilles;
+
             $mirathInput['reste'] -= $part;
-            $this->rapport .= "البنات  يرثن  1/2 الابناء\n";
+            $this->rapport .= "البنات يرثن للذكر مثل حظ الأنثيين\n";
         } else {
             $part = 0;
             $this->rapport .= "خطأ: لم يتم تحديد نصيب الأبناء بعد لحساب نصيب البنات\n";
@@ -493,6 +505,7 @@ class MirathService
         'part' => $part ?? 0,
     ];
 }
+
 
 
     public function mirathalabna(&$mirathInput)
