@@ -216,29 +216,53 @@ class MirathService
         $this->mirathalom($mirathInput);
         $this->mirathaljadah_li_om($mirathInput);
         $this->mirathaljadah_li_ab($mirathInput);
+        if (($mirathInput["abna_alabna"] > 0) || ($mirathInput["alabna"] > 0)) {
+            $this->mirathalab($mirathInput);
+        }
+        if (($mirathInput["abna_alabna"] > 0) || ($mirathInput["alabna"] > 0) || ($mirathInput["alikhwa_alashika"] > 0) || ($mirathInput["alikhwa_li_ab"] > 0)) {
+            $this->mirathaljad($mirathInput);
+        }
         if ($mirathInput['alabna'] == 0) {
             $this->mirathalbanat($mirathInput);
         }
+        if ($mirathInput['alikhwa_alashika'] == 0) {
+            $this->mirathalakhawat_ashakikat($mirathInput);
+        }
         $this->mirathalikhwa_li_om($mirathInput);
         $this->mirathalakhawat_li_om($mirathInput);
-        $this->mirathalakhawat_ashakikat($mirathInput);
         $this->mirathalakhawat_li_ab($mirathInput);
+
+
         if (!($mirathInput["banat_alabna"] == 0)) {
             $this->mirathabna_alabna($mirathInput);
         }
+
         $this->mirathbanat_alabna($mirathInput);
-        $this->mirathalab($mirathInput);
-        $this->mirathaljad($mirathInput);
         // beta3sib
+
         $this->mirathalabna($mirathInput);
+        $this->mirathalikhwa_alashika($mirathInput);
+
         if ($mirathInput['alabna'] > 0) {
             $this->mirathalbanat($mirathInput);
         }
-        if ($mirathInput["banat_alabna"] == 0) {
+        if ($mirathInput['alikhwa_alashika'] > 0) {
+            $this->mirathalakhawat_ashakikat($mirathInput);
+        }
+
+        if (($mirathInput["banat_alabna"] == 0) && ($mirathInput["alabna"] == 0)) {
             $this->mirathabna_alabna($mirathInput);
         }
+
+        if (!($mirathInput["abna_alabna"] > 0) &&  !($mirathInput["alabna"] > 0)) {
+            $this->mirathalab($mirathInput);
+        }
+        
         $this->mirathalikhwa_alashika($mirathInput);
         $this->mirathalikhwa_li_ab($mirathInput);
+        if (!($mirathInput["abna_alabna"] > 0) && !($mirathInput["alabna"] > 0) && !($mirathInput["alikhwa_alashika"] > 0) && !($mirathInput["alikhwa_li_ab"] > 0)) {
+            $this->mirathaljad($mirathInput);
+        }
         $this->mirathabna_alikhwa_alashika($mirathInput);
         $this->mirathabna_alikhwa_li_ab($mirathInput);
         $this->mirathala3mam_alashika($mirathInput);
@@ -461,147 +485,212 @@ class MirathService
     }
     //el foro3//
     public function mirathalbanat(&$mirathInput)
-{
-    if (empty($mirathInput["albanat"])) {
-        return;
-    }
-
-    $nbFilles = $mirathInput["albanat"];
-    $nbFils = $mirathInput["alabna"] ?? 0;
-    $safiTarika = $mirathInput['safi_tarika'];
-
-    // Cas : 1 fille seule, pas de fils
-    if ($nbFilles === 1 && $nbFils === 0) {
-        $part = $this->calculNesef($safiTarika);
-        $mirathInput['reste'] -= $part;
-        $this->rapport .= "البنات يرثن 1/2 فرضا\n";
-    }
-    // Cas : plusieurs filles, pas de fils
-    else if ($nbFilles > 1 && $nbFils === 0) {
-        $part = $this->calculTholothin($safiTarika);
-        $mirathInput['reste'] -= $part;
-        $this->rapport .= "البنات يرثن 2/3 فرضا\n";
-    }
-    // Cas : filles + fils (تعصيب مع الغير)
-    else if ($nbFilles > 0 && $nbFils > 0) {
-        $alabnaPart = array_filter($this->part, fn($item) => $item['type'] === 'الابناء');
-        $alabnaPart = reset($alabnaPart);
-
-        if ($alabnaPart) {
-            // 💡 On suppose que الابناء ont eu leur part globale
-            $partParFille = ($alabnaPart['part'] / (2 * $nbFils)) * 1; // chaque fille = 1/2 d’un fils
-            $part = $partParFille * $nbFilles;
-
-            $mirathInput['reste'] -= $part;
-            $this->rapport .= "البنات يرثن للذكر مثل حظ الأنثيين\n";
-        } else {
-            $part = 0;
-            $this->rapport .= "خطأ: لم يتم تحديد نصيب الأبناء بعد لحساب نصيب البنات\n";
+    {
+        if (empty($mirathInput["albanat"])) {
+            return;
         }
-    }
 
-    $this->part[] = [
-        'type' => 'البنات',
-        'part' => $part ?? 0,
-    ];
-}
+        $nbFilles = $mirathInput["albanat"];
+        $nbFils = $mirathInput["alabna"] ?? 0;
+        $safiTarika = $mirathInput['safi_tarika'];
+
+        // Cas : 1 fille seule, pas de fils
+        if ($nbFilles === 1 && $nbFils === 0) {
+            $part = $this->calculNesef($safiTarika);
+            $mirathInput['reste'] -= $part;
+            $this->rapport .= "البنات يرثن 1/2 فرضا\n";
+        }
+        // Cas : plusieurs filles, pas de fils
+        else if ($nbFilles > 1 && $nbFils === 0) {
+            $part = $this->calculTholothin($safiTarika);
+            $mirathInput['reste'] -= $part;
+            $this->rapport .= "البنات يرثن 2/3 فرضا\n";
+        }
+        // Cas : filles + fils (تعصيب مع الغير)
+        else if ($nbFilles > 0 && $nbFils > 0) {
+            $alabnaPart = array_filter($this->part, fn($item) => $item['type'] === 'الابناء');
+            $alabnaPart = reset($alabnaPart);
+
+            if ($alabnaPart) {
+                // 💡 On suppose que الابناء ont eu leur part globale
+                $partParFille = ($alabnaPart['part'] / (2 * $nbFils)) * 1; // chaque fille = 1/2 d’un fils
+                $part = $partParFille * $nbFilles;
+
+                $mirathInput['reste'] -= $part;
+                $this->rapport .= "البنات يرثن للذكر مثل حظ الأنثيين\n";
+            } else {
+                $part = 0;
+                $this->rapport .= "خطأ: لم يتم تحديد نصيب الأبناء بعد لحساب نصيب البنات\n";
+            }
+        }
+
+        $this->part[] = [
+            'type' => 'البنات',
+            'part' => $part ?? 0,
+        ];
+    }
 
 
 
     public function mirathalabna(&$mirathInput)
-{
-    if (empty($mirathInput["alabna"])) {
-        return;
-    }
-
-    $nbFils = $mirathInput["alabna"];
-    $nbFilles = $mirathInput["albanat"] ?? 0;
-
-    // Cas : pas de filles → les fils prennent tout en taʿṣīb (تعصيب بالنفس)
-    if ($nbFilles == 0) {
-        $part = $mirathInput['reste'];
-        $mirathInput['reste'] = 0;
-
-        $this->rapport .= "الأبناء يرثون الباقي تعصيبا بالنفس\n";
-
-        $this->part[] = [
-            'type' => 'الابناء',
-            'part' => $part,
-        ];
-    }
-
-    // Cas : fils et filles → للذكر مثل حظ الأنثيين
-    else {
-        $totalTêtes = (2 * $nbFils) + $nbFilles;
-        $partFils = ($mirathInput['reste'] * (2 * $nbFils)) / $totalTêtes;
-        $mirathInput['reste'] = 0;
-
-        $this->rapport .= "الأبناء يرثون للذكر مثل حظ الانثيين\n";
-
-        $this->part[] = [
-            'type' => 'الابناء',
-            'part' => $partFils,
-        ];
-    }
-}
-
-
-    public function mirathabna_alabna(&$mirathInput)
     {
-        if ($mirathInput["abna_alabna"] == 0 || $mirathInput["alabna"] > 0) {
+        if (empty($mirathInput["alabna"])) {
             return;
         }
-        if ($mirathInput["banat_alabna"] == 0 || ($mirathInput["banat_alabna"] > 0 && $mirathInput["albanat"] > 1)) {
+        $nbFils = $mirathInput["alabna"];
+        $nbFilles = $mirathInput["albanat"] ?? 0;
+        // Cas : pas de filles → les fils prennent tout en taʿṣīb (تعصيب بالنفس)
+        if ($nbFilles == 0) {
             $part = $mirathInput['reste'];
             $mirathInput['reste'] = 0;
-            $this->rapport .= "ابناء الابناء يرثون الباقي تعصيبا بالنفس\n";
-        } else {
-            $part = $mirathInput['reste'] * 2 / 3;
-            $this->rapport .= "ابناء الابناء يرثون للذكر مثل حظ الانثيين\n";
-        }
-        $this->part[] = [
-            'type' => 'أبناء الابن',
-            'part' => $part,
 
-        ];
+            $this->rapport .= "الأبناء يرثون الباقي تعصيبا بالنفس\n";
+
+            $this->part[] = [
+                'type' => 'الابناء',
+                'part' => $part,
+            ];
+        }
+        // Cas : fils et filles → للذكر مثل حظ الأنثيين
+        else {
+            $totalTêtes = (2 * $nbFils) + $nbFilles;
+            $partFils = ($mirathInput['reste'] * (2 * $nbFils)) / $totalTêtes;
+            $mirathInput['reste'] = 0;
+
+            $this->rapport .= "الأبناء يرثون للذكر مثل حظ الانثيين\n";
+
+            $this->part[] = [
+                'type' => 'الابناء',
+                'part' => $partFils,
+            ];
+        }
+    }
+    public function mirathabna_alabna(&$mirathInput)
+    {
+        $nbFils = $mirathInput["abna_alabna"] ?? 0;
+        $nbFilles = $mirathInput["banat_alabna"] ?? 0;
+        $nbAlbanat = $mirathInput["albanat"] ?? 0;
+
+        // Exclusion si pas de fils ou s'il y a des fils directs
+        if ($nbFils == 0 || !empty($mirathInput["alabna"])) {
+            return;
+        }
+
+        // Cas : uniquement des fils → تعصيب بالنفس
+        if ($nbFilles == 0) {
+            $part = $mirathInput['reste'];
+            $mirathInput['reste'] = 0;
+
+            $this->rapport .= "أبناء الابن يرثون الباقي تعصيبا بالنفس\n";
+            $this->part[] = [
+                'type' => 'أبناء الابن',
+                'part' => $part,
+            ];
+        }
+        // Cas : fils + filles → للذكر مثل حظ الأنثيين **si albanat < 2**
+        elseif ($nbAlbanat < 2) {
+            $totalTêtes = (2 * $nbFils) + $nbFilles;
+            $partParTête = $mirathInput['reste'] / $totalTêtes;
+            $partFils = $partParTête * 2 * $nbFils;
+            $partFilles = $partParTête * $nbFilles;
+            $mirathInput['reste'] = 0;
+
+            $this->rapport .= "أبناء الابن يرثون للذكر مثل حظ الأنثيين\n";
+
+            if ($partFils > 0) {
+                $this->part[] = [
+                    'type' => 'أبناء الابن',
+                    'part' => $partFils,
+                ];
+            }
+
+            if ($partFilles > 0) {
+                $this->part[] = [
+                    'type' => 'بنات الابن',
+                    'part' => $partFilles,
+                ];
+            }
+
+            // Évite double héritage pour بنات الابن
+            $mirathInput['banat_alabna_incluses'] = true;
+        }
+        // Sinon : seules les أبناء الابن héritent
+        else {
+            $part = $mirathInput['reste'];
+            $mirathInput['reste'] = 0;
+
+            $this->rapport .= "أبناء الابن يرثون الباقي تعصيبا بالنفس\n";
+            $this->part[] = [
+                'type' => 'أبناء الابن',
+                'part' => $part,
+            ];
+
+            // Précise que les filles de fils sont exclues
+            $mirathInput['banat_alabna_incluses'] = true;
+        }
     }
 
 
     public function mirathbanat_alabna(&$mirathInput)
     {
-        if ($mirathInput["banat_alabna"] == 0 || $mirathInput["alabna"] > 0 || $mirathInput["albanat"] > 1) {
+        // Exclusions
+        if (
+            ($mirathInput["banat_alabna"] ?? 0) == 0 ||
+            ($mirathInput["alabna"] ?? 0) > 0 ||
+            ($mirathInput["albanat"] ?? 0) >= 2 ||
+            !empty($mirathInput['banat_alabna_incluses'])
+        ) {
             return;
         }
-        // 1 fille du fils, aucun fils du fils
-        if ($mirathInput["banat_alabna"] == 1 && $mirathInput["abna_alabna"] == 0) {
-            $part = $this->calculNesef($mirathInput['safi_tarika']);
+
+        $nbFilles = $mirathInput["banat_alabna"];
+        $nbFils = $mirathInput["abna_alabna"] ?? 0;
+        $nbAlbanat = $mirathInput["albanat"] ?? 0;
+        $safiTarika = $mirathInput['safi_tarika'];
+        $part = 0;
+
+        // Cas 1 : une seule بنت الابن sans أبناء الابن et sans filles directes (ou une seule)
+        if ($nbFilles === 1 && $nbFils === 0 && $nbAlbanat < 1) {
+            $part = $this->calculNesef($safiTarika);
             $mirathInput['reste'] -= $part;
             $this->rapport .= "بنت الابن ترث النصف فرضا\n";
         }
-        // 2+ filles du fils, aucun fils du fils
-        elseif ($mirathInput["banat_alabna"] > 1 && $mirathInput["abna_alabna"] == 0) {
-            $part = $this->calculTholothin($mirathInput['safi_tarika']);
+        // Cas 2 : plusieurs بنات الابن sans أبناء الابن et sans filles directes (ou une seule)
+        elseif ($nbFilles > 1 && $nbFils === 0 && $nbAlbanat <= 1) {
+            $part = $this->calculTholothin($safiTarika);
             $mirathInput['reste'] -= $part;
             $this->rapport .= "بنات الابن يرثن الثلثين فرضا\n";
         }
-        // Fille unique + une fille directe (albanat), pas de fils du fils
-        elseif ($mirathInput["banat_alabna"] > 0 && $mirathInput["albanat"] == 1 && $mirathInput["abna_alabna"] == 0) {
-            $part = $this->calculSodoss($mirathInput['safi_tarika']);
+        // Cas 3 : بنت الابن seule avec بنت واحدة لتكملة الثلثين
+        elseif ($nbFilles > 0 && $nbAlbanat === 1 && $nbFils === 0) {
+            $part = $this->calculSodoss($safiTarika);
             $mirathInput['reste'] -= $part;
             $this->rapport .= "بنت الابن ترث السدس تكملة للثلثين\n";
         }
-        // Présence de fils du fils => taʿṣīb avec eux
-        elseif ($mirathInput["banat_alabna"] > 0 && $mirathInput["albanat"] <= 1 && $mirathInput["abna_alabna"] > 0) {
-            // On applique taʿṣīb maʿa al-ghayr (pour un garçon le double d'une fille)
-            $part = $mirathInput['reste'] * 1 / 3;
-            $this->rapport .= "بنات الابن يرثن  1/2 الابناء\n";
+        // Cas 4 : تعصيب مع الغير
+        elseif ($nbFilles > 0 && $nbFils > 0 && ($mirathInput["alabna"] ?? 0) === 0 && $nbAlbanat <= 1) {
+            $abnaAlabnaPart = array_filter($this->part, fn($item) => $item['type'] === 'أبناء الابن');
+            $abnaAlabnaPart = reset($abnaAlabnaPart);
+
+            if ($abnaAlabnaPart) {
+                $partParFille = ($abnaAlabnaPart['part'] / (2 * $nbFils)) * 1;
+                $part = $partParFille * $nbFilles;
+                $mirathInput['reste'] -= $part;
+                $this->rapport .= "بنات الابن يرثن للذكر مثل حظ الأنثيين\n";
+            } else {
+                $this->rapport .= "خطأ: لم يتم تحديد نصيب أبناء الابن لحساب نصيب البنات\n";
+            }
         }
-        $this->part[] =
-            [
-                'type' => 'بنات  الابناء',
+
+        // Ajouter uniquement si part > 0
+        if ($part > 0) {
+            $this->part[] = [
+                'type' => 'بنات الابن',
                 'part' => $part,
             ];
+        }
     }
+
 
 
     // wasiya wajiba//
@@ -654,153 +743,227 @@ class MirathService
 
     public function mirathalikhwa_alashika(&$mirathInput)
     {
-        if (
-            $mirathInput["alikhwa_alashika"] == 0 ||
-            $this->far3Warith > 0 ||
-            $mirathInput["alab"]
-        ) {
+        $nbFreres = $mirathInput["alikhwa_alashika"] ?? 0;
+        $nbSoeurs = $mirathInput["alakhawat_ashakikat"] ?? 0;
+
+        // Exclusion s'il y a un descendant (far' warith) ou le père
+        if ($nbFreres == 0 || $this->far3Warith > 0 || $mirathInput["alab"] ?? false) {
             return;
         }
 
-        if ($mirathInput["alakhawat_ashakikat"] == 0) {
+        // Si aucune sœur : تعصيب بالنفس
+        if ($nbSoeurs == 0) {
             $part = $mirathInput['reste'];
             $mirathInput['reste'] = 0;
-            $this->rapport .= "الاخوة الاشقاء يرثون الباقي تعصيبا بالنفس\n";
-        } else {
-            $part = $mirathInput['reste'] * 2 / 3;
-            $this->rapport .= "الاخوة الاشقاء يرثون للذكر مثل حظ الانثيين\n";
-        }
-        $this->part[] =
-            [
-                'type' => 'الاخوة الاشقاء',
+            $this->rapport .= "الإخوة الأشقاء يرثون الباقي تعصيبا بالنفس\n";
+
+            $this->part[] = [
+                'type' => 'الإخوة الأشقاء',
                 'part' => $part,
             ];
+        } else {
+            // Avec les sœurs → للذكر مثل حظ الأنثيين
+            $totalTêtes = (2 * $nbFreres) + $nbSoeurs;
+            $partParTête = $mirathInput['reste'] / $totalTêtes;
+            $partFreres = $partParTête * 2 * $nbFreres;
+            $partSoeurs = $partParTête * $nbSoeurs;
+
+            $mirathInput['reste'] = 0;
+
+            $this->rapport .= "الإخوة الأشقاء يرثون مع الأخوات للذكر مثل حظ الأنثيين\n";
+
+            if ($partFreres > 0) {
+                $this->part[] = [
+                    'type' => 'الإخوة الأشقاء',
+                    'part' => $partFreres,
+                ];
+            }
+
+            if ($partSoeurs > 0) {
+                $this->part[] = [
+                    'type' => 'الأخوات الشقيقات',
+                    'part' => $partSoeurs,
+                ];
+            }
+
+            // Marquer comme héritées pour éviter double traitement
+            $mirathInput['alakhawat_ashakikat_incluses'] = true;
+        }
     }
+
 
 
 
     public function mirathalakhawat_ashakikat(&$mirathInput)
     {
+        $nbSoeurs = $mirathInput["alakhawat_ashakikat"] ?? 0;
+        $nbFreres = $mirathInput["alikhwa_alashika"] ?? 0;
+
+        // Exclusion si pas de sœur ou si far‘ warith ou père ou déjà héritées
         if (
-            $mirathInput["alakhawat_ashakikat"] == 0 ||
+            $nbSoeurs == 0 ||
             $this->far3Warith > 0 ||
-            $mirathInput["alab"]
+            ($mirathInput["alab"] ?? false) ||
+            !empty($mirathInput['alakhawat_ashakikat_incluses'])
         ) {
             return;
         }
 
-        if (($mirathInput["alakhawat_ashakikat"] == 1) &&
-            ($mirathInput["alikhwa_alashika"] == 0) &&
-            (!$mirathInput["alab"]) &&
-            ($this->far3Warith == 0) &&
-            (!$mirathInput["aljad"])
-        ) {
+        $part = 0;
+
+        // Cas 1 : une sœur seule, pas de frère, pas de père, pas de descendant, pas de grand-père
+        if ($nbSoeurs === 1 && $nbFreres === 0 ) {
             $part = $this->calculNesef($mirathInput['safi_tarika']);
             $mirathInput['reste'] -= $part;
-            $this->rapport .= "الاخوات الشقيقات يرثن 1/2 فرضا\n";
+            $this->rapport .= "الأخت الشقيقة ترث النصف فرضا\n";
         }
-        if (($mirathInput["alakhawat_ashakikat"] > 1) &&
-            ($mirathInput["alikhwa_alashika"] == 0) &&
-            (!$mirathInput["alab"]) &&
-            ($this->far3Warith == 0) &&
-            (!$mirathInput["aljad"])
-        ) {
+
+        // Cas 2 : plusieurs sœurs, pas de frère, pas de père, pas de descendant, pas de grand-père
+        elseif ($nbSoeurs > 1 && $nbFreres === 0 ) {
             $part = $this->calculTholothin($mirathInput['safi_tarika']);
             $mirathInput['reste'] -= $part;
-            $this->rapport .= "الاخوات الشقيقات يرثن يرث 2/3 فرضا\n";
+            $this->rapport .= "الأخوات الشقيقات يرثن الثلثين فرضا\n";
         }
-        if (($mirathInput["alakhawat_ashakikat"] > 0) && ($mirathInput["alikhwa_alashika"] > 0)) {
-            $part = $mirathInput['reste'] * 1 / 3;
-            $this->rapport .= "الاخوات الشقيقات يرثن يرثن 1/2 الاخوة الأشقاء\n";
-        }
-        $this->part[] =
-            [
-                'type' => 'الاخوات الشقيقات',
+
+        // Ajout uniquement si part > 0
+        if ($part > 0) {
+            $this->part[] = [
+                'type' => 'الأخوات الشقيقات',
                 'part' => $part,
             ];
+        }
     }
 
 
     public function mirathalikhwa_li_ab(&$mirathInput)
     {
-        if ($mirathInput["alikhwa_li_ab"] == 0 || $this->far3Warith > 0 || $mirathInput["alab"] || $mirathInput["alikhwa_alashika"] > 0) {
+        $nbFreres = $mirathInput["alikhwa_li_ab"] ?? 0;
+        $nbSoeurs = $mirathInput["alakhawat_li_ab"] ?? 0;
+
+        // ✅ Cas de blocage total (حجب) :
+        if (
+            $nbFreres == 0  ||
+            $this->far3Warith > 0 ||             // enfants directs
+            $mirathInput["alab"] ||              // père
+            $mirathInput["alikhwa_alashika"] > 0  // frères germains
+
+        ) {
             return;
         }
 
-        if ($mirathInput["alakhawat_li_ab"] == 0) {
+        // ✅ Cas : que des frères sans sœurs
+        if ($nbSoeurs == 0) {
             $part = $mirathInput['reste'];
             $mirathInput['reste'] = 0;
-            $this->rapport .= "الاخوة لاب  يرثون الباقي تعصيبا بالنفس\n";
-        } else {
-            $part = $mirathInput['reste'] * 2 / 3;
-            $this->rapport .= "الاخوة لاب يرثون للذكر مثل حظ الانثيين\n";
-        }
-        $this->part[] =
-            [
-                'type' => 'الاخوة لاب',
+            $this->rapport .= "الإخوة لأب يرثون الباقي تعصيبا بالنفس\n";
+            $this->part[] = [
+                'type' => 'الإخوة لأب',
                 'part' => $part,
             ];
+        }
+
+        // ✅ Cas : frères et sœurs ensemble – للذكر مثل حظ الأنثيين
+        elseif ($mirathInput["alakhawat_ashakikat"] < 2) {
+            $totalTêtes = (2 * $nbFreres) + $nbSoeurs;
+            $partParTête = $mirathInput['reste'] / $totalTêtes;
+            $partFreres = $partParTête * 2 * $nbFreres;
+            $partSoeurs = $partParTête * $nbSoeurs;
+            $mirathInput['reste'] = 0;
+
+
+            $this->rapport .= "الإخوة لأب والأخوات لأب يرثون تعصيبا، للذكر مثل حظ الأنثيين\n";
+
+            if ($nbFreres > 0) {
+                $this->part[] = [
+                    'type' => 'الإخوة لأب',
+                    'part' => $partFreres,
+                ];
+            }
+
+            if ($nbSoeurs > 0) {
+                $this->part[] = [
+                    'type' => 'الأخوات لأب',
+                    'part' => $partSoeurs,
+                ];
+            }
+            $mirathInput['alakhawat_ashakikat_incluses'] = true;
+        }
+
+        // ✅ Cas : 2 sœurs germaines bloquent les sœurs utérines mais pas les frères
+        else {
+            $part = $mirathInput['reste'];
+            $mirathInput['reste'] = 0;
+            $this->rapport .= "الإخوة لأب يرثون الباقي تعصيبا بالنفس لوجود أخوات شقيقات حاجبات\n";
+            $this->part[] = [
+                'type' => 'الإخوة لأب',
+                'part' => $part,
+            ];
+            $mirathInput['alakhawat_ashakikat_incluses'] = true;
+        }
     }
-
-
 
     public function mirathalakhawat_li_ab(&$mirathInput)
     {
+        // Exclusions
         if (
-            $mirathInput["alakhawat_li_ab"] == 0 || $this->far3Warith > 0 || $mirathInput["alab"] ||
-            $mirathInput["alikhwa_alashika"] > 0 || $mirathInput["alakhawat_ashakikat"] > 1
-
+            $mirathInput["alakhawat_li_ab"]  == 0 ||
+            $mirathInput["alikhwa_alashika"]  > 0 ||
+            $mirathInput["alakhawat_ashakikat"]  > 1 ||
+            $mirathInput["alab"] ||
+            $this->far3Warith ||
+            (($mirathInput["alakhawat_ashakikat"] == 1) && ($mirathInput["aljad"])) ||
+            ($mirathInput["alakhawat_li_ab_incluses"] ?? false)
         ) {
             return;
         }
 
-        if (($mirathInput["alakhawat_li_ab"] == 1) &&
-            (!$mirathInput["alab"]) &&
-            ($this->far3Warith == 0) &&
-            ($mirathInput["alikhwa_alashika"] == 0) &&
-            ($mirathInput["alakhawat_ashakikat"] == 0) &&
-            ($mirathInput["alikhwa_li_ab"] == 0) &&
-            (!$mirathInput["aljad"])
-        ) {
-            $part = $this->calculNesef($mirathInput['safi_tarika']);
-            $mirathInput['reste'] -= $part;
-            $this->rapport .= "الاخت لاب ترث  1/2 فرضا\n";
-        }
-        if (($mirathInput["alakhawat_li_ab"] > 1) &&
-            (!$mirathInput["alab"]) &&
-            ($this->far3Warith == 0) &&
-            ($mirathInput["alikhwa_alashika"] == 0) &&
-            ($mirathInput["alakhawat_ashakikat"] == 0) &&
-            ($mirathInput["alikhwa_li_ab"] == 0) &&
-            (!$mirathInput["aljad"])
-        ) {
-            $part = $this->calculTholothin($mirathInput['safi_tarika']);
-            $mirathInput['reste'] -= $part;
-            $this->rapport .= "الاخوات لاب  يرثن 2/3 فرضا\n";
-        }
-        if (($mirathInput["alakhawat_li_ab"] > 0) &&
-            ($mirathInput["alakhawat_ashakikat"] == 1) &&
-            ($mirathInput["alikhwa_li_ab"] == 0) &&
-            (!$mirathInput["alab"]) &&
-            ($this->far3Warith == 0)  &&
-            (!$mirathInput["aljad"])
-        ) {
-            $part = $this->calculSodoss($mirathInput['safi_tarika']);
-            $mirathInput['reste'] -= $part;
-            $this->rapport .= "الاخوات لاب يرثن السدس1/6  تكملة للثلثين\n";
-        }
+        $nbFilles = $mirathInput["alakhawat_li_ab"];
+        $nbFreresGermains = $mirathInput["alikhwa_alashika"] ?? 0;
+        $nbSœursGermaines = $mirathInput["alakhawat_ashakikat"] ?? 0;
+        $nbFreresPaternels = $mirathInput["alikhwa_li_ab"] ?? 0;
+        $safiTarika = $mirathInput['safi_tarika'];
+        $part = 0;
 
-        if (($mirathInput["alakhawat_li_ab"] > 0) && ($mirathInput["alikhwa_li_ab"] > 0)) {
-            $part = $mirathInput['reste'] * 1 / 3;
-            $this->rapport .= "الاخوات لاب يرثن  نصف 1/2 الاخوة لاب\n";
+        // Cas 1 : une seule sœur par le père sans autres bloqueurs
+        if ($nbFilles === 1 && $nbFreresGermains == 0 && $nbSœursGermaines == 0 && $nbFreresPaternels == 0 && empty($mirathInput["aljad"])) {
+            $part = $this->calculNesef($safiTarika);
+            $mirathInput['reste'] -= $part;
+            $this->rapport .= "الأخت لأب ترث النصف 1/2 فرضًا\n";
         }
-        $this->part[] =
-            [
-                'type' => 'الاخوات لاب',
+        // Cas 2 : plusieurs sœurs par le père (sans frères ou sœurs germains, ni père, ni grand-père)
+        elseif ($nbFilles > 1 && $nbFreresGermains == 0 && $nbSœursGermaines == 0 && $nbFreresPaternels == 0) {
+            $part = $this->calculTholothin($safiTarika);
+            $mirathInput['reste'] -= $part;
+            $this->rapport .= "الأخوات لأب يرثن الثلثين 2/3 فرضًا\n";
+        }
+        // Cas 3 : sœur par le père avec une sœur germaine (complément à 2/3)
+        elseif ($nbFilles > 0 && $nbSœursGermaines == 1 && $nbFreresPaternels == 0 && !$mirathInput["alab"] && !$this->far3Warith) {
+            $part = $this->calculSodoss($safiTarika);
+            $mirathInput['reste'] -= $part;
+            $this->rapport .= "الأخوات لأب يرثن السدس 1/6 تكملة للثلثين\n";
+        } elseif ($nbFilles > 0 && $nbFreresPaternels > 0 && !$mirathInput["alab"]  &&  !$this->far3Warith &&  $mirathInput["alikhwa_alashika"] === 0 && ($mirathInput["alakhawat_ashakikat"] <= 1)) {
+            $FreresPaternelsPart = array_filter($this->part, fn($item) => $item['type'] === 'لأخوة لأب');
+            $FreresPaternelsPart = reset($FreresPaternelsPart);
+            if ($FreresPaternelsPart) {
+                $partParFilles = ($FreresPaternelsPart['part'] / (2 * $nbFreresPaternels)) * 1;
+                $part = $partParFilles * $nbFilles;
+                $mirathInput['reste'] -= $part;
+                $this->rapport .= "بالاخوات لا ب يرثن للذكر مثل حظ الأنثيين\n";
+            } else {
+                $this->rapport .= "خطأ: لم يتم تحديد نصيب أبناء الابن لحساب نصيب البنات\n";
+            }
+        }
+        // Ajouter la part uniquement si > 0
+        if ($part > 0) {
+            $this->part[] = [
+                'type' => 'الأخوات لأب',
                 'part' => $part,
             ];
-    }
+        }
 
+        // Marquer comme incluses pour éviter double traitement
+        $mirathInput["alakhawat_li_ab_incluses"] = true;
+    }
 
     public function mirathabna_alikhwa_alashika(&$mirathInput)
     {
