@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { router, useForm } from '@inertiajs/react';
 import Breadcrumbs from '@/Components/Breadcrumbs';
+import GuestLayout from "@/Layouts/GuestLayout";
+
 
 export default function CreateArticle() {
   const { data, setData, post, processing, errors } = useForm({
@@ -15,6 +17,7 @@ export default function CreateArticle() {
   };
 
   return (
+        <GuestLayout>
     <div className="max-w-3xl mx-auto p-6 bg-white rounded shadow">
       <Breadcrumbs
   items={[
@@ -23,10 +26,10 @@ export default function CreateArticle() {
     { label: 'Créer' }
   ]}
 />
-      <h1 className="text-2xl font-bold mb-6">Créer un article</h1>
+      <h1 className="text-2xl font-bold mb-6">إظافة مرجع</h1>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label htmlFor="titre" className="block font-medium">Titre</label>
+          <label htmlFor="titre" className="block font-medium">العنوان</label>
           <input
             id="titre"
             type="text"
@@ -38,7 +41,7 @@ export default function CreateArticle() {
         </div>
 
         <div>
-          <label htmlFor="contenu" className="block font-medium">Contenu</label>
+          <label htmlFor="contenu" className="block font-medium">المحتوى</label>
           <textarea
             id="contenu"
             value={data.contenu}
@@ -50,7 +53,7 @@ export default function CreateArticle() {
         </div>
 
         <div>
-          <label htmlFor="langue" className="block font-medium">Langue</label>
+          <label htmlFor="langue" className="block font-medium">اللغة</label>
           <select
             id="langue"
             value={data.langue}
@@ -68,9 +71,10 @@ export default function CreateArticle() {
           disabled={processing}
           className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
         >
-          Enregistrer
+          تسجيل
         </button>
       </form>
     </div>
+        </GuestLayout>
   );
 }

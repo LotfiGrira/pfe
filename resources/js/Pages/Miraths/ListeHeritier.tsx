@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import GuestLayout from "@/Layouts/GuestLayout";
-import { Link } from "@inertiajs/react";
+import { Link, router } from "@inertiajs/react";
 import type { MirathInput } from "./MirathInput";
+import Footer from "@/Components/Footer";
 
 export default function ListeHeritier() {
     const heirFields: {
@@ -26,35 +27,24 @@ export default function ListeHeritier() {
         { label: "الأخت الشقيقة", key: "alakhawat_ashakikat", type: "number" },
         { label: "الأخت لأب", key: "alakhawat_li_ab", type: "number" },
         { label: "الأخت لأم", key: "alakhawat_li_om", type: "number" },
-        {
-            label: "ابن الأخ الشقيق",
-            key: "abna_alikhwa_alashika",
-            type: "number",
-        },
+        { label: "ابن الأخ الشقيق", key: "abna_alikhwa_alashika", type: "number" },
         { label: "ابن الأخ لأب", key: "abna_alikhwa_li_ab", type: "number" },
         { label: "العم الشقيق", key: "ala3mam_alashika", type: "number" },
         { label: "العم لأب", key: "ala3mam_li_ab", type: "number" },
-        {
-            label: "ابن العم الشقيق",
-            key: "abna_ala3mam_alashika",
-            type: "number",
-        },
+        { label: "ابن العم الشقيق", key: "abna_ala3mam_alashika", type: "number" },
         { label: "ابن العم لأب", key: "abna_ala3mam_li_ab", type: "number" },
     ];
 
     const [mirathInput, setMirathInput] = useState<MirathInput>(() => {
         const stored = localStorage.getItem("mirathInput");
-        const parsed = (
-            stored ? JSON.parse(stored) : {}
-        ) as Partial<MirathInput>;
+        const parsed = (stored ? JSON.parse(stored) : {}) as Partial<MirathInput>;
 
         return {
             ...parsed,
             ...(Object.fromEntries(
                 heirFields.map(({ key, type }) => [
                     key,
-                    parsed[key as keyof MirathInput] ??
-                        (type === "boolean" ? false : 0),
+                    parsed[key as keyof MirathInput] ?? (type === "boolean" ? false : 0),
                 ])
             ) as unknown as MirathInput),
         };
@@ -62,6 +52,7 @@ export default function ListeHeritier() {
 
     const handleNext = () => {
         localStorage.setItem("mirathInput", JSON.stringify(mirathInput));
+        router.visit("/cas-heritier");
     };
 
     return (
@@ -80,16 +71,8 @@ export default function ListeHeritier() {
                 <div className="bg-gray-200 p-4 rounded-lg shadow-md grid grid-cols-2 gap-4">
                     {heirFields
                         .filter(({ key }) => {
-                            if (
-                                mirathInput["gender"] === "ذكر" &&
-                                key === "zawj"
-                            )
-                                return false;
-                            if (
-                                mirathInput["gender"] === "أنثى" &&
-                                key === "zawja"
-                            )
-                                return false;
+                            if (mirathInput["gender"] === "ذكر" && key === "zawj") return false;
+                            if (mirathInput["gender"] === "أنثى" && key === "zawja") return false;
                             return true;
                         })
                         .map(({ label, key, type }, index) => (
@@ -97,9 +80,7 @@ export default function ListeHeritier() {
                                 key={index}
                                 className="flex justify-between items-center bg-yellow-500 p-3 rounded-md"
                             >
-                                <label className="text-white font-bold text-lg">
-                                    {label}
-                                </label>
+                                <label className="text-white font-bold text-lg">{label}</label>
                                 {type === "boolean" ? (
                                     <select
                                         value={mirathInput[key] ? "نعم" : "لا"}
@@ -118,16 +99,13 @@ export default function ListeHeritier() {
                                     <input
                                         className="block w-full rounded-md bg-white px-3.5 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600"
                                         type="number"
-                                        onChange={(e) => {
-                                            console.log({
-                                                v: parseInt(e.target.value),
-                                                key
-                                            });
+                                        value={mirathInput[key] || ""}
+                                        onChange={(e) =>
                                             setMirathInput((prev) => ({
                                                 ...prev,
-                                                [key]: parseInt(e.target.value),
-                                            }));
-                                        }}
+                                                [key]: parseInt(e.target.value) || 0,
+                                            }))
+                                        }
                                     />
                                 )}
                             </div>
@@ -135,12 +113,7 @@ export default function ListeHeritier() {
                 </div>
 
                 <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4">
-                    <Link
-                        href="/cas-heritier"
-                        className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg shadow-md transition-colors duration-200 text-center"
-                    >
-                        الحالات الخاصة
-                    </Link>
+                    
 
                     <button
                         onClick={handleNext}
@@ -149,6 +122,8 @@ export default function ListeHeritier() {
                         التالي
                     </button>
                 </div>
+                {/* Footer */}
+                                          <Footer />
             </div>
         </GuestLayout>
     );

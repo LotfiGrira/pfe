@@ -1,109 +1,139 @@
 import { Fragment, useState } from "react";
 import { usePage, Link } from "@inertiajs/react";
-import ListItem from "./ListItem";
 
 type MenuItem = {
-    text: string;
-    link: string;
+  text: string;
+  link: string;
 };
 
 type NavbarProps = {
-    menu: MenuItem[];
+  menu: MenuItem[];
 };
 
 const Navbar = ({ menu }: NavbarProps) => {
-    const user = usePage().props.auth?.user;
-    const [open, setOpen] = useState(false);
+  const user = usePage().props.auth?.user;
+  const [open, setOpen] = useState(false);
 
-    return (
-        <header className="fixed top-0 z-50 w-full bg-white shadow-md dark:bg-dark">
-            <div className="container mx-auto px-4">
-                <div className="flex items-center justify-between h-16">
-                    {/* Logo */}
-                    <div className="w-auto">
-                        <Link href="/" className="text-xl font-bold text-primary">
-                            الموارث
-                        </Link>
-                    </div>
+  return (
+    <header className="bg-white shadow-md fixed top-0 w-full z-50">
+      <div className="container mx-auto px-4 py-3 flex justify-between items-center">
+        {/* Logo */}
+        <Link
+          href="/"
+          className="text-2xl font-extrabold text-yellow-800 hover:text-yellow-600 transition-colors"
+        >
+          المواريث
+        </Link>
 
-                    {/* Toggle button (mobile) */}
-                    <div className="lg:hidden">
-                        <button
-                            onClick={() => setOpen(!open)}
-                            className="flex flex-col justify-center items-center w-8 h-8 border border-gray-300 rounded"
-                        >
-                            <span className="block w-5 h-0.5 bg-gray-800 mb-1"></span>
-                            <span className="block w-5 h-0.5 bg-gray-800 mb-1"></span>
-                            <span className="block w-5 h-0.5 bg-gray-800"></span>
-                        </button>
-                    </div>
+        {/* Hamburger mobile */}
+        <button
+          onClick={() => setOpen(!open)}
+          className="lg:hidden text-yellow-800 focus:outline-none focus:ring-2 focus:ring-yellow-500 rounded"
+          aria-label="Toggle menu"
+          aria-expanded={open}
+        >
+          <svg
+            className="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            {open ? (
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            ) : (
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M4 6h16M4 12h16M4 18h16"
+              />
+            )}
+          </svg>
+        </button>
 
-                    {/* Navigation */}
-                    <nav
-                        className={`${
-                            open ? "block" : "hidden"
-                        } absolute top-full left-0 w-full bg-white shadow-md px-6 py-4 lg:relative lg:top-0 lg:flex lg:items-center lg:justify-between lg:bg-transparent lg:shadow-none lg:p-0`}
-                    >
-                        <ul className="flex flex-col gap-4 lg:flex-row lg:gap-8">
-                            {menu.map((item) => (
-                                <ListItem key={item.text} NavLink={item.link}>
-                                    {item.text}
-                                </ListItem>
-                            ))}
-                        </ul>
+        {/* Menu */}
+        <nav
+          className={`${
+            open ? "block" : "hidden"
+          } lg:flex lg:items-center w-full lg:w-auto mt-4 lg:mt-0`}
+        >
+          <ul className="flex flex-col lg:flex-row lg:gap-8 gap-4 text-lg text-yellow-900">
+            {menu.map((item) => (
+              <li key={item.text}>
+                <Link
+                  href={item.link}
+                  className="hover:text-yellow-600 transition-colors block px-2 py-1 rounded"
+                >
+                  {item.text}
+                </Link>
+              </li>
+            ))}
+          </ul>
 
-                        {/* Right: User actions */}
-                        <div className="mt-4 lg:mt-0 lg:ml-auto flex items-center gap-4">
-                            {user ? (
-                                <Fragment>
-                                    <span className="text-sm text-gray-700 dark:text-white">
-                                        👤 {user.name}
-                                    </span>
-                                    <Link
-                                        href="/dashboard"
-                                        className="text-sm text-blue-600 hover:underline"
-                                    >
-                                        Dashboard
-                                    </Link>
-                                    <Link
-                                        href={route("profile.edit")}
-                                        className="text-sm text-blue-600 hover:underline"
-                                    >
-                                        Profile
-                                    </Link>
-                                    <Link
-                                        href={route("logout")}
-                                        method="post"
-                                        as="button"
-                                        className="text-sm text-red-600 hover:underline"
-                                    >
-                                        Log Out
-                                    </Link>
-                                </Fragment>
-                            ) : (
-                                <Fragment>
-                                    <Link
-                                        href="/register"
-                                        className="text-sm text-gray-700 hover:text-blue-600"
-                                    >
-                                        Sign Up
-                                    </Link>
-                                    <Link
-                                        href="/login"
-                                        className="text-sm text-gray-700 hover:text-blue-600"
-                                    >
-                                        Sign In
-                                    </Link>
-                                </Fragment>
-                            )}
-                        </div>
-                    </nav>
-                </div>
-            </div>
-        </header>
-    );
+          {/* User actions */}
+          <div className="mt-6 lg:mt-0 lg:ml-10 flex flex-col lg:flex-row items-center gap-4 text-sm">
+            {user ? (
+              <Fragment>
+                <span className="text-gray-700 flex items-center gap-1">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    className="h-5 w-5 text-yellow-700"
+    fill="currentColor"
+    viewBox="0 0 24 24"
+  >
+    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4z" />
+    <path fillRule="evenodd" clipRule="evenodd" d="M4 20c0-2.21 3.58-4 8-4s8 1.79 8 4v1H4v-1z" />
+  </svg>
+  {user.name}
+</span>
+
+                <Link
+                  href="/dashboard"
+                  className="px-3 py-1 bg-yellow-100 text-yellow-800 rounded hover:bg-yellow-200 transition"
+                >
+                  لوحة التحكم
+                </Link>
+                <Link
+                  href={route("profile.edit")}
+                  className="px-3 py-1 bg-yellow-100 text-yellow-800 rounded hover:bg-yellow-200 transition"
+                >
+                  الملف الشخصي
+                </Link>
+                <Link
+                  method="post"
+                  href={route("logout")}
+                  as="button"
+                  className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 transition"
+                >
+                  تسجيل الخروج
+                </Link>
+              </Fragment>
+            ) : (
+              <Fragment>
+                <Link
+                  href="/register"
+                  className="px-3 py-1 text-yellow-700 border border-yellow-700 rounded hover:bg-yellow-700 hover:text-white transition"
+                >
+                  تسجيل
+                </Link>
+                <Link
+                  href="/login"
+                  className="px-3 py-1 bg-yellow-700 text-white rounded hover:bg-yellow-800 transition"
+                >
+                  تسجيل الدخول
+                </Link>
+              </Fragment>
+            )}
+          </div>
+        </nav>
+      </div>
+    </header>
+  );
 };
 
 export default Navbar;
-
-  

@@ -4,6 +4,7 @@ import { Head } from '@inertiajs/react';
 import DeleteUserForm from './Partials/DeleteUserForm';
 import UpdatePasswordForm from './Partials/UpdatePasswordForm';
 import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm';
+import GuestLayout from '@/Layouts/GuestLayout';
 
 export default function Edit({
     mustVerifyEmail,
@@ -18,6 +19,7 @@ export default function Edit({
             }
         >
             <Head title="Profile" />
+                    <GuestLayout>
 
             <div className="py-12">
                 <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
@@ -38,6 +40,8 @@ export default function Edit({
                     </div>
                 </div>
             </div>
+                                </GuestLayout>
+            
         </AuthenticatedLayout>
     );
 }

@@ -1,17 +1,36 @@
 // resources/js/Components/Footer.tsx
+import React, { useEffect, useState } from "react";
 
 export default function Footer() {
-    return (
-      <footer className="bg-gray-800 text-white py-6 mt-12">
-        <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-sm">&copy; {new Date().getFullYear()} الموارث. جميع الحقوق محفوظة.</p>
-          <div className="flex space-x-4 mt-4 md:mt-0">
-            <a href="#" className="hover:underline">من نحن</a>
-            <a href="#" className="hover:underline">المساعدة</a>
-            <a href="#" className="hover:underline">تواصل معنا</a>
-          </div>
-        </div>
-      </footer>
-    );
-  }
-  
+  const [legalText, setLegalText] = useState<string>("");
+
+  useEffect(() => {
+    // Appel API fictif : remplacer l'URL par une vraie si disponible
+    fetch("/api/legal-info")
+      .then((res) => res.json())
+      .then((data) => {
+        setLegalText(data.text || "© 2025 موقع المواريث. جميع الحقوق محفوظة.");
+      })
+      .catch(() => {
+        setLegalText("© 2025 موقع المواريث. جميع الحقوق محفوظة.");
+      });
+  }, []);
+
+  return (
+    <footer className="mt-10 border-t border-[#a67c52] pt-6 text-center text-xs text-gray-600 select-none">
+      <p>{legalText}</p>
+      <p>
+        للمزيد من المعلومات، يمكنك زيارة{" "}
+        <a
+          href="https://wrcati.cawtar.org/preview.php?type=law&ID=10"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-700 underline"
+        >
+          مجلة الأحوال الشخصية التونسية
+        </a>
+        .
+      </p>
+    </footer>
+  );
+}

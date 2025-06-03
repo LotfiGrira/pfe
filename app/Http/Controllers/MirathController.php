@@ -22,27 +22,27 @@ class MirathController extends Controller
     }
 
     public function calculateMirath(Request $request)
-{
-    $data = $request->all();
-    $result = $this->mirathService->calculMirath($data["mirathInput"]);
+    {
+        $data = $request->all();
+        $result = $this->mirathService->calculMirath($data["mirathInput"]);
 
-    return Inertia::render('Miraths/CasHeritierResult', [
-        'result' => $result,
-    ]);
-}
-public function calcul(Request $request)
-{
-    $service = new MirathService($request->all());
-    $result = $service->calculMirath($request->all());
+        return Inertia::render('Miraths/CasHeritierResult', [
+            'result' => $result,
+        ]);
+    }
+    public function calcul(Request $request)
+    {
+        $service = new MirathService($request->all());
+        $result = $service->calculMirath($request->all());
 
-    return response()->json($result);
-}
-
-
+        return response()->json($result);
+    }
 
 
 
-    
+
+
+
     public function showResults()
     {
         return Inertia::render('ResultsPage');

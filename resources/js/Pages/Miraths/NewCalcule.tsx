@@ -2,13 +2,15 @@ import { useState } from "react";
 import { router } from "@inertiajs/react";
 import GuestLayout from "@/Layouts/GuestLayout";
 import type { MirathInput } from "@/types/MirathInput";
+import Footer from "@/Components/Footer";
 
 export default function NewCalcule() {
     const [formData, setFormData] = useState<MirathInput>({
-        gender: (localStorage.getItem("deceasedGender") as "ذكر" | "أنثى") || "ذكر",
+        gender:
+            (localStorage.getItem("deceasedGender") as "ذكر" | "أنثى") || "ذكر",
         tarika: "",
         doyon: "",
-        wasiya: ""
+        wasiya: "",
     });
 
     const handleGenderChange = (value: "ذكر" | "أنثى") => {
@@ -32,7 +34,11 @@ export default function NewCalcule() {
         const maxWasiya = tarika / 3;
 
         if (wasiya > maxWasiya) {
-            alert(`قيمة الوصية لا يجب أن تتجاوز ثلث التركة (${maxWasiya.toFixed(2)}).`);
+            alert(
+                `قيمة الوصية لا يجب أن تتجاوز ثلث التركة (${maxWasiya.toFixed(
+                    2
+                )}).`
+            );
             return;
         }
 
@@ -47,15 +53,27 @@ export default function NewCalcule() {
         <GuestLayout>
             <div className="p-6 bg-yellow-100 shadow-md rounded-lg max-w-3xl mx-auto">
                 <h1 className="text-2xl font-bold text-center mb-4">
-                    حاسبة تقسيم الميراث و حساب المواريث
+                حاسبة تقسيم الميراث   
                 </h1>
                 <p className="text-gray-700 text-center mb-6">
-                    هذه الحاسبة هى الإبتكار الوحيد فى العالم لحل كافة أشكال قضايا الميراث المعقدة، وبمختلف المذاهب والقوانين، وبدقة مائة بالمائة، ومجاناً.
+                    هذه الحاسبة تعطيك نتيجةحساب بدقة
+                    مائة بالمائة، ومجاناً، قم باختيار أقارب المتوفى من جدول
+                    الأقارب  مثل الزوجة والبنات و البنين
+                    وسيتم حساب المواريث إلكترونيا و قسمة التركة، موقع المواريث
+                    هو برنامج تقسيم الميراث وفق القانون التونسي المستوحى من مجلة الأحوال الشخصية  و يمكنك  تحميل  نتيجة تقسيم  المبراث و هو تطوير برمجى
+                    لفكرة جدول تقسيم الميراث و بمثابة حاسبة خاصة لتوزيع و تقسيم
+                    .الورث وعرض خطوات الحساب بالتفصيل، وهي أسهل طريقة للتقسيم
+                     ( عن الحاسبة | المراجع | مبادىء) تنويه: ليس ضرورياً
+                    الإجابة عن كل الأسئلة ، وتحديدك لجهة القرابة يكون منسوباً
+                    للمتوفى مثل [الزوجة] هى زوجة المتوفى و[أب] هو أب المتوفى و
+                    [أخ] هو أخ للمتوفى وهكذا.{" "}
                 </p>
 
                 {/* نوع المورث */}
                 <div className="mb-4">
-                    <label className="block text-gray-700 font-bold mb-2">نوع المورث ؟</label>
+                    <label className="block text-gray-700 font-bold mb-2">
+                        نوع المورث ؟
+                    </label>
                     <div className="flex space-x-4">
                         {["ذكر", "أنثى"].map((g) => (
                             <label key={g}>
@@ -63,7 +81,9 @@ export default function NewCalcule() {
                                     type="radio"
                                     value={g}
                                     checked={formData.gender === g}
-                                    onChange={() => handleGenderChange(g as "ذكر" | "أنثى")}
+                                    onChange={() =>
+                                        handleGenderChange(g as "ذكر" | "أنثى")
+                                    }
                                     className="mr-2"
                                 />
                                 {g}
@@ -74,7 +94,9 @@ export default function NewCalcule() {
 
                 {/* مقدار التركة */}
                 <div className="mb-4">
-                    <label className="block text-gray-700 font-bold mb-2">مقدار التركة ؟</label>
+                    <label className="block text-gray-700 font-bold mb-2">
+                        مقدار التركة ؟
+                    </label>
                     <input
                         type="number"
                         value={formData.tarika}
@@ -86,7 +108,9 @@ export default function NewCalcule() {
 
                 {/* الديون */}
                 <div className="mb-4">
-                    <label className="block text-gray-700 font-bold mb-2">الديون ؟</label>
+                    <label className="block text-gray-700 font-bold mb-2">
+                        الديون ؟
+                    </label>
                     <input
                         type="number"
                         value={formData.doyon}
@@ -98,7 +122,9 @@ export default function NewCalcule() {
 
                 {/* الوصية */}
                 <div className="mb-4">
-                    <label className="block text-gray-700 font-bold mb-2">الوصية ؟</label>
+                    <label className="block text-gray-700 font-bold mb-2">
+                        الوصية ؟
+                    </label>
                     <input
                         type="number"
                         value={formData.wasiya}
@@ -115,6 +141,8 @@ export default function NewCalcule() {
                 >
                     التالي
                 </button>
+                {/* Footer */}
+                <Footer />
             </div>
         </GuestLayout>
     );

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import GuestLayout from "@/Layouts/GuestLayout";
 import type { MirathInput } from "./MirathInput";
 import { router } from "@inertiajs/react";
+import Footer from "@/Components/Footer";
 
 export default function GatelHeritier() {
     const [mirathInput, setMirathInput] = useState<MirathInput | null>(null);
@@ -156,6 +157,8 @@ export default function GatelHeritier() {
                                 التالي
                             </button>
                         </div>
+
+                        
                     </form>
                 )}
             </div>

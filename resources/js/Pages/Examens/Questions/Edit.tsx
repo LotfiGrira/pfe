@@ -78,11 +78,11 @@ const Edit: React.FC<Props> = ({ examenId, question }) => {
             ]}
           />
           
-        <h1 className="text-2xl font-bold mb-4">✏️ Modifier la Question</h1>
+        <h1 className="text-2xl font-bold mb-4">✏️ تغيير السؤال</h1>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label className="block font-semibold mb-1">Titre de la question</label>
+            <label className="block font-semibold mb-1">السؤال</label>
             <input
               type="text"
               value={data.titre}
@@ -93,7 +93,7 @@ const Edit: React.FC<Props> = ({ examenId, question }) => {
           </div>
 
           <div>
-            <label className="block font-semibold mb-2">Propositions</label>
+            <label className="block font-semibold mb-2">الاقتراحات</label>
             {data.propositions.map((prop, index) => (
               <div key={prop.id} className="flex items-center space-x-4 mb-2">
                 <input
@@ -108,14 +108,14 @@ const Edit: React.FC<Props> = ({ examenId, question }) => {
                     checked={prop.is_true}
                     onChange={(e) => handleChangeProposition(index, 'is_true', e.target.checked)}
                   />
-                  <span>Bonne réponse</span>
+                  <span>الاجابة الصحيحة</span>
                 </label>
                 <button
                   type="button"
                   onClick={() => handleRemoveProposition(index)}
                   className="text-red-500 text-sm hover:underline"
                 >
-                  Supprimer
+                  فسخ
                 </button>
               </div>
             ))}
@@ -127,7 +127,7 @@ const Edit: React.FC<Props> = ({ examenId, question }) => {
               onClick={handleAddProposition}
               className="mt-2 text-sm text-green-600 hover:underline"
             >
-              ➕ Ajouter une proposition
+              ➕ إظافة اقتراح
             </button>
           </div>
 
@@ -137,14 +137,14 @@ const Edit: React.FC<Props> = ({ examenId, question }) => {
               disabled={processing}
               className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
             >
-              Enregistrer les modifications
+تسجيل
             </button>
 
             <a
               href={route('examens.questions.index', { examen: examenId })}
               className="text-blue-600 hover:underline text-sm"
             >
-              ← Retour aux questions
+              ← الرجوع الى قائمة الاسئلة
             </a>
           </div>
         </form>

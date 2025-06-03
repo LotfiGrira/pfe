@@ -34,6 +34,9 @@ class QuestionController extends Controller
     ]);
 }
 
+
+
+
     // Créer un nouvel question
     public function create($examen)
 {
@@ -183,4 +186,3 @@ public function liste($examenId)
     ]);
 }
 }
-

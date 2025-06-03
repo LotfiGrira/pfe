@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { router } from "@inertiajs/react";
 import GuestLayout from "@/Layouts/GuestLayout";
 import type { MirathInput } from "./MirathInput";
+import Footer from "@/Components/Footer";
 
 export default function CasHeritier() {
     const [selectedCases, setSelectedCases] = useState({
@@ -51,6 +52,20 @@ export default function CasHeritier() {
                 haskafer: false,
                 noSpecialCases: true,
             };
+
+            const oldInput = localStorage.getItem("mirathInput");
+            const parsedInput = oldInput ? JSON.parse(oldInput) : {};
+            const mergedInput: MirathInput = {
+                ...parsedInput,
+                ...updatedCases,
+            };
+            localStorage.setItem("mirathInput", JSON.stringify(mergedInput));
+
+            router.post('/cas-heritier', { mirathInput: mergedInput }, {
+                onError: (err: any) => alert(err),
+            });
+
+            return; // Stop execution to avoid setting state after redirect
         }
 
         // Si on coche un autre champ, on décoche "noSpecialCases"
@@ -71,13 +86,13 @@ export default function CasHeritier() {
         localStorage.setItem("mirathInput", JSON.stringify(mergedInput));
     };
 
-    const handleCalculateInheritance = (e: Event) => {
+    const handleCalculateInheritance = (e: any) => {
         if (selectedCases.noSpecialCases) {
             e.preventDefault();
             const mirathInput = JSON.parse(localStorage.getItem("mirathInput") || "{}");
             router.post('/cas-heritier', { mirathInput }, {
                 onError: (err: any) => alert(err),
-              });
+            });
         } else if (selectedCases.heirDiedBeforeInheritance) {
             router.visit("/Monasa5atHeritier");
         } else if (selectedCases.hasPregnancy) {
@@ -149,6 +164,8 @@ export default function CasHeritier() {
                         حساب الميراث
                     </button>
                 </div>
+                {/* Footer */}
+                                      <Footer />
             </div>
         </GuestLayout>
     );

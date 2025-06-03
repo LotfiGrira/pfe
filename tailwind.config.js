@@ -14,6 +14,10 @@ export default {
         extend: {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                amiri: ['Amiri', 'serif'],
+            },
+            backgroundImage: {
+                'arabesque': "url('/images/pattern.jpg')", // motif de fond arabe
             },
         },
     },

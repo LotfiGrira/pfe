@@ -49,6 +49,7 @@ export default function UpdatePasswordForm({
     };
 
     return (
+        
         <section className={className}>
             <header>
                 <h2 className="text-lg font-medium text-gray-900">
@@ -142,5 +143,6 @@ export default function UpdatePasswordForm({
                 </div>
             </form>
         </section>
+        
     );
 }

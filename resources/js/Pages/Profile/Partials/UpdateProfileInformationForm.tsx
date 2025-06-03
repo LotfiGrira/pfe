@@ -30,6 +30,7 @@ export default function UpdateProfileInformation({
     };
 
     return (
+        
         <section className={className}>
             <header>
                 <h2 className="text-lg font-medium text-gray-900">
@@ -114,5 +115,6 @@ export default function UpdateProfileInformation({
                 </div>
             </form>
         </section>
+        
     );
 }
