@@ -249,7 +249,7 @@ export default function CasHeritierResult({
 
                              const montantAffiche =
     count > 1
-        ? `${montant.toFixed(3)} دينار = (${count} x ${individualMontant.toFixed(3)} دينار)`
+        ? `${montant.toFixed(3)} دينار = \n ( ${individualMontant.toFixed(3)} * ${count})`
         : `${individualMontant.toFixed(3)} دينار`;
 
 
@@ -269,7 +269,7 @@ export default function CasHeritierResult({
                                             <br />
                                             {denominator}
                                         </td>
-                                        <td className="border px-4 py-2">
+                                        <td className="border px-4 py-2" style={{ direction: "rtl" }}>
                                             {montantAffiche}
                                         </td>
                                     </tr>
