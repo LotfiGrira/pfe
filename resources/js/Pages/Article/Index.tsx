@@ -69,7 +69,7 @@ const ArticleIndex: React.FC<Props> = ({ articles, isAdmin }) => {
     onClick={() => handleDelete(article.id)}
     className="inline-block px-4 py-1 bg-red-600 text-white font-semibold rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 transition"
   >
-    فسخ
+    حذف
   </button>
 </div>
 

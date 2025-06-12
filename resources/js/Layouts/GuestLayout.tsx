@@ -12,8 +12,7 @@ export default function Guest({ children }: PropsWithChildren) {
         { text: "حساب المواريث", link: "/calculator" },
         { text: "مراجع", link: "/articles/liste" },
         {
-            text: "اختبارات",
-            link: user ? "/examens/liste" : "/login",
+            text: "اختبارات",link: user ? "/examens/liste" : "/login",
         },
     ];
 

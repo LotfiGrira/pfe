@@ -11,6 +11,8 @@ export default function NewCalcule() {
         tarika: "",
         doyon: "",
         wasiya: "",
+        gatel: {},
+        maf9oud: {},
     });
 
     const handleGenderChange = (value: "ذكر" | "أنثى") => {
@@ -68,7 +70,11 @@ export default function NewCalcule() {
                     للمتوفى مثل [الزوجة] هى زوجة المتوفى و[أب] هو أب المتوفى و
                     [أخ] هو أخ للمتوفى وهكذا.{" "}
                 </p>
-
+<div className="border-red-400 text-red-800 px-4 py-3 rounded mb-6 text-right">
+    ⚠️ الرجاء إدخال الأشخاص الأحياء فقط. 
+    <br />
+    كل وريث لم يقع إدخاله **لن يُحسب** في تقسيم الميراث.
+</div>
                 {/* نوع المورث */}
                 <div className="mb-4">
                     <label className="block text-gray-700 font-bold mb-2">

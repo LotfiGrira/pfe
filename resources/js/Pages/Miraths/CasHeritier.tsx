@@ -1,113 +1,82 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { router } from "@inertiajs/react";
 import GuestLayout from "@/Layouts/GuestLayout";
 import type { MirathInput } from "./MirathInput";
 import Footer from "@/Components/Footer";
 
 export default function CasHeritier() {
-    const [selectedCases, setSelectedCases] = useState({
-        heirDiedBeforeInheritance: false,
-        hasPregnancy: false,
-        haswasiya: false,
-        hasmafgod: false,
-        hasgatel: false,
-        haskafer: false,
-        noSpecialCases: false,
-    });
+    const [selectedCase, setSelectedCase] = useState<string>("none");
 
     useEffect(() => {
         const mirathInputRaw = localStorage.getItem("mirathInput");
-        let mirathInput = {} as Partial<MirathInput>;
         if (mirathInputRaw) {
-            mirathInput = JSON.parse(mirathInputRaw) as Partial<MirathInput>;
+            const mirathInput = JSON.parse(mirathInputRaw) as Partial<MirathInput>;
 
-            setSelectedCases({
-                heirDiedBeforeInheritance: mirathInput.heirDiedBeforeInheritance || false,
-                hasPregnancy: mirathInput.hasPregnancy || false,
-                haswasiya: mirathInput.haswasiya || false,
-                hasmafgod: mirathInput.hasmafgod || false,
-                hasgatel: mirathInput.hasgatel || false,
-                haskafer: mirathInput.haskafer || false,
-                noSpecialCases: mirathInput.noSpecialCases || false,
-            });
+            const caseKey =
+                mirathInput.heirDiedBeforeInheritance ? "heirDiedBeforeInheritance" :
+                mirathInput.hasPregnancy ? "hasPregnancy" :
+                mirathInput.haswasiya ? "haswasiya" :
+                mirathInput.hasmafgod ? "hasmafgod" :
+                mirathInput.hasgatel ? "hasgatel" :
+                mirathInput.haskafer ? "haskafer" :
+                "none";
+
+            setSelectedCase(caseKey);
         }
     }, []);
 
-    const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>, key: keyof typeof selectedCases) => {
-        const isChecked = e.target.checked;
-
-        let updatedCases = {
-            ...selectedCases,
-            [key]: isChecked,
+    const saveToLocalStorage = (key: string): MirathInput => {
+        const flags = {
+            heirDiedBeforeInheritance: false,
+            hasPregnancy: false,
+            haswasiya: false,
+            hasmafgod: false,
+            hasgatel: false,
+            haskafer: false,
+            noSpecialCases: false,
         };
 
-        // Si "noSpecialCases" est coché, décocher les autres
-        if (key === "noSpecialCases" && isChecked) {
-            updatedCases = {
-                heirDiedBeforeInheritance: false,
-                hasPregnancy: false,
-                haswasiya: false,
-                hasmafgod: false,
-                hasgatel: false,
-                haskafer: false,
-                noSpecialCases: true,
-            };
-
-            const oldInput = localStorage.getItem("mirathInput");
-            const parsedInput = oldInput ? JSON.parse(oldInput) : {};
-            const mergedInput: MirathInput = {
-                ...parsedInput,
-                ...updatedCases,
-            };
-            localStorage.setItem("mirathInput", JSON.stringify(mergedInput));
-
-            router.post('/cas-heritier', { mirathInput: mergedInput }, {
-                onError: (err: any) => alert(err),
-            });
-
-            return; // Stop execution to avoid setting state after redirect
+        if (key !== "none") {
+            flags[key as keyof typeof flags] = true;
+        } else {
+            flags.noSpecialCases = true;
         }
 
-        // Si on coche un autre champ, on décoche "noSpecialCases"
-        if (key !== "noSpecialCases" && isChecked) {
-            updatedCases.noSpecialCases = false;
-        }
-
-        setSelectedCases(updatedCases);
-
-        // Fusionner avec mirathInput existant et sauvegarder
-        const oldInput = localStorage.getItem("mirathInput");
-        const parsedInput = oldInput ? JSON.parse(oldInput) : {};
-        const mergedInput: MirathInput = {
-            ...parsedInput,
-            ...updatedCases,
+        const mirathInputRaw = localStorage.getItem("mirathInput");
+        const mirathInputOld = mirathInputRaw ? JSON.parse(mirathInputRaw) : {};
+        const mirathInput = {
+            ...mirathInputOld,
+            ...flags,
         };
 
-        localStorage.setItem("mirathInput", JSON.stringify(mergedInput));
+        localStorage.setItem("mirathInput", JSON.stringify(mirathInput));
+        return mirathInput;
     };
 
-    const handleCalculateInheritance = (e: any) => {
-        if (selectedCases.noSpecialCases) {
-            e.preventDefault();
-            const mirathInput = JSON.parse(localStorage.getItem("mirathInput") || "{}");
-            router.post('/cas-heritier', { mirathInput }, {
-                onError: (err: any) => alert(err),
-            });
-        } else if (selectedCases.heirDiedBeforeInheritance) {
-            router.visit("/Monasa5atHeritier");
-        } else if (selectedCases.hasPregnancy) {
-            router.visit("/HamelHeritier");
-        } else if (selectedCases.haswasiya) {
-            router.visit("/WasiyaHeritier");
-        } else if (selectedCases.hasmafgod) {
-            router.visit("/MafgodHeritier");
-        } else if (selectedCases.hasgatel) {
-            router.visit("/GatelHeritier");
-        } else if (selectedCases.haskafer) {
-            router.visit("/KaferHeritier");
-        } else {
-            alert("يرجى اختيار حالة خاصة.");
+    const handleChange = (value: string) => {
+        setSelectedCase(value);
+        const mirathInput = saveToLocalStorage(value);
+
+        if (value === "none") return;
+
+        const routeMap: Record<string, string> = {
+            heirDiedBeforeInheritance: "/Monasa5atHeritier",
+            hasPregnancy: "/HamelHeritier",
+            haswasiya: "/WasiyaHeritier",
+            hasmafgod: "/MafgodHeritier",
+            hasgatel: "/GatelHeritier",
+            haskafer: "/KaferHeritier",
+        };
+
+        if (routeMap[value]) {
+            router.visit(routeMap[value]);
         }
+    };
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        const mirathInput = saveToLocalStorage("none");
+        router.post("/cas-heritier", { mirathInput });
     };
 
     return (
@@ -117,76 +86,52 @@ export default function CasHeritier() {
                     <h1 className="text-2xl font-bold text-gray-900 mb-4 text-center">
                         الحالات الخاصة
                     </h1>
-                    <div className="space-y-4">
-                        <Checkbox
-                            label="لا توجد حالات خاصة"
-                            checked={selectedCases.noSpecialCases}
-                            onChange={(e) => handleCheckboxChange(e, "noSpecialCases")}
-                        />
-                        <Checkbox
-                            label="هل توفي أحد الورثة قبل تقسيم التركة (المناسخات)؟"
-                            checked={selectedCases.heirDiedBeforeInheritance}
-                            onChange={(e) => handleCheckboxChange(e, "heirDiedBeforeInheritance")}
-                        />
-                        <Checkbox
-                            label="هل يوجد حمل؟"
-                            checked={selectedCases.hasPregnancy}
-                            onChange={(e) => handleCheckboxChange(e, "hasPregnancy")}
-                        />
-                        <Checkbox
-                            label="هل يوجد أولاد لابن متوفى أو لبنت متوفية (وصية واجبة)؟"
-                            checked={selectedCases.haswasiya}
-                            onChange={(e) => handleCheckboxChange(e, "haswasiya")}
-                        />
-                        <Checkbox
-                            label="هل يوجد مفقود فيمن اخترتهم؟"
-                            checked={selectedCases.hasmafgod}
-                            onChange={(e) => handleCheckboxChange(e, "hasmafgod")}
-                        />
-                        <Checkbox
-                            label="هل يوجد من هو قاتل؟"
-                            checked={selectedCases.hasgatel}
-                            onChange={(e) => handleCheckboxChange(e, "hasgatel")}
-                        />
-                        <Checkbox
-                            label="هل يوجد من هو على خلاف الدين؟"
-                            checked={selectedCases.haskafer}
-                            onChange={(e) => handleCheckboxChange(e, "haskafer")}
-                        />
-                    </div>
+                    <fieldset className="space-y-4 border border-gray-200 p-4 rounded-md">
+                        <legend className="text-lg font-semibold text-gray-700 mb-2">
+                            اختر حالة واحدة فقط
+                        </legend>
+                        {radioOption("none", "لا توجد حالات خاصة", selectedCase, handleChange)}
+                        {radioOption("heirDiedBeforeInheritance", "هل توفي أحد الورثة قبل تقسيم التركة (المناسخات)؟", selectedCase, handleChange)}
+                        {radioOption("hasPregnancy", "هل يوجد حمل؟", selectedCase, handleChange)}
+                        {radioOption("haswasiya", "هل يوجد أولاد لابن متوفى أو لبنت متوفية (وصية واجبة)؟", selectedCase, handleChange)}
+                        {radioOption("hasmafgod", "هل يوجد مفقود فيمن اخترتهم؟", selectedCase, handleChange)}
+                        {radioOption("hasgatel", "هل يوجد من هو قاتل؟", selectedCase, handleChange)}
+                        {radioOption("haskafer", "هل يوجد من هو على خلاف الدين؟", selectedCase, handleChange)}
+                    </fieldset>
                 </div>
 
-                <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4">
-                    <button
-                        onClick={handleCalculateInheritance}
-                        className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg shadow-md transition-colors duration-200"
-                    >
-                        حساب الميراث
-                    </button>
-                </div>
-                {/* Footer */}
-                                      <Footer />
+                {selectedCase === "none" && (
+                    <div className="mt-8 flex justify-center">
+                        <button
+                            onClick={handleSubmit}
+                            className="px-6 py-3 text-white bg-green-600 hover:bg-green-700 font-medium rounded-lg shadow-md transition-colors duration-200"
+                        >
+                            حساب الميراث
+                        </button>
+                    </div>
+                )}
+
+                <Footer />
             </div>
         </GuestLayout>
     );
 }
 
-function Checkbox({
-    label,
-    checked,
-    onChange,
-}: {
-    label: string;
-    checked: boolean;
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}) {
+function radioOption(
+    value: string,
+    label: string,
+    selectedValue: string,
+    onChange: (value: string) => void
+) {
     return (
         <div className="flex items-center space-x-3">
             <input
-                type="checkbox"
-                className="w-5 h-5 text-blue-600 border-gray-300 rounded"
-                checked={checked}
-                onChange={onChange}
+                type="radio"
+                name="specialCase"
+                value={value}
+                checked={selectedValue === value}
+                onChange={() => onChange(value)}
+                className="w-5 h-5 text-blue-600 border-gray-300"
             />
             <label className="text-lg text-gray-800">{label}</label>
         </div>

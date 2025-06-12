@@ -69,26 +69,57 @@ export default function KaferHeritier() {
         }));
     };
 
-    const handleSubmit = () => {
+    const handleNext = () => {
         if (!mirathInput) return;
-
-        const updated = { ...mirathInput };
-
+        const kafer : Record<string, number> = {};
         for (const [key, value] of Object.entries(formValues)) {
             const originalValue = mirathInput[key as keyof MirathInput];
-            const newKey = `${key}_kafer`;
 
             if (typeof originalValue === "number") {
-                const kaferValue = typeof value === "number" ? value : 0;
-                updated[newKey as keyof MirathInput] = Math.min(kaferValue, originalValue);
+                const numericValue = typeof value === "number" ? value : Number(value);
+                if (!isNaN(numericValue)) {
+                    mirathInput[key as keyof MirathInput] = originalValue - numericValue;
+                    kafer[key] = value;
+                }
             } else if (typeof originalValue === "boolean") {
-                updated[newKey as keyof MirathInput] = value === true;
+                if (value) {
+                    mirathInput[key as keyof MirathInput] = false;
+                    kafer[key] = 1;
+                }
             }
         }
-
-        localStorage.setItem("mirathInput", JSON.stringify(updated));
-        router.visit("/mafgod-heritier"); // ou /suivant selon votre flow
+        mirathInput["kafer"] = kafer;
+        localStorage.setItem("mirathInput", JSON.stringify(mirathInput));
+        router.visit("/cas-heritier");
     };
+        const handleSubmit = () => {
+        if (!mirathInput) return;
+        const kafer : Record<string, number> = {};
+        for (const [key, value] of Object.entries(formValues)) {
+            const originalValue = mirathInput[key as keyof MirathInput];
+
+            if (typeof originalValue === "number") {
+                const numericValue = typeof value === "number" ? value : Number(value);
+                if (!isNaN(numericValue)) {
+                    mirathInput[key as keyof MirathInput] = originalValue - numericValue;
+                    kafer[key] = value;
+                }
+            } else if (typeof originalValue === "boolean") {
+                if (value) {
+                    mirathInput[key as keyof MirathInput] = false;
+                    kafer[key] = 1;
+                }
+            }
+        }
+        mirathInput["kafer"] = kafer;
+        localStorage.setItem("mirathInput", JSON.stringify(mirathInput));
+        const to_back = JSON.parse(localStorage.getItem("mirathInput") || "{}");
+        console.log(mirathInput)
+        router.post('/cas-heritier', { mirathInput : to_back }, {
+            onError: (err: any) => alert(err),
+        });
+    };
+
 
     return (
         <GuestLayout>
@@ -153,7 +184,14 @@ export default function KaferHeritier() {
                                 onClick={handleSubmit}
                                 className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
                             >
-                                التالي
+                                حساب الميراث
+                            </button>
+                            <button
+                                type="button"
+                                onClick={handleNext}
+                                className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                            >
+                                الحالات الخاصة
                             </button>
                         </div>
                     </form>

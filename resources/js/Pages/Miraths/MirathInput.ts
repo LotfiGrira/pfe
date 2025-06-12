@@ -43,7 +43,9 @@ export interface MirathInput {
     far3warith?: boolean;
 
     // === Cas particuliers ===
-
+    maf9oud?: Record<string, number>; // contient la lsite des maf9oudins
+    gatel?: Record<string, number>; // contient la lsite des 
+    kafer?: Record<string, number>; // contient la lsite des 
     heirDiedBeforeInheritance?: boolean; // توفي أحد الورثة قبل التركة (المناسخات)
     hasPregnancy?: boolean; // يوجد حمل
     haswasiya?: boolean; // وصية واجبة

@@ -272,7 +272,7 @@ class MirathService
         }
         $this->doyon = $mirathInput['doyon'] ?? 0;
         $this->wasiya = $mirathInput['wasiya'] ?? 0;
-        
+        $this->addCasSpecialRapport($mirathInput);
         return [
             'rapport' => $this->rapport,
             'parts' => $this->part,
@@ -285,6 +285,93 @@ class MirathService
         ];
     }
 
+    function addCasSpecialRapport(&$mirathInput) {
+        $translations = [
+            "zawj" => "زوج",
+            "zawja" => "زوجة",
+            "azawjat" => "عدد الزوجات",
+            "aljad_ma3a_alikhwa" => "الجد مع الإخوة",
+
+            "alab" => "الآباء",
+            "alom" => "الأمهات",
+            "aljad" => "الجد",
+            "aljadah_li_ab" => "الجدّة من جهة الأب",
+            "aljadah_li_om" => "الجدّة من جهة الأم",
+
+            "alabna" => "الأبناء",
+            "albanat" => "البنات",
+            "abna_alabna" => "أبناء الأبناء",
+            "banat_alabna" => "بنات الأبناء",
+
+            "alikhwa_alashika" => "الإخوة الأشقاء",
+            "alikhwa_li_ab" => "الإخوة من جهة الأب",
+            "alikhwa_li_om" => "الإخوة من جهة الأم",
+            "alakhawat_ashakikat" => "الأخوات الأشقاء",
+            "alakhawat_li_ab" => "الأخوات من جهة الأب",
+            "alakhawat_li_om" => "الأخوات من جهة الأم",
+
+            // Page 5: Nephews/Nieces and Others
+            "abna_alikhwa_alashika" => "أبناء الإخوة الأشقاء",
+            "abna_alikhwa_li_ab" => "أبناء الإخوة من جهة الأب",
+            "ala3mam_alashika" => "الأعمام الأشقاء",
+            "ala3mam_li_ab" => "الأعمام من جهة الأب",
+            "abna_ala3mam_alashika" => "أبناء الأعمام الأشقاء",
+            "abna_ala3mam_li_ab" => "أبناء الأعمام من جهة الأب",
+
+            // Derived/computed flags (can be calculated server-side if needed)
+            "far3warith" => "فرع وارث",
+
+            // === Cas particuliers ===
+            "maf9oud" => "مفقود",
+            "heirDiedBeforeInheritance" => "توفي أحد الورثة قبل التركة",
+            "hasPregnancy" => "يوجد حمل",
+            "haswasiya" => "وصية واجبة",
+            "hasmafgod" => "مفقود",
+            "hasgatel" => "قاتل",
+            "hakafer" => "كافر",
+            "noSpecialCases" => "لا توجد حالات خاصة"
+        ];
+
+        // Start the rapport
+        
+    if (
+        (isset($mirathInput['gatel']) ? count($mirathInput['gatel']) : 0) +
+        (isset($mirathInput['maf9oud']) ? count($mirathInput['maf9oud']) : 0) +
+        (isset($mirathInput['kafer']) ? count($mirathInput['kafer']) : 0) == 0
+    ) return;
+
+    $this->rapport .= "من لا يرثون : ";
+
+    if (isset($mirathInput['maf9oud']) && count($mirathInput['maf9oud']) > 0) {
+        $maf9oudOutput = [];
+        foreach ($mirathInput['maf9oud'] as $key => $value) {
+            if (isset($translations[$key])) {
+                $maf9oudOutput[] = $value . " " . $translations[$key];
+            }
+        }
+        $this->rapport .= 'المفقودون : ' . implode(" و ", $maf9oudOutput) . '. ';
+    }
+
+    if (isset($mirathInput['gatel']) && count($mirathInput['gatel']) > 0) {
+        $gatelOutput = [];
+        foreach ($mirathInput['gatel'] as $key => $value) {
+            if (isset($translations[$key])) {
+                $gatelOutput[] = $value . " " . $translations[$key];
+            }
+        }
+        $this->rapport .= 'القتلة : ' . implode(" و ", $gatelOutput) . '. ';
+    }
+
+    if (isset($mirathInput['kafer']) && count($mirathInput['kafer']) > 0) {
+        $kaferOutput = [];
+        foreach ($mirathInput['kafer'] as $key => $value) {
+            if (isset($translations[$key])) {
+                $kaferOutput[] = $value . " " . $translations[$key];
+            }
+        }
+        $this->rapport .= 'على خلاف الدين : ' . implode(" و ", $kaferOutput) . '. ';
+    }
+}
 
     function calculNesef($tarika)
     {

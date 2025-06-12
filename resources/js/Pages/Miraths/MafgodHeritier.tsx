@@ -69,25 +69,55 @@ export default function MafgodHeritier() {
         }));
     };
 
-    const handleSubmit = () => {
+    const handleNext = () => {
         if (!mirathInput) return;
-
-        const updated = { ...mirathInput };
-
+        const maf9oud : Record<string, number> = {};
         for (const [key, value] of Object.entries(formValues)) {
             const originalValue = mirathInput[key as keyof MirathInput];
-            const newKey = `${key}_mafgod`;
 
             if (typeof originalValue === "number") {
-                const mafgodValue = typeof value === "number" ? value : 0;
-                updated[newKey as keyof MirathInput] = Math.min(mafgodValue, originalValue);
+                const numericValue = typeof value === "number" ? value : Number(value);
+                if (!isNaN(numericValue)) {
+                    mirathInput[key as keyof MirathInput] = originalValue - numericValue;
+                    maf9oud[key] = value;
+                }
             } else if (typeof originalValue === "boolean") {
-                updated[newKey as keyof MirathInput] = value === true;
+                if (value) {
+                    mirathInput[key as keyof MirathInput] = false;
+                    maf9oud[key] = 1;
+                }
             }
         }
+        mirathInput["maf9oud"] = maf9oud;
+        localStorage.setItem("mirathInput", JSON.stringify(mirathInput));
+        router.visit("/cas-heritier");   
+    };
+    const handleSubmit = () => {
+        if (!mirathInput) return;
+        const maf9oud : Record<string, number> = {};
+        for (const [key, value] of Object.entries(formValues)) {
+            const originalValue = mirathInput[key as keyof MirathInput];
 
-        localStorage.setItem("mirathInput", JSON.stringify(updated));
-        router.visit("/suivant"); // Modifier si le chemin suivant est différent
+            if (typeof originalValue === "number") {
+                const numericValue = typeof value === "number" ? value : Number(value);
+                if (!isNaN(numericValue)) {
+                    mirathInput[key as keyof MirathInput] = originalValue - numericValue;
+                    maf9oud[key] = value;
+                }
+            } else if (typeof originalValue === "boolean") {
+                if (value) {
+                    mirathInput[key as keyof MirathInput] = false;
+                    maf9oud[key] = 1;
+                }
+            }
+        }
+        mirathInput["maf9oud"] = maf9oud;
+        localStorage.setItem("mirathInput", JSON.stringify(mirathInput));
+        const to_back = JSON.parse(localStorage.getItem("mirathInput") || "{}");
+        console.log(mirathInput)
+        router.post('/cas-heritier', { mirathInput : to_back }, {
+            onError: (err: any) => alert(err),
+        });    
     };
 
     return (
@@ -153,7 +183,14 @@ export default function MafgodHeritier() {
                                 onClick={handleSubmit}
                                 className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
                             >
-                                التالي
+                                حساب الميراث
+                            </button>
+                            <button
+                                type="button"
+                                onClick={handleNext}
+                                className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                            >
+                                الحالات الخاصة
                             </button>
                         </div>
                     </form>
