@@ -264,11 +264,14 @@ class MirathService
         $this->mirathabna_ala3mam_alashika($mirathInput);
         $this->mirathabna_ala3mam_li_ab($mirathInput);
         // si thama reste > 0 yaani 9esma na9sa => n9asmou reste bin lwaratha gad gad
-        if ($mirathInput['reste'] > 0) {
-            $partReste = $mirathInput['reste'] / count($this->part);
-            foreach ($this->part as $key => $value) {
-                $this->part[$key]['part'] += $partReste;
-            }
+        
+
+            if ($mirathInput['reste'] > 0 && is_array($this->part) && count($this->part) > 0) {
+    $partReste = $mirathInput['reste'] / count($this->part);
+    foreach ($this->part as $key => $value) {
+        $this->part[$key]['part'] += $partReste;
+    }
+
         }
         $this->doyon = $mirathInput['doyon'] ?? 0;
         $this->wasiya = $mirathInput['wasiya'] ?? 0;
@@ -341,7 +344,10 @@ class MirathService
     ) return;
 
     $this->rapport .= "من لا يرثون : ";
-
+if (empty($this->part)) {
+        $this->rapport .= "\n\n❖ لا يوجد ورثة مستحقون. ترث الدولة (بيت المال) التركة بأكملها.";
+        return;
+    }
     if (isset($mirathInput['maf9oud']) && count($mirathInput['maf9oud']) > 0) {
         $maf9oudOutput = [];
         foreach ($mirathInput['maf9oud'] as $key => $value) {

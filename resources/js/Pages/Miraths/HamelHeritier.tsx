@@ -57,19 +57,28 @@ export default function ParenteSelection() {
         <GuestLayout>
             <div className="min-h-screen flex items-center justify-center bg-yellow-200 p-4">
                 <div className="bg-yellow-100 shadow-md rounded-lg p-6 max-w-md w-full">
-                    <h2 className="text-center text-lg font-bold mb-4">ما قرابة الجنين للمتوفى؟</h2>
+                    <h2 className="text-center text-lg font-bold mb-4">
+                        ما قرابة الجنين للمتوفى؟
+                    </h2>
                     <div className="space-y-2">
                         {relations.map((relation, index) => (
-                            <label key={index} className="flex items-center space-x-2">
+                            <label
+                                key={index}
+                                className="flex items-center space-x-2"
+                            >
                                 <input
                                     type="radio"
                                     name="relation"
                                     value={relation}
                                     checked={selectedOption === relation}
-                                    onChange={(e) => setSelectedOption(e.target.value)}
+                                    onChange={(e) =>
+                                        setSelectedOption(e.target.value)
+                                    }
                                     className="w-4 h-4 text-blue-600 border-gray-300"
                                 />
-                                <span className="text-gray-900">{relation}</span>
+                                <span className="text-gray-900">
+                                    {relation}
+                                </span>
                             </label>
                         ))}
                     </div>

@@ -27,24 +27,35 @@ export default function ListeHeritier() {
         { label: "الأخت الشقيقة", key: "alakhawat_ashakikat", type: "number" },
         { label: "الأخت لأب", key: "alakhawat_li_ab", type: "number" },
         { label: "الأخت لأم", key: "alakhawat_li_om", type: "number" },
-        { label: "ابن الأخ الشقيق", key: "abna_alikhwa_alashika", type: "number" },
+        {
+            label: "ابن الأخ الشقيق",
+            key: "abna_alikhwa_alashika",
+            type: "number",
+        },
         { label: "ابن الأخ لأب", key: "abna_alikhwa_li_ab", type: "number" },
         { label: "العم الشقيق", key: "ala3mam_alashika", type: "number" },
         { label: "العم لأب", key: "ala3mam_li_ab", type: "number" },
-        { label: "ابن العم الشقيق", key: "abna_ala3mam_alashika", type: "number" },
+        {
+            label: "ابن العم الشقيق",
+            key: "abna_ala3mam_alashika",
+            type: "number",
+        },
         { label: "ابن العم لأب", key: "abna_ala3mam_li_ab", type: "number" },
     ];
 
     const [mirathInput, setMirathInput] = useState<MirathInput>(() => {
         const stored = localStorage.getItem("mirathInput");
-        const parsed = (stored ? JSON.parse(stored) : {}) as Partial<MirathInput>;
+        const parsed = (
+            stored ? JSON.parse(stored) : {}
+        ) as Partial<MirathInput>;
 
         return {
             ...parsed,
             ...(Object.fromEntries(
                 heirFields.map(({ key, type }) => [
                     key,
-                    parsed[key as keyof MirathInput] ?? (type === "boolean" ? false : 0),
+                    parsed[key as keyof MirathInput] ??
+                        (type === "boolean" ? false : 0),
                 ])
             ) as unknown as MirathInput),
         };
@@ -71,8 +82,16 @@ export default function ListeHeritier() {
                 <div className="bg-gray-200 p-4 rounded-lg shadow-md grid grid-cols-2 gap-4">
                     {heirFields
                         .filter(({ key }) => {
-                            if (mirathInput["gender"] === "ذكر" && key === "zawj") return false;
-                            if (mirathInput["gender"] === "أنثى" && key === "zawja") return false;
+                            if (
+                                mirathInput["gender"] === "ذكر" &&
+                                key === "zawj"
+                            )
+                                return false;
+                            if (
+                                mirathInput["gender"] === "أنثى" &&
+                                key === "zawja"
+                            )
+                                return false;
                             return true;
                         })
                         .map(({ label, key, type }, index) => (
@@ -80,7 +99,9 @@ export default function ListeHeritier() {
                                 key={index}
                                 className="flex justify-between items-center bg-yellow-500 p-3 rounded-md"
                             >
-                                <label className="text-white font-bold text-lg">{label}</label>
+                                <label className="text-white font-bold text-lg">
+                                    {label}
+                                </label>
                                 {type === "boolean" ? (
                                     <select
                                         value={mirathInput[key] ? "نعم" : "لا"}
@@ -103,7 +124,9 @@ export default function ListeHeritier() {
                                         onChange={(e) =>
                                             setMirathInput((prev) => ({
                                                 ...prev,
-                                                [key]: parseInt(e.target.value) || 0,
+                                                [key]:
+                                                    parseInt(e.target.value) ||
+                                                    0,
                                             }))
                                         }
                                     />
@@ -113,8 +136,6 @@ export default function ListeHeritier() {
                 </div>
 
                 <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4">
-                    
-
                     <button
                         onClick={handleNext}
                         className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg shadow-md transition-colors duration-200"
@@ -123,7 +144,7 @@ export default function ListeHeritier() {
                     </button>
                 </div>
                 {/* Footer */}
-                                          <Footer />
+                <Footer />
             </div>
         </GuestLayout>
     );

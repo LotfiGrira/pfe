@@ -44,22 +44,22 @@ export default function About({ text }: PageProps<Props>) {
 
   const references = [
     "📚 أهم الكتب في المواريث على القانون التونسي",
-    "1. \"شرح مجلة الأحوال الشخصية التونسية\" – عبد العزيز العشّ\nمن أشهر الكتب التي شرحت قوانين المواريث وفق المجلة.\n\nيتناول الوصية الواجبة، الحجب، والأنصبة بتفصيل دقيق.",
-    "2. \"المواريث في القانون التونسي\" – د. فرج القصير\nكتاب جامعي ومرجعي يُقارن بين فقه المواريث الإسلامي والتطبيق التونسي.\n\nيشرح كيفية التوفيق بين الشريعة والمجلة.",
-    "3. \"الشرح النظري والعملي لمجلة الأحوال الشخصية\" – محمود عبد الجليل\nيضم أمثلة تطبيقية حول تقسيم التركة حسب القوانين التونسية.\n\nمهم لفهم الجانب العملي في تطبيق المواريث.",
-    "4. \"الوصية الواجبة في القانون التونسي\" – دراسة أكاديمية / رسائل ماجستير\nبعض الجامعات التونسية نشرت بحوثًا متخصصة في هذا المجال.\n\nيمكن الرجوع إليها كمصادر فقهية وقانونية.",
-    "5. \"الوصية الواجبة في التشريع التونسي والمقارن\" – دراسات مقارنة\nيناقش الفرق بين القانون التونسي وغيره من القوانين العربية كالمصري والمغربي.",
+    "1. \"شرح مجلة الأحوال الشخصية التونسية\" – عبد العزيز العشّ",
+    "2. \"المواريث في القانون التونسي\" – د. فرج القصير",
+    "3. \"الشرح النظري والعملي لمجلة الأحوال الشخصية\" – محمود عبد الجليل",
+    "4. \"الوصية الواجبة في القانون التونسي\" – دراسة أكاديمية",
+    "5. \"الوصية الواجبة في التشريع التونسي والمقارن\" – دراسات مقارنة",
     "⚖️ مصادر أخرى هامة:",
-    "📄 مجلة الأحوال الشخصية التونسية (1956) – قانون رسمي\nالمرجع الأساسي لتقسيم الإرث في تونس.",
-    "📑 أحكام محكمة التعقيب التونسية في المواريث – قضاء\nتحتوي على سوابق قضائية هامة في مسائل الميراث.",
-    "🎓 محاضرات في فقه المواريث – كلية الحقوق بتونس\nتشمل التطبيق القانوني والفقهي للميراث."
+    "📄 مجلة الأحوال الشخصية التونسية (1956)",
+    "📑 أحكام محكمة التعقيب التونسية في المواريث",
+    "🎓 محاضرات في فقه المواريث – كلية الحقوق بتونس"
   ];
 
   return (
     <GuestLayout>
       <div className="bg-[url('/pattern.png')] bg-repeat min-h-screen text-right text-[#3e2f1c] font-[Arial]">
         <div className="max-w-6xl mx-auto px-6 py-12 space-y-10 bg-[#fdf7e3] shadow-lg border border-[#a67c52]">
-          {/* En-tête */}
+
           <h1 className="text-3xl font-bold text-center text-[#4b3e28] mb-6">
             موقع المواريث
           </h1>
@@ -81,53 +81,37 @@ export default function About({ text }: PageProps<Props>) {
               </Link>
             </div>
 
-            <div className="bg-[#f8f1d4] border border-[#c2a76e] p-4 rounded shadow-sm">
-              <h2 className="text-lg font-bold mb-2 text-center">
-                أعقد مسائل المواريث
-              </h2>
-              <p>
-                يتمتع الموقع بقدرة عالية على معالجة أعقد مسائل الميراث بكل دقة
-                ووضوح...
-              </p>
-              <Link
-                href="/examens/liste"
-                className="mt-4 w-full inline-block text-center bg-[#a45e2d] text-white py-2 rounded hover:bg-[#874b1f]"
-              >
-                اختبر نفسك
-              </Link>
-            </div>
+           <div className="bg-[#f8f1d4] border border-[#c2a76e] p-4 rounded shadow-sm flex flex-col justify-between h-full">
+  <div>
+    <h2 className="text-lg font-bold mb-2 text-center">
+      أعقد مسائل المواريث
+    </h2>
+    <p>
+      يتمتع الموقع بقدرة عالية على معالجة أعقد مسائل الميراث بكل دقة
+      ووضوح...
+    </p>
+  </div>
+  <Link
+    href="/examens/liste"
+    className="mt-4 w-full inline-block text-center bg-[#a45e2d] text-white py-2 rounded hover:bg-[#874b1f] mt-auto"
+  >
+    اختبر نفسك
+  </Link>
+</div>
 
-            <div className="bg-[#f8f1d4] border border-[#c2a76e] p-4 rounded shadow-sm">
-              <h2 className="text-lg font-bold mb-2 text-center">تسهيل التعلم</h2>
-              <p>
-                يوفر النظام إمكانية الاطلاع على المراجع القانونية المعتمدة
-                المتعلقة بفقه المواريث...
-              </p>
-              <button className="mt-4 w-full bg-[#a45e2d] text-white py-2 rounded hover:bg-[#874b1f]">
-                مراجع قانونية
-              </button>
-            </div>
-          </div>
+            <div className="bg-[#f8f1d4] border border-[#c2a76e] p-4 rounded shadow-sm flex flex-col justify-between h-full">
+  <div>
+    <h2 className="text-lg font-bold mb-2 text-center">تسهيل التعلم</h2>
+    <p>
+      يوفر النظام إمكانية الاطلاع على المراجع القانونية المعتمدة
+      المتعلقة بفقه المواريث...
+    </p>
+  </div>
+  <button className="mt-4 w-full bg-[#a45e2d] text-white py-2 rounded hover:bg-[#874b1f] mt-auto">
+    مراجع قانونية
+  </button>
+</div>
 
-          {/* Parchemin Section */}
-          <div className="grid md:grid-cols-2 gap-6 mt-10">
-            <ScrollBox
-              title="آخر المسائل المحلولة"
-              items={[
-                "مات وترك: ابن (2) و ابن ابن و بنت و بنت ابن و أخ شقيق (2) و أخت شقيقة",
-                "مات وترك: أولاد ابن متعدّدين (3) ابن – توفي ابنه في حياة الميت – و أولاد بنات متوفاة",
-                "مات وترك: زوجة و ابن (4) و بنت (3) و أولاد ابن متعدّدين",
-              ]}
-            />
-            <ScrollBox
-              title="جديد الموقع"
-              items={[
-                "الوصية الواجبة و استثناؤها بالقانون",
-                "دراسة تقييم برنامج حساب المواريث",
-                "مسائل الميراث المعقّدة و الخاصة و كيفية حلّها",
-                "أهم مسائل المواريث مع الحلول",
-              ]}
-            />
           </div>
 
           {/* Références */}

@@ -17,7 +17,7 @@ interface Question {
 
 interface Props {
     questions: Question[];
-    examenId: number; // 👈 doit venir du composant parent
+    examenId: number;
 }
 
 const AffichageQuestion: React.FC<Props> = ({ questions = [], examenId }) => {
@@ -26,7 +26,7 @@ const AffichageQuestion: React.FC<Props> = ({ questions = [], examenId }) => {
             router.delete(
                 route("examens.questions.destroy", {
                     examen: examenId,
-                    id: questionId, // ✅ Ici on met bien "id", pas "question"
+                    id: questionId,
                 })
             );
         }
@@ -36,7 +36,7 @@ const AffichageQuestion: React.FC<Props> = ({ questions = [], examenId }) => {
         router.visit(
             route("questions.edit", {
                 examen: examenId,
-                id: questionId, // ⚠️ Bien mettre "id" ici, car ta route utilise {id}
+                id: questionId,
             })
         );
     };
@@ -45,7 +45,6 @@ const AffichageQuestion: React.FC<Props> = ({ questions = [], examenId }) => {
         <GuestLayout>
             <div className="min-h-screen bg-gray-100 p-6">
                 <div className="max-w-3xl mx-auto bg-white shadow-md rounded-lg p-6">
-                    {/* Bouton Ajouter une question */}
                     <div className="flex justify-between items-center mb-6">
                         <Breadcrumbs
                             items={[
@@ -112,8 +111,8 @@ const AffichageQuestion: React.FC<Props> = ({ questions = [], examenId }) => {
                                             >
                                                 • {prop.propos}{" "}
                                                 {prop.is_true
-                                                  ?  "(✓ Bonne réponse)"
-                                                  : ""}
+                                                    ? "(✓ Bonne réponse)"
+                                                    : ""}
                                             </li>
                                         ))}
                                     </ul>

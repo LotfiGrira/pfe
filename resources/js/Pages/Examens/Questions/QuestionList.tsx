@@ -22,7 +22,7 @@ const QuestionList: React.FC<QuestionListProps> = ({
     questions = [],
     examenTitre,
 }) => {
-    const [currentId, setCurrentId] = useState<number | null>(null); // Explicitly allow both number and null
+    const [currentId, setCurrentId] = useState<number | null>(null);
 
     const [selectedPropositions, setSelectedPropositions] = useState<{
         [key: number]: number | null;
@@ -59,12 +59,12 @@ const QuestionList: React.FC<QuestionListProps> = ({
         setResultsVisible(false);
     };
 
-      const handleForward = () => {
-    if (currentId !== null) {
-      const nextId = currentId + 1;
-      window.location.href = `http://localhost:8000/examens/${nextId}/liste`;
-    }
-  };
+    const handleForward = () => {
+        if (currentId !== null) {
+            const nextId = currentId + 1;
+            window.location.href = `http://localhost:8000/examens/${nextId}/liste`;
+        }
+    };
 
     const handlePrint = () => {
         window.print();
@@ -94,12 +94,11 @@ const QuestionList: React.FC<QuestionListProps> = ({
         );
     }
     useEffect(() => {
-    // Extract ID from current URL
-    const match = window.location.pathname.match(/\/examens\/(\d+)\/liste/);
-    if (match) {
-      setCurrentId(parseInt(match[1], 10));
-    }
-  }, []);
+        const match = window.location.pathname.match(/\/examens\/(\d+)\/liste/);
+        if (match) {
+            setCurrentId(parseInt(match[1], 10));
+        }
+    }, []);
 
     return (
         <GuestLayout>
@@ -122,15 +121,20 @@ const QuestionList: React.FC<QuestionListProps> = ({
                                         {question.propositions.map(
                                             (proposition) => {
                                                 const isSelected =
-                                                    selectedPropositions[question.id] ===
-                                                    proposition.id;
-                                                const isCorrect = proposition.is_true;
+                                                    selectedPropositions[
+                                                        question.id
+                                                    ] === proposition.id;
+                                                const isCorrect =
+                                                    proposition.is_true;
 
                                                 const displayText =
                                                     resultsVisible &&
                                                     !isCorrect &&
                                                     !isSelected
-                                                        ? proposition.propos.replace(/0$/, "")
+                                                        ? proposition.propos.replace(
+                                                              /0$/,
+                                                              ""
+                                                          )
                                                         : proposition.propos;
 
                                                 return (
@@ -142,7 +146,9 @@ const QuestionList: React.FC<QuestionListProps> = ({
                                                             type="radio"
                                                             id={`question-${question.id}-proposition-${proposition.id}`}
                                                             name={`question-${question.id}`}
-                                                            value={proposition.id}
+                                                            value={
+                                                                proposition.id
+                                                            }
                                                             checked={isSelected}
                                                             onChange={() =>
                                                                 handleRadioChange(
@@ -151,7 +157,9 @@ const QuestionList: React.FC<QuestionListProps> = ({
                                                                 )
                                                             }
                                                             className="mr-2"
-                                                            disabled={resultsVisible}
+                                                            disabled={
+                                                                resultsVisible
+                                                            }
                                                         />
                                                         <label
                                                             htmlFor={`question-${question.id}-proposition-${proposition.id}`}
@@ -172,22 +180,23 @@ const QuestionList: React.FC<QuestionListProps> = ({
                                                             {resultsVisible && (
                                                                 <>
                                                                     {isSelected &&
-                                                                        isCorrect ?
-                                                                        " ✅"
-                                                                    : ""}
+                                                                    isCorrect
+                                                                        ? " ✅"
+                                                                        : ""}
                                                                     {isSelected &&
-                                                                        !isCorrect ?
-                                                                        " ❌"
-                                                                    : ""}
+                                                                    !isCorrect
+                                                                        ? " ❌"
+                                                                        : ""}
                                                                     {!isSelected &&
-                                                                        isCorrect 
-                                                                        ? (
-                                                                            <span className="ml-2">
-                                                                                ✅ الإجابة الصحيحة
-                                                                            </span>
-                                                                        )
-                                                                        : ""
-                                                                    }
+                                                                    isCorrect ? (
+                                                                        <span className="ml-2">
+                                                                            ✅
+                                                                            الإجابة
+                                                                            الصحيحة
+                                                                        </span>
+                                                                    ) : (
+                                                                        ""
+                                                                    )}
                                                                 </>
                                                             )}
                                                         </label>
@@ -202,52 +211,52 @@ const QuestionList: React.FC<QuestionListProps> = ({
                     </ul>
 
                     <div className="mt-8 text-center">
-  {!resultsVisible ? (
-    <button
-      onClick={handleResultClick}
-      className="inline-block px-8 py-3 bg-green-600 text-white font-mono font-semibold rounded-xl shadow-md hover:bg-green-700 transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
-    >
-      النتيجة
-    </button>
-  ) : (
-    <>
-      <div className="mt-6 p-5 bg-gray-900 text-green-400 font-mono rounded-xl shadow-lg">
-        <h2 className="text-2xl font-bold">
-          Score : {score} / {questions.length}
-        </h2>
-        <p className="mt-3 text-lg">{getRemark(score || 0, questions.length)}</p>
-      </div>
-      <div className="mt-6 flex flex-wrap justify-center gap-4">
-        <button
-          onClick={handlePrint}
-          className="flex items-center justify-center gap-2 px-8 py-3 bg-blue-600 text-white font-mono font-semibold rounded-xl shadow-md hover:bg-blue-700 transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
-        >
-          🖨️ <span>طباعة الأختبار</span>
-        </button>
-        {
-            score < 15 
-            ? (
-            <button
-            onClick={handleRetry}
-            className="flex items-center justify-center gap-2 px-8 py-3 bg-yellow-600 text-white font-mono font-semibold rounded-xl shadow-md hover:bg-yellow-700 transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-opacity-50"
-            >
-            🔁 <span>محاولة أخرى</span>
-            </button>
-            )
-            : (
-            <button
-            onClick={handleForward}
-            className="flex items-center justify-center gap-2 px-8 py-3 bg-yellow-600 text-white font-mono font-semibold rounded-xl shadow-md hover:bg-yellow-700 transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-opacity-50"
-            >
-             <span>الاختبار التالي</span>
-            </button>
-            )
-            
-        }
-      </div>
-    </>
-  )}
-</div>
+                        {!resultsVisible ? (
+                            <button
+                                onClick={handleResultClick}
+                                className="inline-block px-8 py-3 bg-green-600 text-white font-mono font-semibold rounded-xl shadow-md hover:bg-green-700 transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
+                            >
+                                النتيجة
+                            </button>
+                        ) : (
+                            <>
+                                <div className="mt-6 p-5 bg-gray-900 text-green-400 font-mono rounded-xl shadow-lg">
+                                    <h2 className="text-2xl font-bold">
+                                        Score : {score} / {questions.length}
+                                    </h2>
+                                    <p className="mt-3 text-lg">
+                                        {getRemark(
+                                            score || 0,
+                                            questions.length
+                                        )}
+                                    </p>
+                                </div>
+                                <div className="mt-6 flex flex-wrap justify-center gap-4">
+                                    <button
+                                        onClick={handlePrint}
+                                        className="flex items-center justify-center gap-2 px-8 py-3 bg-blue-600 text-white font-mono font-semibold rounded-xl shadow-md hover:bg-blue-700 transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                                    >
+                                        🖨️ <span>طباعة الأختبار</span>
+                                    </button>
+                                    {score < 15 ? (
+                                        <button
+                                            onClick={handleRetry}
+                                            className="flex items-center justify-center gap-2 px-8 py-3 bg-yellow-600 text-white font-mono font-semibold rounded-xl shadow-md hover:bg-yellow-700 transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-opacity-50"
+                                        >
+                                            🔁 <span>محاولة أخرى</span>
+                                        </button>
+                                    ) : (
+                                        <button
+                                            onClick={handleForward}
+                                            className="flex items-center justify-center gap-2 px-8 py-3 bg-yellow-600 text-white font-mono font-semibold rounded-xl shadow-md hover:bg-yellow-700 transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-opacity-50"
+                                        >
+                                            <span>الاختبار التالي</span>
+                                        </button>
+                                    )}
+                                </div>
+                            </>
+                        )}
+                    </div>
                 </div>
             </div>
         </GuestLayout>

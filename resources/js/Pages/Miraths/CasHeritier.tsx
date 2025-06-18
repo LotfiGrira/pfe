@@ -10,16 +10,23 @@ export default function CasHeritier() {
     useEffect(() => {
         const mirathInputRaw = localStorage.getItem("mirathInput");
         if (mirathInputRaw) {
-            const mirathInput = JSON.parse(mirathInputRaw) as Partial<MirathInput>;
+            const mirathInput = JSON.parse(
+                mirathInputRaw
+            ) as Partial<MirathInput>;
 
-            const caseKey =
-                mirathInput.heirDiedBeforeInheritance ? "heirDiedBeforeInheritance" :
-                mirathInput.hasPregnancy ? "hasPregnancy" :
-                mirathInput.haswasiya ? "haswasiya" :
-                mirathInput.hasmafgod ? "hasmafgod" :
-                mirathInput.hasgatel ? "hasgatel" :
-                mirathInput.haskafer ? "haskafer" :
-                "none";
+            const caseKey = mirathInput.heirDiedBeforeInheritance
+                ? "heirDiedBeforeInheritance"
+                : mirathInput.hasPregnancy
+                ? "hasPregnancy"
+                : mirathInput.haswasiya
+                ? "haswasiya"
+                : mirathInput.hasmafgod
+                ? "hasmafgod"
+                : mirathInput.hasgatel
+                ? "hasgatel"
+                : mirathInput.haskafer
+                ? "haskafer"
+                : "none";
 
             setSelectedCase(caseKey);
         }
@@ -90,13 +97,49 @@ export default function CasHeritier() {
                         <legend className="text-lg font-semibold text-gray-700 mb-2">
                             اختر حالة واحدة فقط
                         </legend>
-                        {radioOption("none", "لا توجد حالات خاصة", selectedCase, handleChange)}
-                        {radioOption("heirDiedBeforeInheritance", "هل توفي أحد الورثة قبل تقسيم التركة (المناسخات)؟", selectedCase, handleChange)}
-                        {radioOption("hasPregnancy", "هل يوجد حمل؟", selectedCase, handleChange)}
-                        {radioOption("haswasiya", "هل يوجد أولاد لابن متوفى أو لبنت متوفية (وصية واجبة)؟", selectedCase, handleChange)}
-                        {radioOption("hasmafgod", "هل يوجد مفقود فيمن اخترتهم؟", selectedCase, handleChange)}
-                        {radioOption("hasgatel", "هل يوجد من هو قاتل؟", selectedCase, handleChange)}
-                        {radioOption("haskafer", "هل يوجد من هو على خلاف الدين؟", selectedCase, handleChange)}
+                        {radioOption(
+                            "none",
+                            "لا توجد حالات خاصة",
+                            selectedCase,
+                            handleChange
+                        )}
+
+                        {radioOption(
+                            "hasmafgod",
+                            "هل يوجد مفقود فيمن اخترتهم؟",
+                            selectedCase,
+                            handleChange
+                        )}
+                        {radioOption(
+                            "hasgatel",
+                            "هل يوجد من هو قاتل؟",
+                            selectedCase,
+                            handleChange
+                        )}
+                        {radioOption(
+                            "haskafer",
+                            "هل يوجد من هو على خلاف الدين؟",
+                            selectedCase,
+                            handleChange
+                        )}
+                        {radioOption(
+                            "heirDiedBeforeInheritance",
+                            "هل توفي أحد الورثة قبل تقسيم التركة (المناسخات)؟",
+                            selectedCase,
+                            handleChange
+                        )}
+                        {radioOption(
+                            "hasPregnancy",
+                            "هل يوجد حمل؟",
+                            selectedCase,
+                            handleChange
+                        )}
+                        {radioOption(
+                            "haswasiya",
+                            "هل يوجد أولاد لابن متوفى أو لبنت متوفية (وصية واجبة)؟",
+                            selectedCase,
+                            handleChange
+                        )}
                     </fieldset>
                 </div>
 

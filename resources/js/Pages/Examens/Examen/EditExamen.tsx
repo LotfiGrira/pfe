@@ -44,7 +44,7 @@ export default function Edit({ examen }: Props) {
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
                         <label className="block text-sm font-medium">
-                             تسمية الاختبار
+                            تسمية الاختبار
                         </label>
                         <input
                             type="text"
